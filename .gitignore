@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .gradle
 /local.properties
 /.idea/workspace.xml
@@ -8,7 +7,6 @@
 /captures
 /.idea
 *.iml
-=======
 # Built application files
 *.apk
 *.ap_
@@ -36,4 +34,3 @@ proguard/
 
 # Log Files
 *.log
->>>>>>> origin/master
