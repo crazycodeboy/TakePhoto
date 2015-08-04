@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -20,6 +21,7 @@ import java.io.IOException;
  * 从相册选择照片进行裁剪，从相机拍取照片进行裁剪<br>
  * 从相册选择照片（不裁切），并获取照片的路径<br>
  * 拍取照片（不裁切），并获取照片路径
+ *
  * @author JPH
  * @date 2015.08.04
  */
@@ -45,13 +47,15 @@ public class TakePhoto {
      **/
     public final static int PIC_CROP = 125;
     private Activity activity;
+    private TakeResultListener l;
     private Uri imageUri;
 
-    public TakePhoto(Activity activity) {
+    public TakePhoto(Activity activity, TakeResultListener l) {
         this.activity = activity;
+        this.l = l;
     }
 
-    public Bitmap onResult(int requestCode, int resultCode, Intent data) {
+    public void onResult(int requestCode, int resultCode, Intent data) {
         StringBuffer sb = new StringBuffer();
         sb.append("requestCode:").append(requestCode).append("--resultCode:").append(resultCode).append("--data:").append(data).append("--imageUri:").append(imageUri);
         Log.w("info", sb.toString());
@@ -60,7 +64,8 @@ public class TakePhoto {
             case PIC_SELECT_CROP:
                 if (resultCode == Activity.RESULT_OK) {//从相册选择照片并裁切
                     try {
-                        bitmap = BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(imageUri));//将imageUri对象的图片加载到内存
+//                        bitmap = BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(imageUri));//将imageUri对象的图片加载到内存
+                        l.takeSuccess(imageUri);
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -69,49 +74,44 @@ public class TakePhoto {
                 break;
             case PIC_SELECT_ORIGINAL://从相册选择照片不裁切
                 if (resultCode == Activity.RESULT_OK) {
-                    try {
-                        Uri selectedImage = data.getData(); //获取系统返回的照片的Uri
-                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                        Cursor cursor = activity.getContentResolver().query(selectedImage,
-                                filePathColumn, null, null, null);//从系统表中查询指定Uri对应的照片
-                        cursor.moveToFirst();
-                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                        String picturePath = cursor.getString(columnIndex);  //获取照片路径
-                        cursor.close();
-                        bitmap = BitmapFactory.decodeFile(picturePath);
-                        writeToFile(bitmap);
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    Uri selectedImage = data.getData(); //获取系统返回的照片的Uri
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                    Cursor cursor = activity.getContentResolver().query(selectedImage,
+                            filePathColumn, null, null, null);//从系统表中查询指定Uri对应的照片
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);  //获取照片路径
+                    cursor.close();
+//                        bitmap = BitmapFactory.decodeFile(picturePath);
+//                        writeToFile(bitmap);
+                    if (!TextUtils.isEmpty(picturePath)) {
+                        l.takeSuccess(Uri.parse(picturePath));
+                    } else {
+                        l.takeFail("文件没找到");
                     }
                 }
                 break;
             case PIC_TAKE_CROP://拍取照片,并裁切
                 if (resultCode == Activity.RESULT_OK) {
-                    cropImageUri(imageUri, 600, 600, PIC_CROP);
+                    cropImageUri(imageUri, 480, 480, PIC_CROP);
                 }
                 break;
             case PIC_TAKE_ORIGINAL://拍取照片
                 if (resultCode == Activity.RESULT_OK) {
-                    String imgPath = imageUri.getPath();//获取拍摄照片路径
-                    bitmap = BitmapFactory.decodeFile(imgPath);
+                    l.takeSuccess(imageUri);
+//                    String imgPath = imageUri.getPath();//获取拍摄照片路径
+//                    bitmap = BitmapFactory.decodeFile(imgPath);
                 }
                 break;
             case PIC_CROP://裁剪照片
                 if (resultCode == Activity.RESULT_OK) {
-                    try {
-                        bitmap = BitmapFactory.decodeStream(activity.getContentResolver().
-                                openInputStream(imageUri));//将imageUri对象的图片加载到内存
-
-                    } catch (FileNotFoundException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    l.takeSuccess(imageUri);
                 } else if (resultCode == Activity.RESULT_CANCELED) {//裁切的照片没有保存
                     if (data != null) {
                         bitmap = data.getParcelableExtra("data");//获取裁切的结果数据
                         //将裁切的结果写入到文件
                         writeToFile(bitmap);
+                        l.takeSuccess(imageUri);
                         Log.w("info", bitmap == null ? "null" : "not null");
                     }
                 }
@@ -119,13 +119,13 @@ public class TakePhoto {
             default:
                 break;
         }
-        return bitmap;
     }
+
     /**
      * 从相册选择原生的照片（不裁切）
      */
     public void picSelectOriginal(Uri uri) {
-        imageUri=uri;
+        imageUri = uri;
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_PICK);//Pick an item from the data
         intent.setType("image/*");//从所有图片中进行选择
@@ -134,12 +134,13 @@ public class TakePhoto {
 
     /**
      * 从相册选择照片进行裁剪
-     * @param uri 图片保存的路径
+     *
+     * @param uri    图片保存的路径
      * @param with   裁切的宽度
      * @param height 裁切的高度
      */
-    public void picSelectCrop(Uri uri,int with, int height) {
-        imageUri=uri;
+    public void picSelectCrop(Uri uri, int with, int height) {
+        imageUri = uri;
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_PICK);//Pick an item from the data
         intent.setType("image/*");//从所有图片中进行选择
@@ -158,19 +159,21 @@ public class TakePhoto {
 
     /**
      * 从相册选择照片进行裁剪(裁切图片大小600*600)
+     *
      * @param uri 图片保存的路径
      */
     public void picSelectCrop(Uri uri) {
-        imageUri=uri;
-        picSelectCrop(uri,600, 600);
+        imageUri = uri;
+        picSelectCrop(uri, 600, 600);
     }
 
     /**
      * 拍取照片不裁切
+     *
      * @param uri 图片保存的路径
      */
     public void picTakeOriginal(Uri uri) {
-        imageUri=uri;
+        imageUri = uri;
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);//将拍取的照片保存到指定URI
@@ -179,13 +182,15 @@ public class TakePhoto {
 
     /**
      * 从相机拍取照片进行裁剪
+     *
      * @param uri 图片保存的路径
      */
     public void picTakeCrop(Uri uri) {
-        imageUri=uri;
+        imageUri = uri;
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将拍取的照片保存到指定URI
+//        intent.putExtra(MediaStore.Images.Media.ORIENTATION, 0);//设置竖屏
         activity.startActivityForResult(intent, PIC_TAKE_CROP);
     }
 
@@ -198,6 +203,8 @@ public class TakePhoto {
      * @param requestCode：请求码
      */
     private void cropImageUri(Uri imageUri, int outputX, int outputY, int requestCode) {
+        boolean isReturnData = isReturnData();
+        Log.w("ksdinf", isReturnData ? "true" : "false");
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(imageUri, "image/*");
         intent.putExtra("crop", "true");
@@ -207,35 +214,58 @@ public class TakePhoto {
         intent.putExtra("outputY", outputY);
         intent.putExtra("scale", true);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        intent.putExtra("return-data", true);
+        intent.putExtra("return-data", isReturnData);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("noFaceDetection", true); // no face detection
         activity.startActivityForResult(intent, requestCode);
     }
+
+    /**
+     * 是否裁剪之后返回数据
+     **/
+    private boolean isReturnData() {
+        String manufacturer = android.os.Build.MANUFACTURER;
+        if (!TextUtils.isEmpty(manufacturer)) {
+            if (manufacturer.toLowerCase().contains("lenovo")) {//对于联想的手机返回数据
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * 将bitmap写入到文件
+     *
      * @param bitmap
-     * */
+     */
     private void writeToFile(Bitmap bitmap) {
-        if (bitmap==null)return;
-        File file=new File(imageUri.getPath());
-        ByteArrayOutputStream bos=new ByteArrayOutputStream();
+        if (bitmap == null) return;
+        File file = new File(imageUri.getPath());
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-        FileOutputStream fos=null;
+        FileOutputStream fos = null;
         try {
-            fos=new FileOutputStream(file);
+            fos = new FileOutputStream(file);
             fos.write(bos.toByteArray());
             bos.flush();
             fos.flush();
         } catch (java.io.IOException e) {
             e.printStackTrace();
-        }finally {
-            if (fos!=null) try {
+        } finally {
+            if (fos != null) try {
                 fos.close();
-                if(bos!=null) bos.close();
+                if (bos != null) bos.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public interface TakeResultListener {
+        void takeSuccess(Uri uri);
+
+        void takeFail(String msg);
+
+        void takeCancel();
     }
 }
