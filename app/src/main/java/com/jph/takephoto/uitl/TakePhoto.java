@@ -1,22 +1,13 @@
 package com.jph.takephoto.uitl;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.util.Size;
-import android.view.View;
-import android.widget.ImageView;
-
-import com.jph.takephoto.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -25,10 +16,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
+ * 拍照及从图库选择照片框架
  * 从相册选择照片进行裁剪，从相机拍取照片进行裁剪<br>
  * 从相册选择照片（不裁切），并获取照片的路径<br>
  * 拍取照片（不裁切），并获取照片路径
- *
  * @author JPH
  * @date 2015.08.04
  */
@@ -56,9 +47,8 @@ public class TakePhoto {
     private Activity activity;
     private Uri imageUri;
 
-    public TakePhoto(Activity activity, Uri imageUri) {
+    public TakePhoto(Activity activity) {
         this.activity = activity;
-        this.imageUri = imageUri;
     }
 
     public Bitmap onResult(int requestCode, int resultCode, Intent data) {
@@ -89,6 +79,7 @@ public class TakePhoto {
                         String picturePath = cursor.getString(columnIndex);  //获取照片路径
                         cursor.close();
                         bitmap = BitmapFactory.decodeFile(picturePath);
+                        writeToFile(bitmap);
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -131,37 +122,10 @@ public class TakePhoto {
         return bitmap;
     }
     /**
-     * 将bitmap写入到文件
-     * @param bitmap
-     * */
-    private void writeToFile(Bitmap bitmap) {
-        File file=new File(imageUri.getPath());
-        ByteArrayOutputStream bos=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,bos);
-        FileOutputStream fos=null;
-        try {
-            fos=new FileOutputStream(file);
-            fos.write(bos.toByteArray());
-            bos.flush();
-            fos.flush();
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }finally {
-            if (fos!=null) try {
-                fos.close();
-               if(bos!=null) bos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
-    /**
      * 从相册选择原生的照片（不裁切）
      */
-    public void picSelectOriginal() {
-        // TODO Auto-generated method stub
+    public void picSelectOriginal(Uri uri) {
+        imageUri=uri;
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_PICK);//Pick an item from the data
         intent.setType("image/*");//从所有图片中进行选择
@@ -170,11 +134,12 @@ public class TakePhoto {
 
     /**
      * 从相册选择照片进行裁剪
-     *
+     * @param uri 图片保存的路径
      * @param with   裁切的宽度
      * @param height 裁切的高度
      */
-    public void picSelectCrop(int with, int height) {
+    public void picSelectCrop(Uri uri,int with, int height) {
+        imageUri=uri;
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_PICK);//Pick an item from the data
         intent.setType("image/*");//从所有图片中进行选择
@@ -193,27 +158,31 @@ public class TakePhoto {
 
     /**
      * 从相册选择照片进行裁剪(裁切图片大小600*600)
+     * @param uri 图片保存的路径
      */
-    public void picSelectCrop() {
-        picSelectCrop(600, 600);
+    public void picSelectCrop(Uri uri) {
+        imageUri=uri;
+        picSelectCrop(uri,600, 600);
     }
 
     /**
      * 拍取照片不裁切
+     * @param uri 图片保存的路径
      */
-    public void picTakeOriginal() {
-        // TODO Auto-generated method stub
+    public void picTakeOriginal(Uri uri) {
+        imageUri=uri;
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将拍取的照片保存到指定URI
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);//将拍取的照片保存到指定URI
         activity.startActivityForResult(intent, PIC_TAKE_ORIGINAL);
     }
 
     /**
      * 从相机拍取照片进行裁剪
+     * @param uri 图片保存的路径
      */
-    public void picTakeCrop() {
-        // TODO Auto-generated method stub
+    public void picTakeCrop(Uri uri) {
+        imageUri=uri;
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将拍取的照片保存到指定URI
@@ -242,5 +211,31 @@ public class TakePhoto {
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("noFaceDetection", true); // no face detection
         activity.startActivityForResult(intent, requestCode);
+    }
+    /**
+     * 将bitmap写入到文件
+     * @param bitmap
+     * */
+    private void writeToFile(Bitmap bitmap) {
+        if (bitmap==null)return;
+        File file=new File(imageUri.getPath());
+        ByteArrayOutputStream bos=new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        FileOutputStream fos=null;
+        try {
+            fos=new FileOutputStream(file);
+            fos.write(bos.toByteArray());
+            bos.flush();
+            fos.flush();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }finally {
+            if (fos!=null) try {
+                fos.close();
+                if(bos!=null) bos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
