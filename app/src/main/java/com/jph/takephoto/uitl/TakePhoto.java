@@ -54,6 +54,12 @@ public class TakePhoto {
         this.l = l;
     }
 
+    /**
+     * 处理拍照或裁剪结果
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     public void onResult(int requestCode, int resultCode, Intent data) {
         StringBuffer sb = new StringBuffer();
         sb.append("requestCode:").append(requestCode).append("--resultCode:").append(resultCode).append("--data:").append(data).append("--imageUri:").append(imageUri);
