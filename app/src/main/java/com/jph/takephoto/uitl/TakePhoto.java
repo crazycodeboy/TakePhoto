@@ -21,6 +21,7 @@ import java.io.IOException;
  * 从相册选择照片进行裁剪，从相机拍取照片进行裁剪<br>
  * 从相册选择照片（不裁切），并获取照片的路径<br>
  * 拍取照片（不裁切），并获取照片路径
+ *
  * @author JPH
  * @date 2015.08.04
  */
@@ -56,6 +57,7 @@ public class TakePhoto {
 
     /**
      * 处理拍照或裁剪结果
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -67,13 +69,9 @@ public class TakePhoto {
         switch (requestCode) {
             case PIC_SELECT_CROP:
                 if (resultCode == Activity.RESULT_OK) {//从相册选择照片并裁切
-                    try {
-//                        bitmap = BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(imageUri));//将imageUri对象的图片加载到内存
-                        l.takeSuccess(imageUri);
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    l.takeSuccess(imageUri);
+                } else {
+                    l.takeCancel();
                 }
                 break;
             case PIC_SELECT_ORIGINAL://从相册选择照片不裁切
@@ -86,13 +84,13 @@ public class TakePhoto {
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     String picturePath = cursor.getString(columnIndex);  //获取照片路径
                     cursor.close();
-//                        bitmap = BitmapFactory.decodeFile(picturePath);
-//                        writeToFile(bitmap);
                     if (!TextUtils.isEmpty(picturePath)) {
                         l.takeSuccess(Uri.parse(picturePath));
                     } else {
                         l.takeFail("文件没找到");
                     }
+                } else {
+                    l.takeCancel();
                 }
                 break;
             case PIC_TAKE_CROP://拍取照片,并裁切
@@ -103,8 +101,8 @@ public class TakePhoto {
             case PIC_TAKE_ORIGINAL://拍取照片
                 if (resultCode == Activity.RESULT_OK) {
                     l.takeSuccess(imageUri);
-//                    String imgPath = imageUri.getPath();//获取拍摄照片路径
-//                    bitmap = BitmapFactory.decodeFile(imgPath);
+                } else {
+                    l.takeCancel();
                 }
                 break;
             case PIC_CROP://裁剪照片
@@ -112,12 +110,16 @@ public class TakePhoto {
                     l.takeSuccess(imageUri);
                 } else if (resultCode == Activity.RESULT_CANCELED) {//裁切的照片没有保存
                     if (data != null) {
-                        Bitmap bitmap= data.getParcelableExtra("data");//获取裁切的结果数据
+                        Bitmap bitmap = data.getParcelableExtra("data");//获取裁切的结果数据
                         //将裁切的结果写入到文件
                         writeToFile(bitmap);
                         l.takeSuccess(imageUri);
                         Log.w("info", bitmap == null ? "null" : "not null");
+                    } else {
+                        l.takeFail("没有获取到裁剪结果");
                     }
+                } else {
+                    l.takeCancel();
                 }
                 break;
             default:
@@ -138,6 +140,7 @@ public class TakePhoto {
 
     /**
      * 从相册选择照片进行裁剪
+     *
      * @param uri    图片保存的路径
      * @param with   裁切的宽度
      * @param height 裁切的高度
@@ -182,8 +185,10 @@ public class TakePhoto {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);//将拍取的照片保存到指定URI
         activity.startActivityForResult(intent, PIC_TAKE_ORIGINAL);
     }
+
     /**
      * 从相机拍取照片进行裁剪
+     *
      * @param uri 图片保存的路径
      */
     public void picTakeCrop(Uri uri) {
@@ -236,6 +241,7 @@ public class TakePhoto {
 
     /**
      * 将bitmap写入到文件
+     *
      * @param bitmap
      */
     private void writeToFile(Bitmap bitmap) {
