@@ -58,7 +58,6 @@ public class TakePhoto {
         StringBuffer sb = new StringBuffer();
         sb.append("requestCode:").append(requestCode).append("--resultCode:").append(resultCode).append("--data:").append(data).append("--imageUri:").append(imageUri);
         Log.w("info", sb.toString());
-        Bitmap bitmap = null;
         switch (requestCode) {
             case PIC_SELECT_CROP:
                 if (resultCode == Activity.RESULT_OK) {//从相册选择照片并裁切
@@ -107,7 +106,7 @@ public class TakePhoto {
                     l.takeSuccess(imageUri);
                 } else if (resultCode == Activity.RESULT_CANCELED) {//裁切的照片没有保存
                     if (data != null) {
-                        bitmap = data.getParcelableExtra("data");//获取裁切的结果数据
+                        Bitmap bitmap= data.getParcelableExtra("data");//获取裁切的结果数据
                         //将裁切的结果写入到文件
                         writeToFile(bitmap);
                         l.takeSuccess(imageUri);
@@ -133,7 +132,6 @@ public class TakePhoto {
 
     /**
      * 从相册选择照片进行裁剪
-     *
      * @param uri    图片保存的路径
      * @param with   裁切的宽度
      * @param height 裁切的高度
@@ -141,7 +139,7 @@ public class TakePhoto {
     public void picSelectCrop(Uri uri, int with, int height) {
         imageUri = uri;
         Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_PICK);//Pick an item from the data
+        intent.setAction(Intent.ACTION_GET_CONTENT);//Pick an item from the data
         intent.setType("image/*");//从所有图片中进行选择
         intent.putExtra("crop", "true");//设置为裁切
         intent.putExtra("aspectX", 1);//裁切的宽比例
@@ -178,10 +176,8 @@ public class TakePhoto {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);//将拍取的照片保存到指定URI
         activity.startActivityForResult(intent, PIC_TAKE_ORIGINAL);
     }
-
     /**
      * 从相机拍取照片进行裁剪
-     *
      * @param uri 图片保存的路径
      */
     public void picTakeCrop(Uri uri) {
