@@ -21,7 +21,6 @@ import java.io.IOException;
  * 从相册选择照片进行裁剪，从相机拍取照片进行裁剪<br>
  * 从相册选择照片（不裁切），并获取照片的路径<br>
  * 拍取照片（不裁切），并获取照片路径
- *
  * @author JPH
  * @date 2015.08.04
  */
@@ -235,7 +234,6 @@ public class TakePhoto {
 
     /**
      * 将bitmap写入到文件
-     *
      * @param bitmap
      */
     private void writeToFile(Bitmap bitmap) {
@@ -261,6 +259,9 @@ public class TakePhoto {
         }
     }
 
+    /**
+     * 拍照结果监听接口
+     */
     public interface TakeResultListener {
         void takeSuccess(Uri uri);
 
