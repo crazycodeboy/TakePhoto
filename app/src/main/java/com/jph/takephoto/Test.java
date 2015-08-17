@@ -14,13 +14,11 @@ import java.io.File;
  * 从相册选择照片进行裁剪，从相机拍取照片进行裁剪<br>
  * 从相册选择照片（不裁切），并获取照片的路径<br>
  * 拍取照片（不裁切），并获取照片路径
- *
  * @author JPH
  * @Date:2014.10.09
  */
 public class Test extends TakePhotoActivity {
     private ImageView imgShow;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

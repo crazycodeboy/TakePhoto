@@ -27,7 +27,7 @@ import java.io.FileNotFoundException;
 public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultListener {
     private TakePhoto takePhoto;
     /**
-     * 获取TakePhoto实例
+     *  获取TakePhoto实例
      * @return
      */
     protected TakePhoto getTakePhoto(){
