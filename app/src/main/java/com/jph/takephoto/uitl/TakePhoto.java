@@ -148,7 +148,7 @@ public class TakePhoto {
     public void picSelectCrop(Uri uri, int with, int height) {
         imageUri = uri;
         Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_GET_CONTENT);//Pick an item from the data
+        intent.setAction(Intent.ACTION_PICK);//Pick an item from the data
         intent.setType("image/*");//从所有图片中进行选择
         intent.putExtra("crop", "true");//设置为裁切
         intent.putExtra("aspectX", 1);//裁切的宽比例
