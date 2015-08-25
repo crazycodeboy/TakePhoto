@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -210,7 +211,7 @@ public class TakePhoto {
      */
     private void cropImageUri(Uri imageUri, int outputX, int outputY, int requestCode) {
         boolean isReturnData = isReturnData();
-        Log.w("ksdinf", isReturnData ? "true" : "false");
+        Log.w("ksdinf","isReturnData:"+( isReturnData ? "true" : "false"));
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(imageUri, "image/*");
         intent.putExtra("crop", "true");
@@ -230,11 +231,17 @@ public class TakePhoto {
      * 是否裁剪之后返回数据
      **/
     private boolean isReturnData() {
-        String manufacturer = android.os.Build.MANUFACTURER;
-        if (!TextUtils.isEmpty(manufacturer)) {
-            if (manufacturer.toLowerCase().contains("lenovo")) {//对于联想的手机返回数据
-                return true;
-            }
+       String release= Build.VERSION.RELEASE;
+       int sdk= Build.VERSION.SDK_INT;
+        Log.i("ksdinf","release:"+release+"sdk:"+sdk);
+//        String manufacturer = android.os.Build.MANUFACTURER;
+//        if (!TextUtils.isEmpty(manufacturer)) {
+//            if (manufacturer.toLowerCase().contains("lenovo")) {//对于联想的手机返回数据
+//                return true;
+//            }
+//        }
+        if (sdk>=21){//5.0或以上版本要求返回数据
+            return  true;
         }
         return false;
     }
