@@ -53,4 +53,16 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
     public void takeCancel() {
         Log.w("info", "用户取消");
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (takePhoto!=null)outState.putParcelable("imageUri", takePhoto.getImageUri());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        getTakePhoto().setImageUri((Uri)savedInstanceState.getParcelable("imageUri"));
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 }

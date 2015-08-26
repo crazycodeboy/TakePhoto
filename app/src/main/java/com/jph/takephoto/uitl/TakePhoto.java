@@ -274,6 +274,12 @@ public class TakePhoto {
             }
         }
     }
+    public Uri getImageUri() {
+        return imageUri;
+    }
+    public void setImageUri(Uri imageUri) {
+        this.imageUri = imageUri;
+    }
 
     /**
      * 拍照结果监听接口
