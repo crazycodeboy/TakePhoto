@@ -26,18 +26,6 @@ import java.io.FileNotFoundException;
  */
 public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultListener {
     private TakePhoto takePhoto;
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable("takePhoto",takePhoto);
-        super.onSaveInstanceState(outState);
-    }
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        takePhoto= (TakePhoto) savedInstanceState.getSerializable("takePhoto");
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
     /**
      *  获取TakePhoto实例
      * @return
@@ -50,7 +38,7 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        takePhoto.onResult(requestCode, resultCode, data);
+        getTakePhoto().onResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
     @Override
