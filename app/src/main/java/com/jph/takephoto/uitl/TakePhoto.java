@@ -27,7 +27,7 @@ import java.io.Serializable;
  * @author JPH
  * @date 2015.08.04
  */
-public class TakePhoto implements Serializable{
+public class TakePhoto {
     /**
      * request Code 从相册选择照片并裁切
      **/
