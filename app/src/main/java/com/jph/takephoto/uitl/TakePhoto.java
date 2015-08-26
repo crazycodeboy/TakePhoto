@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * 拍照及从图库选择照片框架
@@ -26,7 +27,7 @@ import java.io.IOException;
  * @author JPH
  * @date 2015.08.04
  */
-public class TakePhoto {
+public class TakePhoto implements Serializable{
     /**
      * request Code 从相册选择照片并裁切
      **/
