@@ -26,7 +26,7 @@ public class Test extends TakePhotoActivity {
         imgShow= (ImageView) findViewById(R.id.imgShow);
     }
     public void cropPic(View view) {
-        Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), +System.currentTimeMillis() + ".jpg"));
+        Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "/temp/"+System.currentTimeMillis() + ".jpg"));
         switch (view.getId()) {
             case R.id.btnCropFromGallery://从相册选择照片进行裁剪
                 getTakePhoto().picSelectCrop(imageUri);
@@ -56,6 +56,7 @@ public class Test extends TakePhotoActivity {
     public void takeSuccess(Uri uri) {
         super.takeSuccess(uri);
         showImg(uri);
+        compressPic(uri.getPath());
     }
     private void showImg(Uri uri){
         BitmapFactory.Options option=new BitmapFactory.Options();
