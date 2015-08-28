@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <Button
+        android:id="@+id/btnCropFromGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="cropPic"
+        android:text="从相册选择照片进行裁剪" />
+
+    <Button
+        android:id="@+id/btnOriginal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="cropPic"
+        android:text="从相册获取原生的图片" />
+
+    <Button
+        android:id="@+id/btnCropFromTake"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="cropPic"
+        android:text="从相机拍取照片进行裁剪" />
+
+    <Button
+        android:id="@+id/btnTakeOriginal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="cropPic"
+        android:layout_marginTop="51dp"
+        android:text="从相机拍取照片不裁剪" />
+    <ImageView
+        android:id="@+id/imgShow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:scaleType="fitCenter" />
+
+</LinearLayout>

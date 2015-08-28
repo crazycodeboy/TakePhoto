@@ -1,4 +1,4 @@
-package com.jph.takephoto;
+package com.jph.simple;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.jph.takephoto.TakePhotoActivity;
 
 import java.io.File;
 
@@ -17,7 +19,7 @@ import java.io.File;
  * @author JPH
  * @Date:2014.10.09
  */
-public class Test extends TakePhotoActivity {
+public class MainActivity extends TakePhotoActivity {
     private ImageView imgShow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
