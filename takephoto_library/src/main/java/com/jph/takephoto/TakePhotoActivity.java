@@ -27,6 +27,7 @@ import java.util.TimerTask;
 
 /**
  * 继承这个类来让Activity获取拍照的能力<br>
+ *
  * @author JPH
  * @Date:2015.08.05
  */
