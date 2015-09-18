@@ -3,6 +3,9 @@ package com.jph.takephoto.uitl;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,7 +29,7 @@ public class CompressImageUtil {
 	 */
 	private void compressImageByQuality(final Bitmap bitmap,final String imgPath){
 		if(bitmap==null){
-			listener.onCompressFailed("像素压缩失败");
+			sendMsg(false,"像素压缩失败");
 			return;
 		}
 		new Thread(new Runnable() {//开启多线程进行压缩处理
@@ -51,9 +54,9 @@ public class CompressImageUtil {
 					fos.write(baos.toByteArray());
 					fos.flush();
 					fos.close();
-					listener.onCompressSuccessed(imgPath);
+					sendMsg(true, imgPath);
 				} catch (Exception e) {
-					listener.onCompressFailed("质量压缩失败");
+					sendMsg(false,"质量压缩失败");
 					e.printStackTrace();
 				}
 			}
@@ -69,7 +72,7 @@ public class CompressImageUtil {
 	private void compressImageByPixel(String imgPath) {
 		Bitmap bitmap=null;
 		if(imgPath==null){
-			listener.onCompressFailed("要压缩的文件不存在");
+			sendMsg(false,"要压缩的文件不存在");
 			return;
 		}
 		BitmapFactory.Options newOpts = new BitmapFactory.Options();
@@ -105,11 +108,38 @@ public class CompressImageUtil {
 		this.listener=listener;
 		File file=new File(imgPath);
 		if (file==null||!file.exists()||!file.isFile()){//如果文件不存在，则不做任何处理
-			listener.onCompressFailed("要压缩的文件不存在");
+			sendMsg(false,"要压缩的文件不存在");
 			return;
 		}
 		this.compressImageByPixel(imgPath);
 	}
+
+	/**
+	 * 发送压缩结果的消息
+	 * @param isSuccess 压缩是否成功
+	 * @param obj
+	 */
+	private void sendMsg(boolean isSuccess,String obj){
+		Message msg=new Message();
+		msg.obj=obj;
+		msg.what=isSuccess?1:0;
+		mhHandler.sendMessage(msg);
+	}
+	/**
+	 * 此handle的目的主要是为了将接口在主线程中触发
+	 * ，为了安全起见把接口放到主线程触发
+	 */
+	Handler mhHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			if(msg.what==1){//压缩成功
+				listener.onCompressSuccessed((String)msg.obj);
+			}else if (msg.what==0) {//压缩失败
+				listener.onCompressFailed((String) msg.obj);
+			}
+		}
+	};
 
 	/**
 	 * 压缩结果监听器
