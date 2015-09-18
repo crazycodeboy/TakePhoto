@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-
 import com.jph.takephoto.uitl.CompressImageUtil;
 import com.jph.takephoto.uitl.CompressImageUtil.CompressListener;
 import com.jph.takephoto.uitl.TakePhoto;
@@ -21,7 +20,6 @@ import com.jph.takephoto.uitl.Utils;
 public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultListener,CompressListener {
     private TakePhoto takePhoto;
     protected ProgressDialog wailLoadDialog;
-    private CompressListener compressListener;
     /**
      *  获取TakePhoto实例
      * @return
@@ -63,21 +61,17 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
     /**
      * 压缩照片
      * @param path 照片路径
-     * @param compressListener 压缩照片的监听器
      */
-    protected void compressPic(String path,CompressListener compressListener) {
-        this.compressListener=compressListener;
+    protected void compressPic(String path) {
         wailLoadDialog = Utils.showProgressDialog(TakePhotoActivity.this,"正在压缩照片...");// 提交数据
         new CompressImageUtil().compressImageByPixel(path,this);
     }
     @Override
     public void onCompressSuccessed(String imgPath) {
-        this.compressListener.onCompressSuccessed(imgPath);
         if (wailLoadDialog!=null)wailLoadDialog.dismiss();
     }
     @Override
     public void onCompressFailed(String msg) {
-        this.compressListener.onCompressFailed(msg);
         if (wailLoadDialog!=null)wailLoadDialog.dismiss();
     }
 }
