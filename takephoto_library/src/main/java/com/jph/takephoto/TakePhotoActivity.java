@@ -63,6 +63,7 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
     /**
      * 压缩照片
      * @param path 照片路径
+     * @param compressListener 压缩照片的监听器
      */
     protected void compressPic(String path,CompressListener compressListener) {
         this.compressListener=compressListener;
