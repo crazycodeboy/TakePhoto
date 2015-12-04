@@ -65,10 +65,11 @@ public class TakePhoto {
         StringBuffer sb = new StringBuffer();
         sb.append("requestCode:").append(requestCode).append("--resultCode:").append(resultCode).append("--data:").append(data).append("--imageUri:").append(imageUri);
         Log.w("info", sb.toString());
+
         switch (requestCode) {
             case PIC_SELECT_CROP:
-                if (resultCode == Activity.RESULT_OK) {//从相册选择照片并裁切
-                    l.takeSuccess(imageUri);
+                if (resultCode == Activity.RESULT_OK&&data!=null) {//从相册选择照片并裁切
+                    cropImageUri(data.getData(), 480, 480, PIC_CROP);
                 } else {
                     l.takeCancel();
                 }
@@ -137,39 +138,41 @@ public class TakePhoto {
         activity.startActivityForResult(intent, PIC_SELECT_ORIGINAL);
     }
 
-    /**
-     * 从相册选择照片进行裁剪
-     *
-     * @param uri    图片保存的路径
-     * @param with   裁切的宽度
-     * @param height 裁切的高度
-     */
-    public void picSelectCrop(Uri uri, int with, int height) {
-        imageUri = uri;
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_PICK);//Pick an item from the data
-        intent.setType("image/*");//从所有图片中进行选择
-        intent.putExtra("crop", "true");//设置为裁切
-        intent.putExtra("aspectX", 1);//裁切的宽比例
-        intent.putExtra("aspectY", 1);//裁切的高比例
-        intent.putExtra("outputX", with);//裁切的宽度
-        intent.putExtra("outputY", height);//裁切的高度
-        intent.putExtra("scale", true);//支持缩放
-        intent.putExtra("return-data", false);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将裁切的结果输出到指定的Uri
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());//裁切成的图片的格式
-        intent.putExtra("noFaceDetection", true); // no face detection
-        activity.startActivityForResult(intent, PIC_SELECT_CROP);
-    }
+//    /**
+//     * 从相册选择照片进行裁剪
+//     *
+//     * @param uri    图片保存的路径
+//     * @param with   裁切的宽度
+//     * @param height 裁切的高度
+//     */
+//    public void picSelectCrop(Uri uri, int with, int height) {
+//        imageUri = uri;
+//        Intent intent = new Intent(Intent.ACTION_PICK);
+//        intent.setDataAndType(imageUri, "image/*");
+//        intent.putExtra("crop", "true");//设置为裁切
+//        intent.putExtra("aspectX", 2);//裁切的宽比例
+//        intent.putExtra("aspectY", 1);//裁切的高比例
+//        intent.putExtra("outputX", with);//裁切的宽度
+//        intent.putExtra("outputY", height);//裁切的高度
+//        intent.putExtra("scale", true);//支持缩放
+//        intent.putExtra("return-data", false);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将裁切的结果输出到指定的Uri
+//        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());//裁切成的图片的格式
+//        intent.putExtra("noFaceDetection", true); // no face detection
+//        activity.startActivityForResult(intent, PIC_SELECT_CROP);
+//    }
 
     /**
-     * 从相册选择照片进行裁剪(裁切图片大小600*600)
+     * 从相册选择照片进行裁剪
      *
      * @param uri 图片保存的路径
      */
     public void picSelectCrop(Uri uri) {
         imageUri = uri;
-        picSelectCrop(uri, 600, 600);
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        intent.putExtra("return-data", true);
+        activity.startActivityForResult(intent, PIC_SELECT_CROP);
     }
 
     /**
@@ -181,7 +184,7 @@ public class TakePhoto {
         imageUri = uri;
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);//将拍取的照片保存到指定URI
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将拍取的照片保存到指定URI
         activity.startActivityForResult(intent, PIC_TAKE_ORIGINAL);
     }
 
@@ -195,7 +198,6 @@ public class TakePhoto {
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将拍取的照片保存到指定URI
-//        intent.putExtra(MediaStore.Images.Media.ORIENTATION, 0);//设置竖屏
         activity.startActivityForResult(intent, PIC_TAKE_CROP);
     }
 
@@ -218,7 +220,7 @@ public class TakePhoto {
         intent.putExtra("outputX", outputX);
         intent.putExtra("outputY", outputY);
         intent.putExtra("scale", true);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, this.imageUri);
         intent.putExtra("return-data", isReturnData);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("noFaceDetection", true); // no face detection
@@ -229,8 +231,8 @@ public class TakePhoto {
      * 是否裁剪之后返回数据
      **/
     private boolean isReturnData() {
-       String release= Build.VERSION.RELEASE;
-       int sdk= Build.VERSION.SDK_INT;
+        String release= Build.VERSION.RELEASE;
+        int sdk= Build.VERSION.SDK_INT;
         Log.i("ksdinf","release:"+release+"sdk:"+sdk);
 //        String manufacturer = android.os.Build.MANUFACTURER;
 //        if (!TextUtils.isEmpty(manufacturer)) {
