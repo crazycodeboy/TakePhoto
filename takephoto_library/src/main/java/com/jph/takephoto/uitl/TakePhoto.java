@@ -238,8 +238,8 @@ public class TakePhoto {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(imageUri, "image/*");
         intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
+        intent.putExtra("aspectX", cropWidth);
+        intent.putExtra("aspectY", cropHeight);
         intent.putExtra("outputX",cropWidth);
         intent.putExtra("outputY",cropHeight);
         intent.putExtra("scale", true);
