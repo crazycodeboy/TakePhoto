@@ -257,15 +257,15 @@ public class TakePhoto {
         String release= Build.VERSION.RELEASE;
         int sdk= Build.VERSION.SDK_INT;
         Log.i("ksdinf","release:"+release+"sdk:"+sdk);
-//        String manufacturer = android.os.Build.MANUFACTURER;
-//        if (!TextUtils.isEmpty(manufacturer)) {
-//            if (manufacturer.toLowerCase().contains("lenovo")) {//对于联想的手机返回数据
-//                return true;
-//            }
-//        }
-        if (sdk>=21){//5.0或以上版本要求返回数据
-            return  true;
+        String manufacturer = android.os.Build.MANUFACTURER;
+        if (!TextUtils.isEmpty(manufacturer)) {
+            if (manufacturer.toLowerCase().contains("lenovo")) {//对于联想的手机返回数据
+                return true;
+            }
         }
+//        if (sdk>=21){//5.0或以上版本要求返回数据
+//            return  true;
+//        }
         return false;
     }
 
