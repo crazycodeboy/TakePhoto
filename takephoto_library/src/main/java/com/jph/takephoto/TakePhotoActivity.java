@@ -68,7 +68,7 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
     }
     @Override
     public void onCompressSuccessed(String imgPath) {
-        if (wailLoadDialog!=null)wailLoadDialog.dismiss();
+        if (wailLoadDialog!=null&&wailLoadDialog.isShowing()&&!this.isFinishing())wailLoadDialog.dismiss();
     }
     @Override
     public void onCompressFailed(String msg) {
