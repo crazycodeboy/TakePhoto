@@ -13,7 +13,7 @@ import java.io.FileOutputStream;
 /**
  * 压缩照片2.0
  * @author JPH
- * @date 2015-08-26 下午1:44:26
+ * Date 2015-08-26 下午1:44:26
  */
 public class CompressImageUtil {
 	//压缩文件的路径
@@ -100,7 +100,7 @@ public class CompressImageUtil {
 	/**
 	 * 压缩文件并检查压缩是否完成
 	 * @author JPH
-	 * @date 2015-1-26 下午4:58:18
+	 * Date 2015-1-26 下午4:58:18
 	 * @param imgPath
 	 */
 	public void compressImageByPixel(String imgPath,CompressListener listener) {

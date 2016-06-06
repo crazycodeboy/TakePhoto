@@ -21,7 +21,7 @@ import java.io.IOException;
  * 拍取照片（不裁切），并获取照片路径
  *
  * @author JPH
- * @date 2015.08.04
+ * Date 2015.08.04
  */
 public class TakePhoto {
     /**
