@@ -78,14 +78,7 @@ public class TakePhoto {
                 break;
             case PIC_SELECT_ORIGINAL://从相册选择照片不裁切
                 if (resultCode == Activity.RESULT_OK) {
-                    Uri selectedImage = data.getData(); //获取系统返回的照片的Uri
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = activity.getContentResolver().query(selectedImage,
-                            filePathColumn, null, null, null);//从系统表中查询指定Uri对应的照片
-                    cursor.moveToFirst();
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String picturePath = cursor.getString(columnIndex);  //获取照片路径
-                    cursor.close();
+                    String picturePath = TUtils.getFilePathWithUri(data.getData(), activity);
                     if (!TextUtils.isEmpty(picturePath)) {
                         l.takeSuccess(Uri.parse(picturePath));
                     } else {
@@ -128,7 +121,6 @@ public class TakePhoto {
                 break;
         }
     }
-
     /**
      * 从相册选择原生的照片（不裁切）
      */

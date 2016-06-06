@@ -28,7 +28,9 @@ public class MainActivity extends TakePhotoActivity {
         imgShow= (ImageView) findViewById(R.id.imgShow);
     }
     public void cropPic(View view) {
-        Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "/temp/"+System.currentTimeMillis() + ".jpg"));
+        File file=new File(Environment.getExternalStorageDirectory(), "/temp/"+System.currentTimeMillis() + ".jpg");
+        if (!file.getParentFile().exists())file.getParentFile().mkdirs();
+        Uri imageUri = Uri.fromFile(file);
         switch (view.getId()) {
             case R.id.btnCropFromGallery://从相册选择照片进行裁剪
                 getTakePhoto().picSelectCrop(imageUri);

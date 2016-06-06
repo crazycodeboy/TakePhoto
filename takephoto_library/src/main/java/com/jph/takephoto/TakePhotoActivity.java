@@ -9,7 +9,7 @@ import android.util.Log;
 import com.jph.takephoto.uitl.CompressImageUtil;
 import com.jph.takephoto.uitl.CompressImageUtil.CompressListener;
 import com.jph.takephoto.uitl.TakePhoto;
-import com.jph.takephoto.uitl.Utils;
+import com.jph.takephoto.uitl.TUtils;
 
 /**
  * 继承这个类来让Activity获取拍照的能力<br>
@@ -63,7 +63,7 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
      * @param path 照片路径
      */
     protected void compressPic(String path) {
-        wailLoadDialog = Utils.showProgressDialog(TakePhotoActivity.this,"正在压缩照片...");// 提交数据
+        wailLoadDialog = TUtils.showProgressDialog(TakePhotoActivity.this,"正在压缩照片...");// 提交数据
         new CompressImageUtil().compressImageByPixel(path,this);
     }
     @Override
