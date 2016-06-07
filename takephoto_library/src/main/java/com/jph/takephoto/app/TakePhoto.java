@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.jph.takephoto.uitl.IntentUtils;
 import com.jph.takephoto.uitl.TConstant;
 import com.jph.takephoto.uitl.TUtils;
 
@@ -18,7 +19,7 @@ import com.jph.takephoto.uitl.TUtils;
  * 拍取照片（不裁切），并获取照片路径
  *
  * @author JPH
- * Date 2015.08.04
+ *         Date 2015.08.04
  */
 public class TakePhoto {
     private int cropHeight;
@@ -26,6 +27,7 @@ public class TakePhoto {
     private Activity activity;
     private TakeResultListener l;
     private Uri imageUri;
+
     public TakePhoto(Activity activity, TakeResultListener l) {
         this.activity = activity;
         this.l = l;
@@ -45,7 +47,7 @@ public class TakePhoto {
 
         switch (requestCode) {
             case TConstant.PIC_SELECT_CROP:
-                if (resultCode == Activity.RESULT_OK&&data!=null) {//从相册选择照片并裁切
+                if (resultCode == Activity.RESULT_OK && data != null) {//从相册选择照片并裁切
                     cropImageUri(data.getData(), TConstant.PIC_CROP);
                 } else {
                     l.takeCancel();
@@ -81,7 +83,7 @@ public class TakePhoto {
                 } else if (resultCode == Activity.RESULT_CANCELED) {//裁切的照片没有保存
                     if (data != null) {
                         Bitmap bitmap = data.getParcelableExtra("data");//获取裁切的结果数据
-                        TUtils.writeToFile(bitmap,imageUri);//将裁切的结果写入到文件
+                        TUtils.writeToFile(bitmap, imageUri);//将裁切的结果写入到文件
                         l.takeSuccess(imageUri);
                         Log.w("info", bitmap == null ? "null" : "not null");
                     } else {
@@ -95,40 +97,14 @@ public class TakePhoto {
                 break;
         }
     }
+
     /**
      * 从相册选择原生的照片（不裁切）
      */
     public void picSelectOriginal(Uri uri) {
         imageUri = uri;
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_PICK);//Pick an item from the data
-        intent.setType("image/*");//从所有图片中进行选择
-        activity.startActivityForResult(intent, TConstant.PIC_SELECT_ORIGINAL);
+        activity.startActivityForResult(IntentUtils.getPhotoPickIntent(), TConstant.PIC_SELECT_ORIGINAL);
     }
-
-//    /**
-//     * 从相册选择照片进行裁剪
-//     *
-//     * @param uri    图片保存的路径
-//     * @param with   裁切的宽度
-//     * @param height 裁切的高度
-//     */
-//    public void picSelectCrop(Uri uri, int with, int height) {
-//        imageUri = uri;
-//        Intent intent = new Intent(Intent.ACTION_PICK);
-//        intent.setDataAndType(imageUri, "image/*");
-//        intent.putExtra("crop", "true");//设置为裁切
-//        intent.putExtra("aspectX", 2);//裁切的宽比例
-//        intent.putExtra("aspectY", 1);//裁切的高比例
-//        intent.putExtra("outputX", with);//裁切的宽度
-//        intent.putExtra("outputY", height);//裁切的高度
-//        intent.putExtra("scale", true);//支持缩放
-//        intent.putExtra("return-data", false);
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将裁切的结果输出到指定的Uri
-//        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());//裁切成的图片的格式
-//        intent.putExtra("noFaceDetection", true); // no face detection
-//        activity.startActivityForResult(intent, PIC_SELECT_CROP);
-//    }
 
     /**
      * 从相册选择照片进行裁剪
@@ -136,23 +112,21 @@ public class TakePhoto {
      * @param uri 图片保存的路径
      */
     public void picSelectCrop(Uri uri) {
-        picSelectCrop(uri,TConstant.outputX,TConstant.outputY);
+        picSelectCrop(uri, TConstant.outputX, TConstant.outputY);
     }
+
     /**
      * 从相册选择照片进行裁剪
      *
-     * @param uri 图片保存的路径
-     * @param cropWidth 裁切宽度
+     * @param uri        图片保存的路径
+     * @param cropWidth  裁切宽度
      * @param cropHeight 裁切高度
      */
-    public void picSelectCrop(Uri uri,int cropWidth,int cropHeight) {
-        this.cropWidth=cropWidth;
-        this.cropHeight=cropHeight;
+    public void picSelectCrop(Uri uri, int cropWidth, int cropHeight) {
+        this.cropWidth = cropWidth;
+        this.cropHeight = cropHeight;
         imageUri = uri;
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        intent.putExtra("return-data", true);
-        activity.startActivityForResult(intent, TConstant.PIC_SELECT_CROP);
+        activity.startActivityForResult(IntentUtils.getPhotoPickIntent(), TConstant.PIC_SELECT_CROP);
     }
 
     /**
@@ -162,33 +136,30 @@ public class TakePhoto {
      */
     public void picTakeOriginal(Uri uri) {
         imageUri = uri;
-        Intent intent = new Intent();
-        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将拍取的照片保存到指定URI
-        activity.startActivityForResult(intent, TConstant.PIC_TAKE_ORIGINAL);
+        activity.startActivityForResult(IntentUtils.getPhotoCaptureIntent(imageUri), TConstant.PIC_TAKE_ORIGINAL);
     }
 
     /**
      * 从相机拍取照片进行裁剪
+     *
      * @param uri 图片保存的路径
      */
     public void picTakeCrop(Uri uri) {
-      picTakeCrop(uri,TConstant.outputX,TConstant.outputY);
+        picTakeCrop(uri, TConstant.outputX, TConstant.outputY);
     }
+
     /**
      * 从相机拍取照片进行裁剪
-     * @param uri 图片保存的路径
-     * @param cropWidth 裁切宽度
+     *
+     * @param uri        图片保存的路径
+     * @param cropWidth  裁切宽度
      * @param cropHeight 裁切高度
      */
-    public void picTakeCrop(Uri uri,int cropWidth,int cropHeight) {
-        this.cropWidth=cropWidth;
-        this.cropHeight=cropHeight;
+    public void picTakeCrop(Uri uri, int cropWidth, int cropHeight) {
+        this.cropWidth = cropWidth;
+        this.cropHeight = cropHeight;
         imageUri = uri;
-        Intent intent = new Intent();
-        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将拍取的照片保存到指定URI
-        activity.startActivityForResult(intent, TConstant.PIC_TAKE_CROP);
+        activity.startActivityForResult(IntentUtils.getPhotoCaptureIntent(imageUri), TConstant.PIC_TAKE_CROP);
     }
 
 
@@ -198,26 +169,14 @@ public class TakePhoto {
      * @param imageUri：uri对应的照片
      * @param requestCode：请求码
      */
-    private void cropImageUri(Uri imageUri,int requestCode) {
-        boolean isReturnData = TUtils.isReturnData();
-        Log.w("ksdinf","isReturnData:"+( isReturnData ? "true" : "false"));
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(imageUri, "image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", cropWidth);
-        intent.putExtra("aspectY", cropHeight);
-        intent.putExtra("outputX",cropWidth);
-        intent.putExtra("outputY",cropHeight);
-        intent.putExtra("scale", true);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, this.imageUri);
-        intent.putExtra("return-data", isReturnData);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        intent.putExtra("noFaceDetection", true); // no face detection
-        activity.startActivityForResult(intent, requestCode);
+    private void cropImageUri(Uri imageUri, int requestCode) {
+        activity.startActivityForResult(IntentUtils.getPhotoCropIntent(imageUri,this.imageUri,cropWidth,cropHeight), requestCode);
     }
+
     public Uri getImageUri() {
         return imageUri;
     }
+
     public void setImageUri(Uri imageUri) {
         this.imageUri = imageUri;
     }
