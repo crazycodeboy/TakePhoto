@@ -16,7 +16,7 @@ import java.io.File;
  * 从相册选择照片（不裁切），并获取照片的路径<br>
  * 拍取照片（不裁切），并获取照片路径
  * Author JPH
- * Date 2016/6/7 0007 15:53
+ * Date 2016/6/7 0007 16:01
  */
 public class MainActivity extends TakePhotoActivity {
     private ImageView imgShow;

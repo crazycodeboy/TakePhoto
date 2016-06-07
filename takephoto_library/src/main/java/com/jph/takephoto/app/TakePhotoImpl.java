@@ -20,11 +20,11 @@ import com.jph.takephoto.uitl.TUtils;
  * Date: 2016/6/7 0007 15:10
  */
 public class TakePhotoImpl implements TakePhoto{
-    private int cropHeight;
-    private int cropWidth;
     private Activity activity;
     private TakeResultListener listener;
     private Uri outPutUri;
+    private int cropHeight;
+    private int cropWidth;
 
     public TakePhotoImpl(Activity activity, TakeResultListener listener) {
         this.activity = activity;
@@ -101,7 +101,7 @@ public class TakePhotoImpl implements TakePhoto{
 
     @Override
     public void onPicSelectCrop(Uri outPutUri) {
-        onPicSelectCrop(outPutUri,cropWidth,cropHeight);
+        onPicSelectCrop(outPutUri,TConstant.outputX,TConstant.outputY);
     }
 
     @Override
