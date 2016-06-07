@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 import com.jph.takephoto.app.TakePhotoActivity;
+import com.jph.takephoto.app.TakePhotoFragmentActivity;
 import com.jph.takephoto.compress.CompressConfig;
 
 import java.io.File;
@@ -19,7 +20,7 @@ import java.io.File;
  * Author JPH
  * Date 2016/6/7 0007 16:01
  */
-public class MainActivity extends TakePhotoActivity {
+public class MainActivity extends TakePhotoFragmentActivity {
     private ImageView imgShow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
