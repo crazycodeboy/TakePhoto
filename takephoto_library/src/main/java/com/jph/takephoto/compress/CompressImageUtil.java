@@ -1,4 +1,4 @@
-package com.jph.takephoto.uitl;
+package com.jph.takephoto.compress;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -20,6 +20,11 @@ public class CompressImageUtil {
 	private String imgPath;
 	//压缩结果监听器
 	private CompressListener listener;
+	private CompressConfig config;
+
+	public CompressImageUtil(CompressConfig config) {
+		this.config=config==null?CompressConfig.getDefaultConfig():config;
+	}
 	/**
 	 * 多线程压缩图片的质量
 	 * @author JPH
@@ -39,7 +44,7 @@ public class CompressImageUtil {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				int options = 100;
 				bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);//质量压缩方法，把压缩后的数据存放到baos中 (100表示不压缩，0表示压缩到最小)
-				while (baos.toByteArray().length / 1024 >100) {//循环判断如果压缩后图片是否大于100KB,大于继续压缩         
+				while (baos.toByteArray().length >config.getMaxSize()) {//循环判断如果压缩后图片是否大于指定大小,大于继续压缩
 					baos.reset();//重置baos即让下一次的写入覆盖之前的内容 
 					options -= 10;//图片质量每次减少10
 					if(options<0)options=0;//如果图片质量小于0，则将图片的质量压缩到最小值
@@ -81,7 +86,7 @@ public class CompressImageUtil {
 		newOpts.inJustDecodeBounds = false;
 		int width = newOpts.outWidth;
 		int height = newOpts.outHeight;
-		float maxSize =1200f;//默认1200px
+		float maxSize =config.getMaxPixel();
 		int be = 1;
 		if (width > height && width > maxSize) {//缩放比,用高或者宽其中较大的一个数据进行计算
 			be = (int) (newOpts.outWidth / maxSize);

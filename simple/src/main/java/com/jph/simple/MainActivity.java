@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 import com.jph.takephoto.app.TakePhotoActivity;
+import com.jph.takephoto.compress.CompressConfig;
 
 import java.io.File;
 
@@ -41,7 +42,7 @@ public class MainActivity extends TakePhotoActivity {
                 getTakePhoto().onPicSelectOriginal();
                 break;
             case R.id.btnTakeOriginal://从相机拍取照片不裁剪
-                getTakePhoto().onPicTakeOriginal(imageUri);
+                getTakePhoto().onEnableCompress(CompressConfig.getDefaultConfig().setShowCompressDialog(true)).onPicTakeOriginal(imageUri);
                 break;
             default:
                 break;
@@ -59,7 +60,6 @@ public class MainActivity extends TakePhotoActivity {
     public void takeSuccess(String imagePath) {
         super.takeSuccess(imagePath);
         showImg(imagePath);
-        compressPic(imagePath);
     }
     private void showImg(String imagePath){
         BitmapFactory.Options option=new BitmapFactory.Options();

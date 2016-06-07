@@ -1,6 +1,7 @@
 package com.jph.takephoto.app;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.jph.takephoto.compress.CompressConfig;
+import com.jph.takephoto.compress.CompressImageUtil;
 import com.jph.takephoto.uitl.IntentUtils;
 import com.jph.takephoto.uitl.TConstant;
 import com.jph.takephoto.uitl.TUtils;
@@ -26,7 +29,8 @@ public class TakePhotoImpl implements TakePhoto{
     private Uri outPutUri;
     private int cropHeight;
     private int cropWidth;
-
+    private CompressConfig compressConfig;
+    private ProgressDialog wailLoadDialog;
     public TakePhotoImpl(Activity activity, TakeResultListener listener) {
         this.activity = activity;
         this.listener = listener;
@@ -38,6 +42,7 @@ public class TakePhotoImpl implements TakePhoto{
             cropHeight=savedInstanceState.getInt("cropHeight");
             cropWidth=savedInstanceState.getInt("cropWidth");
             outPutUri=savedInstanceState.getParcelable("outPutUri");
+            compressConfig=(CompressConfig)savedInstanceState.getSerializable("compressConfig");
         }
     }
 
@@ -46,6 +51,7 @@ public class TakePhotoImpl implements TakePhoto{
         outState.putInt("cropHeight",cropHeight);
         outState.putInt("cropWidth",cropWidth);
         outState.putParcelable("outPutUri",outPutUri);
+        outState.putSerializable("compressConfig",compressConfig);
     }
 
     @Override
@@ -62,9 +68,9 @@ public class TakePhotoImpl implements TakePhoto{
                 if (resultCode == Activity.RESULT_OK) {
                     String picturePath = TUtils.getFilePathWithUri(data.getData(), activity);
                     if (!TextUtils.isEmpty(picturePath)) {
-                        listener.takeSuccess(picturePath);
+                        takeSuccess(picturePath);
                     } else {
-                        listener.takeFail("文件没找到");
+                        takeFail("文件没找到");
                     }
                 } else {
                     listener.takeCancel();
@@ -77,22 +83,22 @@ public class TakePhotoImpl implements TakePhoto{
                 break;
             case TConstant.PIC_TAKE_ORIGINAL://拍取照片
                 if (resultCode == Activity.RESULT_OK) {
-                    listener.takeSuccess(TUtils.getFilePathWithUri(outPutUri, activity));
+                    takeSuccess(TUtils.getFilePathWithUri(outPutUri, activity));
                 } else {
                     listener.takeCancel();
                 }
                 break;
             case TConstant.PIC_CROP://裁剪照片
                 if (resultCode == Activity.RESULT_OK) {
-                    listener.takeSuccess(TUtils.getFilePathWithUri(outPutUri, activity));
+                    takeSuccess(TUtils.getFilePathWithUri(outPutUri, activity));
                 } else if (resultCode == Activity.RESULT_CANCELED) {//裁切的照片没有保存
                     if (data != null) {
                         Bitmap bitmap = data.getParcelableExtra("data");//获取裁切的结果数据
                         TUtils.writeToFile(bitmap, outPutUri);//将裁切的结果写入到文件
-                        listener.takeSuccess(TUtils.getFilePathWithUri(outPutUri, activity));
+                        takeSuccess(TUtils.getFilePathWithUri(outPutUri, activity));
                         Log.w("info", bitmap == null ? "null" : "not null");
                     } else {
-                        listener.takeFail("没有获取到裁剪结果");
+                        takeFail("没有获取到裁剪结果");
                     }
                 } else {
                     listener.takeCancel();
@@ -145,7 +151,35 @@ public class TakePhotoImpl implements TakePhoto{
         activity.startActivityForResult(IntentUtils.getPhotoCaptureIntent(this.outPutUri), TConstant.PIC_TAKE_CROP);
     }
 
+    @Override
+    public TakePhoto onEnableCompress(CompressConfig config) {
+        this.compressConfig=config;
+        return this;
+    }
+
     private void cropImageUri(Uri imageUri) {
         onCropImageUri(imageUri, outPutUri, cropWidth, cropHeight);
+    }
+    private void takeSuccess(final String picturePath){
+        if (null==compressConfig){
+            listener.takeSuccess(picturePath);
+        }else {
+            if (compressConfig.isShowCompressDialog())wailLoadDialog = TUtils.showProgressDialog(activity,"正在压缩照片...");
+            new CompressImageUtil(compressConfig).compressImageByPixel(picturePath, new CompressImageUtil.CompressListener() {
+                @Override
+                public void onCompressSuccessed(String imgPath) {
+                    listener.takeSuccess(imgPath);
+                    if (wailLoadDialog!=null&&!activity.isFinishing())wailLoadDialog.dismiss();
+                }
+                @Override
+                public void onCompressFailed(String msg) {
+                    listener.takeFail(String.format("图片压缩失败:%s,picturePath:%s",msg,picturePath));
+                    if (wailLoadDialog!=null&&!activity.isFinishing())wailLoadDialog.dismiss();
+                }
+            });
+        }
+    }
+    private void takeFail(String message){
+        listener.takeFail(message);
     }
 }

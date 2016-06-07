@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.jph.takephoto.compress.CompressConfig;
+
 /**
  * 拍照及从图库选择照片框架
  * 从相册选择照片进行裁剪，从相机拍取照片进行裁剪<br>
@@ -64,6 +66,12 @@ public interface TakePhoto {
      * @param cropHeight 裁切高度
      */
     void onPicTakeCrop(Uri outPutUri, int cropWidth, int cropHeight);
+
+    /**
+     * 启用照片压缩
+     * @return 压缩照片配置类
+     */
+    TakePhoto onEnableCompress(CompressConfig config);
     /**
      * 裁剪指定uri对应的照片
      *
