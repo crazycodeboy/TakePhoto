@@ -3,15 +3,68 @@ package com.jph.takephoto.uitl;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Author: JPH
  * Date: 2015/8/26 0026 16:23
  */
 public class TUtils {
-
+    /**
+     * 是否裁剪之后返回数据
+     **/
+    public static boolean isReturnData() {
+        String release= Build.VERSION.RELEASE;
+        int sdk= Build.VERSION.SDK_INT;
+        Log.i("ksdinf","release:"+release+"sdk:"+sdk);
+        String manufacturer = android.os.Build.MANUFACTURER;
+        if (!TextUtils.isEmpty(manufacturer)) {
+            if (manufacturer.toLowerCase().contains("lenovo")) {//对于联想的手机返回数据
+                return true;
+            }
+        }
+//        if (sdk>=21){//5.0或以上版本要求返回数据
+//            return  true;
+//        }
+        return false;
+    }
+    /**
+     * 将bitmap写入到文件
+     *
+     * @param bitmap
+     */
+    public static void writeToFile(Bitmap bitmap,Uri imageUri) {
+        if (bitmap == null) return;
+        File file = new File(imageUri.getPath());
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+            fos.write(bos.toByteArray());
+            bos.flush();
+            fos.flush();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) try {
+                fos.close();
+                if (bos != null) bos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     /**
      * 通过URI获取文件的路径
      * @param uri

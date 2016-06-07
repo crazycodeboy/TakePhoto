@@ -8,7 +8,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.jph.takephoto.TakePhotoActivity;
+import com.jph.takephoto.app.TakePhotoActivity;
 
 import java.io.File;
 

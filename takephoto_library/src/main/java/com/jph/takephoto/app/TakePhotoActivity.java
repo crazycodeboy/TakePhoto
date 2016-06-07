@@ -1,4 +1,4 @@
-package com.jph.takephoto;
+package com.jph.takephoto.app;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import com.jph.takephoto.uitl.CompressImageUtil;
 import com.jph.takephoto.uitl.CompressImageUtil.CompressListener;
-import com.jph.takephoto.uitl.TakePhoto;
 import com.jph.takephoto.uitl.TUtils;
 
 /**
