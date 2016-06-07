@@ -19,6 +19,21 @@ import com.jph.takephoto.uitl.TUtils;
 public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultListener,CompressListener {
     private TakePhoto takePhoto;
     protected ProgressDialog wailLoadDialog;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        getTakePhoto().onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        getTakePhoto().onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        getTakePhoto().onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
     /**
      *  获取TakePhoto实例
      * @return
@@ -28,11 +43,6 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
             takePhoto=new TakePhotoImpl(this,this);
         }
         return takePhoto;
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        getTakePhoto().onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
     }
     @Override
     public void takeSuccess(String imagePath) {
@@ -45,17 +55,6 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
     @Override
     public void takeCancel() {
         Log.w("info", "用户取消");
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        if (takePhoto!=null)outState.putParcelable("imageUri", takePhoto.getOutPutUri());
-        super.onSaveInstanceState(outState);
-    }
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        getTakePhoto().setOutPutUri((Uri)savedInstanceState.getParcelable("imageUri"));
-        super.onRestoreInstanceState(savedInstanceState);
     }
     /**
      * 压缩照片

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -30,12 +31,25 @@ public class TakePhotoImpl implements TakePhoto{
         this.activity = activity;
         this.listener = listener;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState!=null){
+            cropHeight=savedInstanceState.getInt("cropHeight");
+            cropWidth=savedInstanceState.getInt("cropWidth");
+            outPutUri=savedInstanceState.getParcelable("outPutUri");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("cropHeight",cropHeight);
+        outState.putInt("cropWidth",cropWidth);
+        outState.putParcelable("outPutUri",outPutUri);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("requestCode:").append(requestCode).append("--resultCode:").append(resultCode).append("--data:").append(data).append("--outPutUri:").append(outPutUri);
-        Log.w("info", sb.toString());
-
         switch (requestCode) {
             case TConstant.PIC_SELECT_CROP:
                 if (resultCode == Activity.RESULT_OK && data != null) {//从相册选择照片并裁切

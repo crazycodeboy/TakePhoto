@@ -2,6 +2,7 @@ package com.jph.takephoto.app;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 
 /**
  * 拍照及从图库选择照片框架
@@ -72,6 +73,10 @@ public interface TakePhoto {
      * @param cropHeight 裁剪高度
      */
     void onCropImageUri(Uri imageUri, Uri outPutUri, int cropWidth, int cropHeight);
+    void onCreate(Bundle savedInstanceState);
+    void onSaveInstanceState(Bundle outState);
+    void setOutPutUri(Uri outPutUri);
+    Uri getOutPutUri();
     /**
      * 拍照结果监听接口
      */
@@ -82,6 +87,4 @@ public interface TakePhoto {
 
         void takeCancel();
     }
-    void setOutPutUri(Uri outPutUri);
-    Uri getOutPutUri();
 }
