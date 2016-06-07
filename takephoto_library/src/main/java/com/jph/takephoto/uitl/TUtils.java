@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import java.io.IOException;
  * Date: 2015/8/26 0026 16:23
  */
 public class TUtils {
+    private static final String TAG = IntentUtils.class.getName();
     /**
      * 是否裁剪之后返回数据
      **/
@@ -74,6 +76,10 @@ public class TUtils {
      * Date 2016/6/6 0006 20:01
      */
     public static String getFilePathWithUri(Uri uri, Activity activity) {
+        if(uri==null){
+            Log.w(TAG,"uri is null,activity may have been recovered?");
+            return null;
+        }
         String picturePath = null;
         String scheme=uri.getScheme();
         if ("content".equals(scheme)){

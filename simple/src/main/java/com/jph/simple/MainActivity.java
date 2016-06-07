@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.jph.takephoto.app.TakePhotoActivity;
 
 import java.io.File;
@@ -16,8 +15,8 @@ import java.io.File;
  * 从相册选择照片进行裁剪，从相机拍取照片进行裁剪<br>
  * 从相册选择照片（不裁切），并获取照片的路径<br>
  * 拍取照片（不裁切），并获取照片路径
- * @author JPH
- * @Date:2014.10.09
+ * Author JPH
+ * Date 2016/6/7 0007 15:53
  */
 public class MainActivity extends TakePhotoActivity {
     private ImageView imgShow;
@@ -33,16 +32,16 @@ public class MainActivity extends TakePhotoActivity {
         Uri imageUri = Uri.fromFile(file);
         switch (view.getId()) {
             case R.id.btnCropFromGallery://从相册选择照片进行裁剪
-                getTakePhoto().picSelectCrop(imageUri);
+                getTakePhoto().onPicSelectCrop(imageUri);
                 break;
             case R.id.btnCropFromTake://从相机拍取照片进行裁剪
-                getTakePhoto().picTakeCrop(imageUri);
+                getTakePhoto().onPicTakeCrop(imageUri);
                 break;
             case R.id.btnOriginal://从相册选择照片不裁切
-                getTakePhoto().picSelectOriginal(imageUri);
+                getTakePhoto().onPicSelectOriginal();
                 break;
             case R.id.btnTakeOriginal://从相机拍取照片不裁剪
-                getTakePhoto().picTakeOriginal(imageUri);
+                getTakePhoto().onPicTakeOriginal(imageUri);
                 break;
             default:
                 break;
@@ -57,15 +56,15 @@ public class MainActivity extends TakePhotoActivity {
         super.takeFail(msg);
     }
     @Override
-    public void takeSuccess(Uri uri) {
-        super.takeSuccess(uri);
-        showImg(uri);
-        compressPic(uri.getPath());
+    public void takeSuccess(String imagePath) {
+        super.takeSuccess(imagePath);
+        showImg(imagePath);
+        compressPic(imagePath);
     }
-    private void showImg(Uri uri){
+    private void showImg(String imagePath){
         BitmapFactory.Options option=new BitmapFactory.Options();
         option.inSampleSize=2;
-        Bitmap bitmap=BitmapFactory.decodeFile(uri.getPath(),option);
+        Bitmap bitmap=BitmapFactory.decodeFile(imagePath,option);
         imgShow.setImageBitmap(bitmap);
     }
 }

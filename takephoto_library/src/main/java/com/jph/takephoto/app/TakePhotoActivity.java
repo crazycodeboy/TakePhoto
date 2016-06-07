@@ -23,20 +23,20 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
      *  获取TakePhoto实例
      * @return
      */
-    protected TakePhoto getTakePhoto(){
+    public TakePhoto getTakePhoto(){
         if (takePhoto==null){
-            takePhoto=new TakePhoto(this,this);
+            takePhoto=new TakePhotoImpl(this,this);
         }
         return takePhoto;
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        getTakePhoto().onResult(requestCode, resultCode, data);
+        getTakePhoto().onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
     @Override
-    public void takeSuccess(Uri uri) {
-        Log.i("info", "takeSuccess：" + uri);
+    public void takeSuccess(String imagePath) {
+        Log.i("info", "takeSuccess：" + imagePath);
     }
     @Override
     public void takeFail(String msg) {
@@ -49,12 +49,12 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        if (takePhoto!=null)outState.putParcelable("imageUri", takePhoto.getImageUri());
+        if (takePhoto!=null)outState.putParcelable("imageUri", takePhoto.getOutPutUri());
         super.onSaveInstanceState(outState);
     }
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        getTakePhoto().setImageUri((Uri)savedInstanceState.getParcelable("imageUri"));
+        getTakePhoto().setOutPutUri((Uri)savedInstanceState.getParcelable("imageUri"));
         super.onRestoreInstanceState(savedInstanceState);
     }
     /**
