@@ -75,8 +75,6 @@ public interface TakePhoto {
     void onCropImageUri(Uri imageUri, Uri outPutUri, int cropWidth, int cropHeight);
     void onCreate(Bundle savedInstanceState);
     void onSaveInstanceState(Bundle outState);
-    void setOutPutUri(Uri outPutUri);
-    Uri getOutPutUri();
     /**
      * 拍照结果监听接口
      */

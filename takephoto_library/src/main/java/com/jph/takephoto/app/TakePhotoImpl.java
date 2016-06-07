@@ -148,13 +148,4 @@ public class TakePhotoImpl implements TakePhoto{
     private void cropImageUri(Uri imageUri) {
         onCropImageUri(imageUri, outPutUri, cropWidth, cropHeight);
     }
-    @Override
-    public void setOutPutUri(Uri outPutUri) {
-        this.outPutUri = outPutUri;
-    }
-
-    @Override
-    public Uri getOutPutUri() {
-        return outPutUri;
-    }
 }
