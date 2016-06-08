@@ -1,6 +1,5 @@
 package com.jph.simple;
 
-import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -8,7 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
-import com.jph.takephoto.app.TakePhotoActivity;
+
 import com.jph.takephoto.app.TakePhotoFragmentActivity;
 import com.jph.takephoto.compress.CompressConfig;
 
@@ -35,13 +34,13 @@ public class MainActivity extends TakePhotoFragmentActivity {
         Uri imageUri = Uri.fromFile(file);
         switch (view.getId()) {
             case R.id.btnCropFromGallery://从相册选择照片进行裁剪
-                getTakePhoto().onPicSelectCrop(imageUri);
+                getTakePhoto().onEnableCompress(new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create(),true).onPicSelectCrop(imageUri);
                 break;
             case R.id.btnCropFromTake://从相机拍取照片进行裁剪
-                getTakePhoto().onPicTakeCrop(imageUri);
+                getTakePhoto().onEnableCompress(new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create(),true).onPicTakeCrop(imageUri);
                 break;
             case R.id.btnOriginal://从相册选择照片不裁切
-                getTakePhoto().onPicSelectOriginal();
+                getTakePhoto().onEnableCompress(new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create(),true).onPicSelectOriginal();
                 break;
             case R.id.btnTakeOriginal://从相机拍取照片不裁剪
                 getTakePhoto().onEnableCompress(new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create(),true).onPicTakeOriginal(imageUri);
