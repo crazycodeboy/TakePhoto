@@ -8,6 +8,7 @@ import android.os.Message;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 /**
@@ -15,15 +16,24 @@ import java.io.FileOutputStream;
  * @author JPH
  * Date 2015-08-26 下午1:44:26
  */
-public class CompressImageUtil {
-	//压缩文件的路径
-	private String imgPath;
-	//压缩结果监听器
-	private CompressListener listener;
+public class CompressImageUtil implements CompressImage{
 	private CompressConfig config;
-
+	Handler mhHandler = new Handler();
 	public CompressImageUtil(CompressConfig config) {
 		this.config=config==null?CompressConfig.getDefaultConfig():config;
+	}
+	@Override
+	public void compress(String imagePath, CompressListener listener) {
+		if (config.isEnablePixelCompress()){
+			try {
+				compressImageByPixel(imagePath,listener);
+			} catch (FileNotFoundException e) {
+				listener.onCompressFailed(imagePath,String.format("图片压缩失败,%s",e.toString()));
+				e.printStackTrace();
+			}
+		}else {
+			compressImageByQuality(BitmapFactory.decodeFile(imagePath),imagePath,listener);
+		}
 	}
 	/**
 	 * 多线程压缩图片的质量
@@ -32,9 +42,9 @@ public class CompressImageUtil {
 	 * @param imgPath 图片的保存路径
 	 * @date 2014-12-5下午11:30:43
 	 */
-	private void compressImageByQuality(final Bitmap bitmap,final String imgPath){
+	private void compressImageByQuality(final Bitmap bitmap, final String imgPath, final CompressImage.CompressListener listener){
 		if(bitmap==null){
-			sendMsg(false,"像素压缩失败");
+			sendMsg(false,imgPath,"像素压缩失败,bitmap is null",listener);
 			return;
 		}
 		new Thread(new Runnable() {//开启多线程进行压缩处理
@@ -59,9 +69,9 @@ public class CompressImageUtil {
 					fos.write(baos.toByteArray());
 					fos.flush();
 					fos.close();
-					sendMsg(true, imgPath);
+					sendMsg(true, imgPath,null,listener);
 				} catch (Exception e) {
-					sendMsg(false,"质量压缩失败");
+					sendMsg(false,imgPath,"质量压缩失败",listener);
 					e.printStackTrace();
 				}
 			}
@@ -74,15 +84,14 @@ public class CompressImageUtil {
 	 * @return 
 	 * @date 2014-12-5下午11:30:59
 	 */
-	private void compressImageByPixel(String imgPath) {
-		Bitmap bitmap=null;
+	private void compressImageByPixel(String imgPath,CompressListener listener) throws FileNotFoundException {
 		if(imgPath==null){
-			sendMsg(false,"要压缩的文件不存在");
+			sendMsg(false,imgPath,"要压缩的文件不存在",listener);
 			return;
 		}
 		BitmapFactory.Options newOpts = new BitmapFactory.Options();
 		newOpts.inJustDecodeBounds = true;//只读边,不读内容
-		bitmap = BitmapFactory.decodeFile(imgPath, newOpts);
+		BitmapFactory.decodeFile(imgPath, newOpts);
 		newOpts.inJustDecodeBounds = false;
 		int width = newOpts.outWidth;
 		int height = newOpts.outHeight;
@@ -99,67 +108,30 @@ public class CompressImageUtil {
 		newOpts.inPreferredConfig = Config.ARGB_8888;//该模式是默认的,可不设
 		newOpts.inPurgeable = true;// 同时设置才会有效
 		newOpts.inInputShareable = true;//。当系统内存不够时候图片自动被回收
-		bitmap = BitmapFactory.decodeFile(imgPath, newOpts);
-		compressImageByQuality(bitmap,imgPath);//压缩好比例大小后再进行质量压缩  
-	}
-	/**
-	 * 压缩文件并检查压缩是否完成
-	 * @author JPH
-	 * Date 2015-1-26 下午4:58:18
-	 * @param imgPath
-	 */
-	public void compressImageByPixel(String imgPath,CompressListener listener) {
-		this.imgPath=imgPath;
-		this.listener=listener;
-		File file=new File(imgPath);
-		if (file==null||!file.exists()||!file.isFile()){//如果文件不存在，则不做任何处理
-			sendMsg(false,"要压缩的文件不存在");
-			return;
+		Bitmap bitmap = BitmapFactory.decodeFile(imgPath, newOpts);
+		if (config.isEnableQualityCompress()){
+			compressImageByQuality(bitmap,imgPath,listener);//压缩好比例大小后再进行质量压缩
+		}else {
+			bitmap.compress(Bitmap.CompressFormat.JPEG,100,new FileOutputStream(new File(imgPath)));
+			listener.onCompressSuccessed(imgPath);
 		}
-		this.compressImageByPixel(imgPath);
 	}
-
 	/**
 	 * 发送压缩结果的消息
 	 * @param isSuccess 压缩是否成功
-	 * @param obj
+	 * @param imagePath
+	 * @param message
 	 */
-	private void sendMsg(boolean isSuccess,String obj){
-		Message msg=new Message();
-		msg.obj=obj;
-		msg.what=isSuccess?1:0;
-		mhHandler.sendMessage(msg);
-	}
-	/**
-	 * 此handle的目的主要是为了将接口在主线程中触发
-	 * ，为了安全起见把接口放到主线程触发
-	 */
-	Handler mhHandler = new Handler(){
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			if(msg.what==1){//压缩成功
-				listener.onCompressSuccessed((String)msg.obj);
-			}else if (msg.what==0) {//压缩失败
-				listener.onCompressFailed((String) msg.obj);
+	private void sendMsg(final boolean isSuccess, final String imagePath,final String message, final CompressImage.CompressListener listener){
+		mhHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				if (isSuccess){
+					listener.onCompressSuccessed(imagePath);
+				}else{
+					listener.onCompressFailed(imagePath,message);
+				}
 			}
-		}
-	};
-
-	/**
-	 * 压缩结果监听器
-	 */
-	public interface CompressListener{
-		/**
-		 * 压缩成功
-		 * @param imgPath 压缩图片的路径
-		 */
-		void onCompressSuccessed(String imgPath);
-
-		/**
-		 * 压缩失败
-		 * @param msg 失败的原因
-		 */
-		void onCompressFailed(String msg);
+		});
 	}
 }

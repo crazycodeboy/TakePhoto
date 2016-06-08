@@ -18,37 +18,71 @@ public class CompressConfig implements Serializable {
      * 压缩到的最大大小，单位B
      */
     private int maxSize=100*1024;
+
     /**
-     * 是否显示压缩对话框
+     * 是否启用像素压缩
      */
-    private boolean isShowCompressDialog;
-    public int getMaxPixel() {
-        return maxPixel;
-    }
+    private boolean enablePixelCompress=true;
+    /**
+     * 是否启用质量压缩
+     */
+    private boolean enableQualityCompress=true;
     public static CompressConfig getDefaultConfig(){
         return new CompressConfig();
+    }
+    public int getMaxPixel() {
+        return maxPixel;
     }
     public CompressConfig setMaxPixel(int maxPixel) {
         this.maxPixel = maxPixel;
         return this;
     }
-
     public int getMaxSize() {
         return maxSize;
     }
-
-    public CompressConfig setMaxSize(int maxSize) {
+    public void setMaxSize(int maxSize) {
         this.maxSize = maxSize;
-        return this;
     }
 
-    public boolean isShowCompressDialog() {
-        return isShowCompressDialog;
+    public boolean isEnablePixelCompress() {
+        return enablePixelCompress;
     }
 
-    public CompressConfig setShowCompressDialog(boolean showCompressDialog) {
-        isShowCompressDialog = showCompressDialog;
-        return this;
+    public void setEnablePixelCompress(boolean enablePixelCompress) {
+        this.enablePixelCompress = enablePixelCompress;
+    }
+
+    public boolean isEnableQualityCompress() {
+        return enableQualityCompress;
+    }
+
+    public void setEnableQualityCompress(boolean enableQualityCompress) {
+        this.enableQualityCompress = enableQualityCompress;
+    }
+    public static class Builder{
+        private CompressConfig config;
+        public Builder() {
+            config=new CompressConfig();
+        }
+        public Builder setMaxSize(int maxSize) {
+            config.setMaxSize( maxSize);
+            return this;
+        }
+        public Builder setMaxPixel(int maxPixel) {
+            config.setMaxPixel(maxPixel);
+            return this;
+        }
+        public Builder setEnablePixelCompress(boolean enablePixelCompress) {
+            config.setEnablePixelCompress(enablePixelCompress);
+            return this;
+        }
+        public Builder setEnableQualityCompress(boolean enableQualityCompress) {
+            config.setEnableQualityCompress(enableQualityCompress);
+            return this;
+        }
+        public CompressConfig create(){
+            return config;
+        }
     }
 }
 

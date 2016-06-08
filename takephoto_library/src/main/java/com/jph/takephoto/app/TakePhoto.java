@@ -71,7 +71,7 @@ public interface TakePhoto {
      * 启用照片压缩
      * @return 压缩照片配置类
      */
-    TakePhoto onEnableCompress(CompressConfig config);
+    TakePhoto onEnableCompress(CompressConfig config,boolean showCompressDialog);
     /**
      * 裁剪指定uri对应的照片
      *

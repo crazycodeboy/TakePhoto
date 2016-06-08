@@ -1,5 +1,6 @@
 package com.jph.simple;
 
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -43,7 +44,7 @@ public class MainActivity extends TakePhotoFragmentActivity {
                 getTakePhoto().onPicSelectOriginal();
                 break;
             case R.id.btnTakeOriginal://从相机拍取照片不裁剪
-                getTakePhoto().onEnableCompress(CompressConfig.getDefaultConfig().setShowCompressDialog(true)).onPicTakeOriginal(imageUri);
+                getTakePhoto().onEnableCompress(new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create(),true).onPicTakeOriginal(imageUri);
                 break;
             default:
                 break;

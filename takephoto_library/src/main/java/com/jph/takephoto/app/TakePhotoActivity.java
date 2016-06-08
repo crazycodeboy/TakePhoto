@@ -1,13 +1,9 @@
 package com.jph.takephoto.app;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import com.jph.takephoto.compress.CompressImageUtil;
-import com.jph.takephoto.compress.CompressImageUtil.CompressListener;
-import com.jph.takephoto.uitl.TUtils;
 
 /**
  * 继承这个类来让Activity获取拍照的能力<br>

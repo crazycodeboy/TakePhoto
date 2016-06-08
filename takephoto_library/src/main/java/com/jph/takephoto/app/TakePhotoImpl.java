@@ -10,7 +10,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.jph.takephoto.compress.CompressConfig;
-import com.jph.takephoto.compress.CompressImageUtil;
+import com.jph.takephoto.compress.CompressImage;
+import com.jph.takephoto.compress.CompressImageImpl;
 import com.jph.takephoto.uitl.IntentUtils;
 import com.jph.takephoto.uitl.TConstant;
 import com.jph.takephoto.uitl.TUtils;
@@ -30,6 +31,10 @@ public class TakePhotoImpl implements TakePhoto{
     private int cropHeight;
     private int cropWidth;
     private CompressConfig compressConfig;
+    /**
+     * 是否显示压缩对话框
+     */
+    private boolean showCompressDialog;
     private ProgressDialog wailLoadDialog;
     public TakePhotoImpl(Activity activity, TakeResultListener listener) {
         this.activity = activity;
@@ -41,6 +46,7 @@ public class TakePhotoImpl implements TakePhoto{
         if (savedInstanceState!=null){
             cropHeight=savedInstanceState.getInt("cropHeight");
             cropWidth=savedInstanceState.getInt("cropWidth");
+            showCompressDialog=savedInstanceState.getBoolean("showCompressDialog");
             outPutUri=savedInstanceState.getParcelable("outPutUri");
             compressConfig=(CompressConfig)savedInstanceState.getSerializable("compressConfig");
         }
@@ -50,6 +56,7 @@ public class TakePhotoImpl implements TakePhoto{
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt("cropHeight",cropHeight);
         outState.putInt("cropWidth",cropWidth);
+        outState.putBoolean("showCompressDialog",showCompressDialog);
         outState.putParcelable("outPutUri",outPutUri);
         outState.putSerializable("compressConfig",compressConfig);
     }
@@ -152,8 +159,9 @@ public class TakePhotoImpl implements TakePhoto{
     }
 
     @Override
-    public TakePhoto onEnableCompress(CompressConfig config) {
+    public TakePhoto onEnableCompress(CompressConfig config,boolean showCompressDialog) {
         this.compressConfig=config;
+        this.showCompressDialog=showCompressDialog;
         return this;
     }
 
@@ -164,15 +172,15 @@ public class TakePhotoImpl implements TakePhoto{
         if (null==compressConfig){
             listener.takeSuccess(picturePath);
         }else {
-            if (compressConfig.isShowCompressDialog())wailLoadDialog = TUtils.showProgressDialog(activity,"正在压缩照片...");
-            new CompressImageUtil(compressConfig).compressImageByPixel(picturePath, new CompressImageUtil.CompressListener() {
+            if (showCompressDialog)wailLoadDialog = TUtils.showProgressDialog(activity,"正在压缩照片...");
+            new CompressImageImpl(compressConfig).compress(picturePath, new CompressImage.CompressListener() {
                 @Override
                 public void onCompressSuccessed(String imgPath) {
                     listener.takeSuccess(imgPath);
                     if (wailLoadDialog!=null&&!activity.isFinishing())wailLoadDialog.dismiss();
                 }
                 @Override
-                public void onCompressFailed(String msg) {
+                public void onCompressFailed(String imagePath,String msg) {
                     listener.takeFail(String.format("图片压缩失败:%s,picturePath:%s",msg,picturePath));
                     if (wailLoadDialog!=null&&!activity.isFinishing())wailLoadDialog.dismiss();
                 }
