@@ -1,11 +1,12 @@
-##TakePhoto简介  
+## [TakePhoto](https://github.com/crazycodeboy/TakePhoto) 简介  
 - 支持以拍照的方式获取照片 
 - 支持从相册选择照片  
 - 支持对照片进行裁切
 - 支持对照片进行压缩
 - 支持对裁切及压缩参数自定义  
-- 支持因拍照Activity被回收后的自动恢复 
- 
+- 支持因拍照Activity被回收后的自动恢复   
+
+GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/crazycodeboy/TakePhoto)
 ##如何使用   
 ###使用TakePhoto有以下两种方式：
 **方式一：通过继承的方式**  
@@ -74,4 +75,4 @@ Maven:
 </dependency>
 ```  
 ##最后  
-如果你对TakePhoto有更好的建议或想改造它，欢迎大家Fork and Pull requests。  
+如果你对[TakePhoto](https://github.com/crazycodeboy/TakePhoto)有更好的建议或想改造它，欢迎大家Fork and Pull requests。  
