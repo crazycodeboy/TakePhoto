@@ -48,7 +48,7 @@ public class CompressConfig implements Serializable {
         return enablePixelCompress;
     }
 
-    public void setEnablePixelCompress(boolean enablePixelCompress) {
+    public void enablePixelCompress(boolean enablePixelCompress) {
         this.enablePixelCompress = enablePixelCompress;
     }
 
@@ -56,7 +56,7 @@ public class CompressConfig implements Serializable {
         return enableQualityCompress;
     }
 
-    public void setEnableQualityCompress(boolean enableQualityCompress) {
+    public void enableQualityCompress(boolean enableQualityCompress) {
         this.enableQualityCompress = enableQualityCompress;
     }
     public static class Builder{
@@ -72,12 +72,12 @@ public class CompressConfig implements Serializable {
             config.setMaxPixel(maxPixel);
             return this;
         }
-        public Builder setEnablePixelCompress(boolean enablePixelCompress) {
-            config.setEnablePixelCompress(enablePixelCompress);
+        public Builder enablePixelCompress(boolean enablePixelCompress) {
+            config.enablePixelCompress(enablePixelCompress);
             return this;
         }
-        public Builder setEnableQualityCompress(boolean enableQualityCompress) {
-            config.setEnableQualityCompress(enableQualityCompress);
+        public Builder enableQualityCompress(boolean enableQualityCompress) {
+            config.enableQualityCompress(enableQualityCompress);
             return this;
         }
         public CompressConfig create(){
