@@ -72,7 +72,7 @@ public class TUtils {
      * @param uri
      * @param activity
      * @return
-     * @Author JPH
+     * Author JPH
      * Date 2016/6/6 0006 20:01
      */
     public static String getFilePathWithUri(Uri uri, Activity activity) {
@@ -98,12 +98,12 @@ public class TUtils {
     /**
      * 显示圆形进度对话框
      *
-     * @author JPH
-     * Date 2014-12-12 下午7:04:09
      * @param activity
      * @param progressTitle
      *            显示的标题
      * @return
+     * Author JPH
+     * Date 2014-12-12 下午7:04:09
      */
     public static ProgressDialog showProgressDialog(final Activity activity,
                                                     String... progressTitle) {
