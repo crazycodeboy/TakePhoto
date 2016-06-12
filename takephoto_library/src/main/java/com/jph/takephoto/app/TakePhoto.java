@@ -16,7 +16,7 @@ import com.jph.takephoto.compress.CompressConfig;
  */
 public interface TakePhoto {
     /**
-     * 处理拍照或裁剪结果
+     * 处理拍照或从相册选择的照片或裁剪的结果
      *
      * @param requestCode
      * @param resultCode
@@ -30,7 +30,7 @@ public interface TakePhoto {
     void onPicSelectOriginal();
 
     /**
-     * 从相册选择照片进行裁剪
+     * 从相册选择照片进行裁剪(以默认大小)
      *
      * @param outPutUri 图片保存的路径
      */
@@ -52,7 +52,7 @@ public interface TakePhoto {
      */
     void onPicTakeOriginal(Uri outPutUri);
     /**
-     * 从相机拍取照片进行裁剪
+     * 从相机拍取照片进行裁剪(以默认大小)
      *
      * @param outPutUri 图片保存的路径
      */
@@ -69,7 +69,9 @@ public interface TakePhoto {
 
     /**
      * 启用照片压缩
-     * @return 压缩照片配置类
+     * @param config 压缩照片配置
+     * @param showCompressDialog 压缩时是否显示进度对话框
+     * @return
      */
     TakePhoto onEnableCompress(CompressConfig config,boolean showCompressDialog);
     /**
