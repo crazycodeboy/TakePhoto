@@ -69,7 +69,7 @@ public interface TakePhoto {
 
     /**
      * 启用照片压缩
-     * @param config 压缩照片配置类
+     * @param config 压缩照片配置
      * @param showCompressDialog 压缩时是否显示进度对话框
      * @return
      */

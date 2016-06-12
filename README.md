@@ -1,4 +1,3 @@
-# TakePhoto—Android照片处理框架  
 ##TakePhoto简介  
 - 支持以拍照的方式获取照片 
 - 支持从相册选择照片  
@@ -30,7 +29,7 @@ void takeCancel();
 ```java
  /**
   * 启用照片压缩
-  * @param config 压缩照片配置类
+  * @param config 压缩照片配置
   * @param showCompressDialog 压缩时是否显示进度对话框
   * @return 
   */
@@ -43,7 +42,7 @@ eg：
 ##关于兼容性问题  
 TakePhoto是基于Android官方标准API编写的，适配了目前市场上主流的Rom。如果你在使用过程中发现了适配问题，可以提交Issues。   
 1. 为适配部分手机拍照时会回收Activity,TakePhoto在`onSaveInstanceState`与 `onCreate`做了相应的恢复处理。  
-2. 为适配部分手机拍照或从相册选择照片时屏幕方向会发生转变从而导致拍照失败的问题，可以在AndroidManifest.xml中对使用了TakePhoto的Activity添加android:configChanges="orientation|keyboardHidden|screenSize"配置。  
+2. 为适配部分手机拍照或从相册选择照片时屏幕方向会发生转变,从而导致拍照失败的问题，可以在AndroidManifest.xml中对使用了TakePhoto的Activity添加android:configChanges="orientation|keyboardHidden|screenSize"配置。  
 eg:  
 ```
 <activity
@@ -59,7 +58,7 @@ eg:
 ```
 
 ##在项目中使用    
-为方便大家使用，现已将TakePhoto发布到JCenter(如果你对如何将项目发布到JCenter感兴趣可以参考：[教你轻松将Android library 发布到JCenter](http://blog.csdn.net/fengyuzhengfan/article/details/51407009))  
+为方便大家使用，现已将TakePhoto发布到JCenter(如果你对如何将项目发布到JCenter感兴趣可以参考：《[教你轻松将Android library 发布到JCenter](http://blog.csdn.net/fengyuzhengfan/article/details/51407009))》  
 Gradle:  
 ```groovy 
     compile 'com.jph.takephoto:takephoto_library:1.0.1'
