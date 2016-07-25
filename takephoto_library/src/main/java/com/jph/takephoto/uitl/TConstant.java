@@ -34,4 +34,8 @@ public class TConstant {
      * request Code 裁切照片
      **/
     public final static int PIC_CROP = 125;
+    /**
+     * request Code 从文件中选择照片
+     **/
+    public final static int PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL = 128;
  }
