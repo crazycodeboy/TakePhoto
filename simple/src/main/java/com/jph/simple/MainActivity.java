@@ -45,6 +45,9 @@ public class MainActivity extends TakePhotoFragmentActivity {
             case R.id.btnTakeOriginal://从相机拍取照片不裁剪
                 getTakePhoto().onEnableCompress(new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create(),true).onPicTakeOriginal(imageUri);
                 break;
+            case R.id.btnDocuments://从文件选择照片不裁剪
+                getTakePhoto().onEnableCompress(new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create(),true).onPicFromDocuments();
+                break;
             default:
                 break;
         }

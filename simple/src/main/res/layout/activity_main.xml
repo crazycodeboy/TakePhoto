@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,6 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="cropPic"
+        android:layout_margin="5dp"
         android:text="从相册选择照片进行裁剪" />
 
     <Button
@@ -16,6 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="cropPic"
+        android:layout_margin="5dp"
         android:text="从相册获取原生的图片" />
 
     <Button
@@ -23,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="cropPic"
+        android:layout_margin="5dp"
         android:text="从相机拍取照片进行裁剪" />
 
     <Button
@@ -30,13 +32,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="cropPic"
-        android:layout_marginTop="51dp"
+        android:layout_margin="5dp"
         android:text="从相机拍取照片不裁剪" />
-    <ImageView
-        android:id="@+id/imgShow"
+    <Button
+        android:id="@+id/btnDocuments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="50dp"
+        android:onClick="cropPic"
+        android:layout_margin="5dp"
+        android:text="从文件选择照片不裁剪" />
+    <ImageView
+        android:id="@+id/imgShow"
+        android:background="@android:color/darker_gray"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:minHeight="160dp"
+        android:minWidth="260dp"
+        android:layout_margin="5dp"
         android:scaleType="fitCenter" />
 
 </LinearLayout>

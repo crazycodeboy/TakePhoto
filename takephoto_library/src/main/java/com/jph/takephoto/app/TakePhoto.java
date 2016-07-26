@@ -26,7 +26,7 @@ public interface TakePhoto {
     /**
      * 从文档中选择照片（不裁切）
      */
-    void onPicSelectDocuments();
+    void onPicFromDocuments();
     /**
      * 从相册选择原生的照片（不裁切）
      */

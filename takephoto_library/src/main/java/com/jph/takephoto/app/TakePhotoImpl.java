@@ -14,7 +14,12 @@ import com.jph.takephoto.compress.CompressImage;
 import com.jph.takephoto.compress.CompressImageImpl;
 import com.jph.takephoto.uitl.IntentUtils;
 import com.jph.takephoto.uitl.TConstant;
+import com.jph.takephoto.uitl.TException;
+import com.jph.takephoto.uitl.TImageFiles;
+import com.jph.takephoto.uitl.TUriParse;
 import com.jph.takephoto.uitl.TUtils;
+
+import java.io.FileNotFoundException;
 
 /**
  * 拍照及从图库选择照片框架
@@ -25,6 +30,7 @@ import com.jph.takephoto.uitl.TUtils;
  * Date: 2016/6/7 0007 15:10
  */
 public class TakePhotoImpl implements TakePhoto{
+    private static final String TAG = IntentUtils.class.getName();
     private Activity activity;
     private TakeResultListener listener;
     private Uri outPutUri;
@@ -73,11 +79,11 @@ public class TakePhotoImpl implements TakePhoto{
                 break;
             case TConstant.PIC_SELECT_ORIGINAL://从相册选择照片不裁切
                 if (resultCode == Activity.RESULT_OK) {
-                    String picturePath = TUtils.getFilePathWithUri(data.getData(), activity);
-                    if (!TextUtils.isEmpty(picturePath)) {
-                        takeSuccess(picturePath);
-                    } else {
-                        takeFail("文件没找到");
+                    try {
+                        takeSuccess(TUriParse.getFilePathWithUri(data.getData(), activity));
+                    } catch (TException e) {
+                        takeFail(e.getDetailMessage());
+                        e.printStackTrace();
                     }
                 } else {
                     listener.takeCancel();
@@ -85,11 +91,11 @@ public class TakePhotoImpl implements TakePhoto{
                 break;
             case TConstant.PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL://从文件选择照片不裁切
                 if (resultCode == Activity.RESULT_OK) {
-                    String picturePath = TUtils.getFilePathWithDocumentsUri(data.getData(), activity);
-                    if (!TextUtils.isEmpty(picturePath)) {
-                        takeSuccess(picturePath);
-                    } else {
-                        takeFail("文件没找到");
+                    try {
+                        takeSuccess(TUriParse.getFilePathWithDocumentsUri(data.getData(), activity));
+                    } catch (TException e) {
+                        takeFail(e.getDetailMessage());
+                        e.printStackTrace();
                     }
                 } else {
                     listener.takeCancel();
@@ -102,20 +108,34 @@ public class TakePhotoImpl implements TakePhoto{
                 break;
             case TConstant.PIC_TAKE_ORIGINAL://拍取照片
                 if (resultCode == Activity.RESULT_OK) {
-                    takeSuccess(TUtils.getFilePathWithUri(outPutUri, activity));
+                    try {
+                        takeSuccess(TUriParse.getFilePathWithUri(outPutUri, activity));
+                    } catch (TException e) {
+                        takeFail(e.getDetailMessage());
+                        e.printStackTrace();
+                    }
                 } else {
                     listener.takeCancel();
                 }
                 break;
             case TConstant.PIC_CROP://裁剪照片
                 if (resultCode == Activity.RESULT_OK) {
-                    takeSuccess(TUtils.getFilePathWithUri(outPutUri, activity));
+                    try {
+                        takeSuccess(TUriParse.getFilePathWithUri(outPutUri, activity));
+                    } catch (TException e) {
+                        takeFail(e.getDetailMessage());
+                        e.printStackTrace();
+                    }
                 } else if (resultCode == Activity.RESULT_CANCELED) {//裁切的照片没有保存
                     if (data != null) {
                         Bitmap bitmap = data.getParcelableExtra("data");//获取裁切的结果数据
-                        TUtils.writeToFile(bitmap, outPutUri);//将裁切的结果写入到文件
-                        takeSuccess(TUtils.getFilePathWithUri(outPutUri, activity));
-                        Log.w("info", bitmap == null ? "null" : "not null");
+                        TImageFiles.writeToFile(bitmap, outPutUri);//将裁切的结果写入到文件
+                        try {
+                            takeSuccess(TUriParse.getFilePathWithUri(outPutUri, activity));
+                        } catch (TException e) {
+                            takeFail(e.getDetailMessage());
+                            e.printStackTrace();
+                        }
                     } else {
                         takeFail("没有获取到裁剪结果");
                     }
@@ -134,7 +154,7 @@ public class TakePhotoImpl implements TakePhoto{
     }
 
     @Override
-    public void onPicSelectDocuments() {
+    public void onPicFromDocuments() {
         activity.startActivityForResult(IntentUtils.getPickIntentWithDocuments(),TConstant.PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL);
     }
 
