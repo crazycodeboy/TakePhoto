@@ -83,6 +83,18 @@ public class TakePhotoImpl implements TakePhoto{
                     listener.takeCancel();
                 }
                 break;
+            case TConstant.PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL://从文件选择照片不裁切
+                if (resultCode == Activity.RESULT_OK) {
+                    String picturePath = TUtils.getFilePathWithDocumentsUri(data.getData(), activity);
+                    if (!TextUtils.isEmpty(picturePath)) {
+                        takeSuccess(picturePath);
+                    } else {
+                        takeFail("文件没找到");
+                    }
+                } else {
+                    listener.takeCancel();
+                }
+                break;
             case TConstant.PIC_TAKE_CROP://拍取照片,并裁切
                 if (resultCode == Activity.RESULT_OK) {
                     cropImageUri(outPutUri);
@@ -119,6 +131,11 @@ public class TakePhotoImpl implements TakePhoto{
     @Override
     public void onCropImageUri(Uri imageUri, Uri outPutUri, int cropWidth, int cropHeight) {
         activity.startActivityForResult(IntentUtils.getPhotoCropIntent(imageUri, outPutUri, cropWidth, cropHeight), TConstant.PIC_CROP);
+    }
+
+    @Override
+    public void onPicSelectDocuments() {
+        activity.startActivityForResult(IntentUtils.getPickIntentWithDocuments(),TConstant.PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL);
     }
 
     @Override

@@ -23,7 +23,10 @@ public interface TakePhoto {
      * @param data
      */
     void onActivityResult(int requestCode, int resultCode, Intent data);
-
+    /**
+     * 从文档中选择照片（不裁切）
+     */
+    void onPicSelectDocuments();
     /**
      * 从相册选择原生的照片（不裁切）
      */
