@@ -56,8 +56,8 @@ public class CompressImageUtil implements CompressImage{
 				bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);//质量压缩方法，把压缩后的数据存放到baos中 (100表示不压缩，0表示压缩到最小)
 				while (baos.toByteArray().length >config.getMaxSize()) {//循环判断如果压缩后图片是否大于指定大小,大于继续压缩
 					baos.reset();//重置baos即让下一次的写入覆盖之前的内容 
-					options -= 10;//图片质量每次减少10
-					if(options<0)options=0;//如果图片质量小于0，则将图片的质量压缩到最小值
+					options -= 5;//图片质量每次减少5
+					if(options<5)options=5;//如果图片质量小于5，为保证压缩后的图片质量，图片最底压缩质量为5
 					bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);//将压缩后的图片保存到baos中
 					if(options==0)break;//如果图片的质量已降到最低则，不再进行压缩
 				}
