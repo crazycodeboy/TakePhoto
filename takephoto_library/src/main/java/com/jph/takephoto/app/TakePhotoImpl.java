@@ -6,12 +6,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.compress.CompressImage;
 import com.jph.takephoto.compress.CompressImageImpl;
+import com.jph.takephoto.entity.TIntentWap;
 import com.jph.takephoto.uitl.IntentUtils;
 import com.jph.takephoto.uitl.TConstant;
 import com.jph.takephoto.uitl.TException;
@@ -19,7 +18,7 @@ import com.jph.takephoto.uitl.TImageFiles;
 import com.jph.takephoto.uitl.TUriParse;
 import com.jph.takephoto.uitl.TUtils;
 
-import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 /**
  * 拍照及从图库选择照片框架
@@ -77,7 +76,7 @@ public class TakePhotoImpl implements TakePhoto{
                     listener.takeCancel();
                 }
                 break;
-            case TConstant.PIC_SELECT_ORIGINAL://从相册选择照片不裁切
+            case TConstant.PICK_PICTURE_FROM_GALLERY_ORIGINAL://从相册选择照片不裁切
                 if (resultCode == Activity.RESULT_OK) {
                     try {
                         takeSuccess(TUriParse.getFilePathWithUri(data.getData(), activity));
@@ -155,14 +154,25 @@ public class TakePhotoImpl implements TakePhoto{
 
     @Override
     public void onPicFromDocuments() {
-        activity.startActivityForResult(IntentUtils.getPickIntentWithDocuments(),TConstant.PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL);
+//        activity.startActivityForResult(IntentUtils.getPickIntentWithDocuments(),TConstant.PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL);
+        selectPicture(0);
     }
-
     @Override
     public void onPicSelectOriginal() {
-        activity.startActivityForResult(IntentUtils.getPhotoPickIntent(), TConstant.PIC_SELECT_ORIGINAL);
+//        activity.startActivityForResult(IntentUtils.getPickIntentWithGallery(), TConstant.PICK_PICTURE_FROM_GALLERY_ORIGINAL);
+        selectPicture(1);
     }
-
+    private void selectPicture(int defaultIndex){
+        ArrayList<TIntentWap>intentWapList=new ArrayList<>();
+        intentWapList.add(new TIntentWap(IntentUtils.getPickIntentWithDocuments(),TConstant.PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL));
+        intentWapList.add(new TIntentWap(IntentUtils.getPickIntentWithGallery(),TConstant.PICK_PICTURE_FROM_GALLERY_ORIGINAL));
+        try {
+            TUtils.sendIntentWithSafely(activity,intentWapList,defaultIndex,false);
+        } catch (TException e) {
+            takeFail(e.getDetailMessage());
+            e.printStackTrace();
+        }
+    }
     @Override
     public void onPicSelectCrop(Uri outPutUri) {
         onPicSelectCrop(outPutUri,TConstant.outputX,TConstant.outputY);
@@ -173,7 +183,7 @@ public class TakePhotoImpl implements TakePhoto{
         this.cropWidth = cropWidth;
         this.cropHeight = cropHeight;
         this.outPutUri = outPutUri;
-        activity.startActivityForResult(IntentUtils.getPhotoPickIntent(), TConstant.PIC_SELECT_CROP);
+        activity.startActivityForResult(IntentUtils.getPickIntentWithGallery(), TConstant.PIC_SELECT_CROP);
     }
 
     @Override

@@ -55,7 +55,7 @@ public class IntentUtils {
      * 获取选择照片的Intent
      * @return
      */
-    public static Intent getPhotoPickIntent() {
+    public static Intent getPickIntentWithGallery() {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_PICK);//Pick an item from the data
         intent.setType("image/*");//从所有图片中进行选择

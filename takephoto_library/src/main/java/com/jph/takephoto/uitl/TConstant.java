@@ -21,7 +21,7 @@ public class TConstant {
     /**
      * request Code 从相册选择照片不裁切
      **/
-    public final static int PIC_SELECT_ORIGINAL = 126;
+    public final static int PICK_PICTURE_FROM_GALLERY_ORIGINAL = 126;
     /**
      * request Code 拍取照片并裁切
      **/
