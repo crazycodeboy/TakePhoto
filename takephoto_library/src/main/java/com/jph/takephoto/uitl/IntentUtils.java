@@ -23,9 +23,9 @@ public class IntentUtils {
      * @param cropHeight 裁切之后的高度
      * @return
      */
-    public static Intent getPhotoCropIntent(Uri targetUri,Uri outPutUri, int cropWidth,int cropHeight) {
+    public static Intent getCropIntent(Uri targetUri, Uri outPutUri, int cropWidth, int cropHeight) {
         boolean isReturnData = TUtils.isReturnData();
-        Log.w(TAG, "getPhotoCropIntent:isReturnData:" + (isReturnData ? "true" : "false"));
+        Log.w(TAG, "getCropIntent:isReturnData:" + (isReturnData ? "true" : "false"));
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(targetUri, "image/*");
         intent.putExtra("crop", "true");
@@ -45,7 +45,7 @@ public class IntentUtils {
      * 获取拍照的Intent
      * @return
      */
-    public static Intent getPhotoCaptureIntent(Uri imageUri) {
+    public static Intent getCaptureIntent(Uri imageUri) {
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将拍取的照片保存到指定URI

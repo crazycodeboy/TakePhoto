@@ -17,6 +17,7 @@ import com.jph.takephoto.uitl.TException;
 import com.jph.takephoto.uitl.TImageFiles;
 import com.jph.takephoto.uitl.TUriParse;
 import com.jph.takephoto.uitl.TUtils;
+import com.soundcloud.android.crop.Crop;
 
 import java.util.ArrayList;
 
@@ -117,7 +118,8 @@ public class TakePhotoImpl implements TakePhoto{
                     listener.takeCancel();
                 }
                 break;
-            case TConstant.PIC_CROP://裁剪照片
+            case TConstant.PIC_CROP://裁剪照片返回结果
+            case Crop.REQUEST_CROP://裁剪照片返回结果
                 if (resultCode == Activity.RESULT_OK) {
                     try {
                         takeSuccess(TUriParse.getFilePathWithUri(outPutUri, activity));
@@ -149,7 +151,8 @@ public class TakePhotoImpl implements TakePhoto{
 
     @Override
     public void onCropImageUri(Uri imageUri, Uri outPutUri, int cropWidth, int cropHeight) {
-        activity.startActivityForResult(IntentUtils.getPhotoCropIntent(imageUri, outPutUri, cropWidth, cropHeight), TConstant.PIC_CROP);
+//        activity.startActivityForResult(IntentUtils.getCropIntent(imageUri, outPutUri, cropWidth, cropHeight), TConstant.PIC_CROP);
+        TUtils.starCropWithSafely(activity,imageUri,outPutUri,cropWidth,cropHeight);
     }
 
     @Override
@@ -189,7 +192,7 @@ public class TakePhotoImpl implements TakePhoto{
     @Override
     public void onPicTakeOriginal(Uri outPutUri) {
         this.outPutUri = outPutUri;
-        activity.startActivityForResult(IntentUtils.getPhotoCaptureIntent(this.outPutUri), TConstant.PIC_TAKE_ORIGINAL);
+        activity.startActivityForResult(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.PIC_TAKE_ORIGINAL);
     }
 
     @Override
@@ -202,7 +205,7 @@ public class TakePhotoImpl implements TakePhoto{
         this.cropWidth = cropWidth;
         this.cropHeight = cropHeight;
         this.outPutUri = outPutUri;
-        activity.startActivityForResult(IntentUtils.getPhotoCaptureIntent(this.outPutUri), TConstant.PIC_TAKE_CROP);
+        activity.startActivityForResult(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.PIC_TAKE_CROP);
     }
 
     @Override

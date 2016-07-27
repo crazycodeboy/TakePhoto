@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.jph.takephoto.entity.TIntentWap;
+import com.soundcloud.android.crop.Crop;
 
 import java.util.List;
 
@@ -36,6 +38,15 @@ public class TUtils {
             sendIntentWithSafely(activity,intentWapList,++defaultIndex,isCrop);
         }else {
             activity.startActivityForResult(intentWap.getIntent(),intentWap.getRequestCode());
+        }
+    }
+    public static void starCropWithSafely(Activity activity, Uri imageUri,Uri outPutUri,int cropWidth,int cropHeight){
+        Intent nativeCropIntent=IntentUtils.getCropIntent(imageUri, outPutUri, cropWidth, cropHeight);
+        List result=activity.getPackageManager().queryIntentActivities(nativeCropIntent,PackageManager.MATCH_ALL);
+        if (result.isEmpty()){
+            Crop.of(imageUri, outPutUri).withMaxSize(cropWidth,cropHeight).start(activity);
+        }else {
+            activity.startActivityForResult(IntentUtils.getCropIntent(imageUri, outPutUri, cropWidth, cropHeight), TConstant.PIC_CROP);
         }
     }
     /**
