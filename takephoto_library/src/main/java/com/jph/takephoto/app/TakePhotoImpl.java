@@ -221,14 +221,24 @@ public class TakePhotoImpl implements TakePhoto{
     @Override
     public void onPickFromCapture(Uri outPutUri) {
         this.outPutUri = outPutUri;
-        activity.startActivityForResult(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE);
+        try {
+            TUtils.captureBySafely(activity,new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE));
+        } catch (TException e) {
+            takeFail(e.toString());
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onPickFromCaptureWithCrop(Uri outPutUri, CropOptions options) {
         this.cropOptions = options;
         this.outPutUri = outPutUri;
-        activity.startActivityForResult(IntentUtils.getCaptureIntent(outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP);
+        try {
+            TUtils.captureBySafely(activity,new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP));
+        } catch (TException e) {
+            takeFail(e.toString());
+            e.printStackTrace();
+        }
     }
     @Override
     public TakePhoto onEnableCompress(CompressConfig config,boolean showCompressDialog) {

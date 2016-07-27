@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.TException;
@@ -44,7 +45,18 @@ public class TUtils {
             activity.startActivityForResult(intentWap.getIntent(),intentWap.getRequestCode());
         }
     }
-
+    /**
+     * 拍照前检查是否有相机
+     **/
+    public static void captureBySafely(Activity activity,TIntentWap intentWap)throws TException{
+        List result=activity.getPackageManager().queryIntentActivities(intentWap.getIntent(),PackageManager.MATCH_ALL);
+        if (result.isEmpty()){
+            Toast.makeText(activity,"没有找到相机",Toast.LENGTH_SHORT).show();
+            throw new TException(TExceptionType.TYPE_NO_CAMERA);
+        }else {
+            activity.startActivityForResult(intentWap.getIntent(),intentWap.getRequestCode());
+        }
+    }
     /**
      * 通过第三方工具裁切照片，当没有第三方裁切工具时，会自动使用自带裁切工具进行裁切
      * @param activity
