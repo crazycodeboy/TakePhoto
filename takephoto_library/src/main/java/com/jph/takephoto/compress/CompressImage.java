@@ -18,7 +18,7 @@ public interface CompressImage {
          *
          * @param imgPath 压缩图片的路径
          */
-        void onCompressSuccessed(String imgPath);
+        void onCompressSuccess(String imgPath);
 
         /**
          * 压缩失败

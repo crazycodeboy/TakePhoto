@@ -1,4 +1,4 @@
-package com.jph.takephoto.entity;
+package com.jph.takephoto.model;
 
 import android.content.Intent;
 

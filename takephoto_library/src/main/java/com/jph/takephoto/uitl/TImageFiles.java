@@ -1,5 +1,6 @@
 package com.jph.takephoto.uitl;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,6 +9,10 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+import android.widget.Toast;
+
+import com.jph.takephoto.model.TException;
+import com.jph.takephoto.model.TExceptionType;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -53,7 +58,7 @@ public class TImageFiles {
     /**
      * InputStream 转File
      * */
-    public static void inputStreamToFile(InputStream is, File file) throws TException{
+    public static void inputStreamToFile(InputStream is, File file) throws TException {
         if (file==null){
             Log.i(TAG,"inputStreamToFile:file not be null");
             throw new TException(TExceptionType.TYPE_WRITE_FAIL);
@@ -88,7 +93,7 @@ public class TImageFiles {
      */
     public static File getTempFile(Context context, Uri photoUri)throws TException {
         String minType=getMimeType(context, photoUri);
-        if (!checkMimeType(minType))throw new TException(TExceptionType.TYPE_NOT_IMAGE);
+        if (!checkMimeType(context,minType))throw new TException(TExceptionType.TYPE_NOT_IMAGE);
         File filesDir=context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         if (!filesDir.exists())filesDir.mkdirs();
         File photoFile = new File(filesDir, UUID.randomUUID().toString() + "." +minType );
@@ -100,8 +105,10 @@ public class TImageFiles {
      * @param minType
      * @return
      */
-    public static boolean checkMimeType(String minType) {
-        return ".jpg|.gif|.png|.bmp|.jpeg|".contains(minType.toLowerCase())?true:false;
+    public static boolean checkMimeType(Context context,String minType) {
+        boolean isPicture=TextUtils.isEmpty(minType)?false:".jpg|.gif|.png|.bmp|.jpeg|".contains(minType.toLowerCase())?true:false;
+        if (!isPicture)Toast.makeText(context,"选择的不是图片",Toast.LENGTH_SHORT).show();
+        return isPicture;
     }
 
     /**

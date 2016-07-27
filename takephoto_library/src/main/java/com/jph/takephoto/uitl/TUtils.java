@@ -9,7 +9,10 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.jph.takephoto.entity.TIntentWap;
+import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.TException;
+import com.jph.takephoto.model.TExceptionType;
+import com.jph.takephoto.model.TIntentWap;
 import com.soundcloud.android.crop.Crop;
 
 import java.util.List;
@@ -30,23 +33,47 @@ public class TUtils {
      * @param isCrop 是否为裁切照片的Intent
      * @throws TException
      */
-    public static void sendIntentWithSafely(Activity activity, List<TIntentWap> intentWapList,int defaultIndex,boolean isCrop)throws TException{
-        if (defaultIndex+1>intentWapList.size())throw new TException(isCrop?TExceptionType.TYPE_NO_MATCH_PICK_INTENT:TExceptionType.TYPE_NO_MATCH_CROP_INTENT);
+    public static void sendIntentBySafely(Activity activity, List<TIntentWap> intentWapList, int defaultIndex, boolean isCrop)throws TException{
+        if (defaultIndex+1>intentWapList.size())throw new TException(isCrop? TExceptionType.TYPE_NO_MATCH_PICK_INTENT:TExceptionType.TYPE_NO_MATCH_CROP_INTENT);
         TIntentWap intentWap=intentWapList.get(defaultIndex);
         List result=activity.getPackageManager().queryIntentActivities(intentWap.getIntent(),PackageManager.MATCH_ALL);
         if (result.isEmpty()){
-            sendIntentWithSafely(activity,intentWapList,++defaultIndex,isCrop);
+            sendIntentBySafely(activity,intentWapList,++defaultIndex,isCrop);
         }else {
             activity.startActivityForResult(intentWap.getIntent(),intentWap.getRequestCode());
         }
     }
-    public static void starCropWithSafely(Activity activity, Uri imageUri,Uri outPutUri,int cropWidth,int cropHeight){
-        Intent nativeCropIntent=IntentUtils.getCropIntent(imageUri, outPutUri, cropWidth, cropHeight);
+
+    /**
+     * 通过第三方工具裁切照片，当没有第三方裁切工具时，会自动使用自带裁切工具进行裁切
+     * @param activity
+     * @param imageUri
+     * @param outPutUri
+     * @param options
+     */
+    public static void cropWithOtherAppBySafely(Activity activity, Uri imageUri, Uri outPutUri, CropOptions options){
+        Intent nativeCropIntent=IntentUtils.getCropIntentWithOtherApp(imageUri, outPutUri,options);
         List result=activity.getPackageManager().queryIntentActivities(nativeCropIntent,PackageManager.MATCH_ALL);
         if (result.isEmpty()){
-            Crop.of(imageUri, outPutUri).withMaxSize(cropWidth,cropHeight).start(activity);
+            cropWithOwnApp(activity,imageUri,outPutUri,options);
         }else {
-            activity.startActivityForResult(IntentUtils.getCropIntent(imageUri, outPutUri, cropWidth, cropHeight), TConstant.PIC_CROP);
+            activity.startActivityForResult(IntentUtils.getCropIntentWithOtherApp(imageUri, outPutUri,options), TConstant.RC_CROP);
+        }
+    }
+    /**
+     * 通过TakePhoto自带的裁切工具裁切图片
+     * @param activity
+     * @param imageUri
+     * @param outPutUri
+     * @param options
+     */
+    public static void cropWithOwnApp(Activity activity, Uri imageUri, Uri outPutUri, CropOptions options){
+        if (options.getAspectX()*options.getAspectY()>0){
+            Crop.of(imageUri, outPutUri).withAspect(options.getAspectX(),options.getAspectY()).start(activity);
+        }else if (options.getOutputX()*options.getOutputY()>0){
+            Crop.of(imageUri, outPutUri).withMaxSize(options.getOutputX(),options.getOutputY()).start(activity);
+        }else {
+            Crop.of(imageUri, outPutUri).asSquare().start(activity);
         }
     }
     /**

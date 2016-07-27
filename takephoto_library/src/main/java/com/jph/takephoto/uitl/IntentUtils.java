@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.jph.takephoto.model.CropOptions;
+
 /**
  * Intent工具类用于生成拍照、
  * 从相册选择照片，裁切照片所需的Intent
@@ -19,20 +21,23 @@ public class IntentUtils {
      * 获取裁切照片的Intent
      * @param targetUri 要裁切的照片
      * @param outPutUri 裁切完成的照片
-     * @param cropWidth 裁切之后的宽度
-     * @param cropHeight 裁切之后的高度
+     * @param options 裁切配置
      * @return
      */
-    public static Intent getCropIntent(Uri targetUri, Uri outPutUri, int cropWidth, int cropHeight) {
+    public static Intent getCropIntentWithOtherApp(Uri targetUri, Uri outPutUri, CropOptions options) {
         boolean isReturnData = TUtils.isReturnData();
-        Log.w(TAG, "getCropIntent:isReturnData:" + (isReturnData ? "true" : "false"));
+        Log.w(TAG, "getCaptureIntentWithCrop:isReturnData:" + (isReturnData ? "true" : "false"));
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(targetUri, "image/*");
         intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", cropWidth);
-        intent.putExtra("aspectY", cropHeight);
-        intent.putExtra("outputX", cropWidth);
-        intent.putExtra("outputY", cropHeight);
+        if (options.getAspectX()*options.getAspectY()>0){
+            intent.putExtra("aspectX", options.getAspectX());
+            intent.putExtra("aspectY", options.getAspectY());
+        }
+        if (options.getOutputX()*options.getOutputY()>0){
+            intent.putExtra("outputX", options.getOutputX());
+            intent.putExtra("outputY", options.getOutputY());
+        }
         intent.putExtra("scale", true);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outPutUri);
         intent.putExtra("return-data", isReturnData);
@@ -45,10 +50,10 @@ public class IntentUtils {
      * 获取拍照的Intent
      * @return
      */
-    public static Intent getCaptureIntent(Uri imageUri) {
+    public static Intent getCaptureIntent(Uri outPutUri) {
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将拍取的照片保存到指定URI
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, outPutUri);//将拍取的照片保存到指定URI
         return intent;
     }
     /**

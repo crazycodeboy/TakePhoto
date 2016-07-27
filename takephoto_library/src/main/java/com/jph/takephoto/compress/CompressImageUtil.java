@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
-import android.os.Message;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -113,7 +112,7 @@ public class CompressImageUtil implements CompressImage{
 			compressImageByQuality(bitmap,imgPath,listener);//压缩好比例大小后再进行质量压缩
 		}else {
 			bitmap.compress(Bitmap.CompressFormat.JPEG,100,new FileOutputStream(new File(imgPath)));
-			listener.onCompressSuccessed(imgPath);
+			listener.onCompressSuccess(imgPath);
 		}
 	}
 	/**
@@ -127,7 +126,7 @@ public class CompressImageUtil implements CompressImage{
 			@Override
 			public void run() {
 				if (isSuccess){
-					listener.onCompressSuccessed(imagePath);
+					listener.onCompressSuccess(imagePath);
 				}else{
 					listener.onCompressFailed(imagePath,message);
 				}

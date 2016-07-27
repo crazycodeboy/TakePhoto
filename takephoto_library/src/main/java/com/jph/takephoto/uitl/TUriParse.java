@@ -1,28 +1,18 @@
 package com.jph.takephoto.uitl;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.nfc.Tag;
-import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
 
-import java.io.ByteArrayOutputStream;
+import com.jph.takephoto.model.TException;
+import com.jph.takephoto.model.TExceptionType;
+
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.UUID;
 
 /**
  * Uri解析工具类
@@ -39,7 +29,7 @@ public class TUriParse {
      * @Author JPH
      * Date 2016/6/6 0006 20:01
      */
-    public static String getFilePathWithUri(Uri uri, Activity activity)throws TException{
+    public static String getFilePathWithUri(Uri uri, Activity activity)throws TException {
         if(uri==null){
             Log.w(TAG,"uri is null,activity may have been recovered?");
             throw new TException(TExceptionType.TYPE_URI_NULL);
@@ -58,7 +48,7 @@ public class TUriParse {
             picturePath=uri.getPath();
         }
         if (TextUtils.isEmpty(picturePath))throw new TException(TExceptionType.TYPE_URI_PARSE_FAIL);
-        if (!TImageFiles.checkMimeType(TImageFiles.getMimeType(activity,uri)))throw new TException(TExceptionType.TYPE_NOT_IMAGE);
+        if (!TImageFiles.checkMimeType(activity,TImageFiles.getMimeType(activity,uri)))throw new TException(TExceptionType.TYPE_NOT_IMAGE);
         return picturePath;
     }
     /**
