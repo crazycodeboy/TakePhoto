@@ -10,7 +10,9 @@ import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ToggleButton;
 
 import com.jph.takephoto.app.TakePhotoFragmentActivity;
 import com.jph.takephoto.compress.CompressConfig;
@@ -27,11 +29,20 @@ import java.io.File;
  */
 public class MainActivity extends TakePhotoFragmentActivity {
     private ImageView imgShow;
+    private ToggleButton toggleButton;
+    private boolean withOwnCrop;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imgShow= (ImageView) findViewById(R.id.imgShow);
+        toggleButton= (ToggleButton) findViewById(R.id.toggleButton);
+        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                withOwnCrop=isChecked;
+            }
+        });
     }
     public void cropPic(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -44,7 +55,7 @@ public class MainActivity extends TakePhotoFragmentActivity {
         if (!file.getParentFile().exists())file.getParentFile().mkdirs();
         Uri imageUri = Uri.fromFile(file);
         CompressConfig compressConfig=new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create();
-        CropOptions cropOptions=new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(false).create();
+        CropOptions cropOptions=new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(withOwnCrop).create();
         switch (view.getId()) {
             case R.id.btnPickFromGallery://从相册选择照片不裁切
                 getTakePhoto().onEnableCompress(compressConfig,true).onPickFromGallery();
