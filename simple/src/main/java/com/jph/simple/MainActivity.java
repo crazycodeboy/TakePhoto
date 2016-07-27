@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.jph.takephoto.app.TakePhotoFragmentActivity;
 import com.jph.takephoto.compress.CompressConfig;
+import com.jph.takephoto.model.CropOptions;
 
 import java.io.File;
 
@@ -32,21 +33,26 @@ public class MainActivity extends TakePhotoFragmentActivity {
         File file=new File(Environment.getExternalStorageDirectory(), "/temp/"+System.currentTimeMillis() + ".jpg");
         if (!file.getParentFile().exists())file.getParentFile().mkdirs();
         Uri imageUri = Uri.fromFile(file);
+        CompressConfig compressConfig=new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create();
+        CropOptions cropOptions=new CropOptions.Builder().setAspectX(1).setAspectY(1).create();
         switch (view.getId()) {
-            case R.id.btnCropFromGallery://从相册选择照片进行裁剪
-                getTakePhoto().onEnableCompress(new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create(),true).onPicSelectCrop(imageUri);
+            case R.id.btnPickFromGallery://从相册选择照片不裁切
+                getTakePhoto().onEnableCompress(compressConfig,true).onPickFromGallery();
                 break;
-            case R.id.btnCropFromTake://从相机拍取照片进行裁剪
-                getTakePhoto().onEnableCompress(new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create(),true).onPicTakeCrop(imageUri);
+            case R.id.btnPickFromGalleryWithCrop://从相册选择照片进行裁剪
+                getTakePhoto().onEnableCompress(compressConfig,true).onPickFromGalleryWithCrop(imageUri,cropOptions);
                 break;
-            case R.id.btnOriginal://从相册选择照片不裁切
-                getTakePhoto().onEnableCompress(new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create(),true).onPicSelectOriginal();
+            case R.id.btnPickFromCapture://从相机拍取照片不裁剪
+                getTakePhoto().onEnableCompress(compressConfig,true).onPickFromCapture(imageUri);
                 break;
-            case R.id.btnTakeOriginal://从相机拍取照片不裁剪
-                getTakePhoto().onEnableCompress(new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create(),true).onPicTakeOriginal(imageUri);
+            case R.id.btnPickFromCaptureWithCrop://从相机拍取照片进行裁剪
+            getTakePhoto().onEnableCompress(compressConfig,true).onPickFromCaptureWithCrop(imageUri,cropOptions);
+            break;
+            case R.id.btnPickFromDocuments://从文件选择照片不裁剪
+                getTakePhoto().onEnableCompress(compressConfig,true).onPickFromDocuments();
                 break;
-            case R.id.btnDocuments://从文件选择照片不裁剪
-                getTakePhoto().onEnableCompress(new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create(),true).onPicFromDocuments();
+            case R.id.btnDocumentsCrop://从文件选择照片并裁剪
+                getTakePhoto().onEnableCompress(compressConfig,true).onPickFromDocumentsWithCrop(imageUri,cropOptions);
                 break;
             default:
                 break;

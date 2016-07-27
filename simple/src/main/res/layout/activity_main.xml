@@ -4,43 +4,50 @@
     android:layout_height="match_parent"
     >
     <Button
-        android:id="@+id/btnCropFromGallery"
+        android:id="@+id/btnPickFromGallery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="cropPic"
         android:layout_margin="5dp"
-        android:text="从相册选择照片进行裁剪" />
+        android:text="从相册获取图片" />
+    <Button
+        android:id="@+id/btnPickFromGalleryWithCrop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="cropPic"
+        android:layout_margin="5dp"
+        android:text="从相册获取图片并裁剪" />
 
     <Button
-        android:id="@+id/btnOriginal"
+        android:id="@+id/btnPickFromCapture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="cropPic"
         android:layout_margin="5dp"
-        android:text="从相册获取原生的图片" />
+        android:text="从相机获取图片" />
+    <Button
+        android:id="@+id/btnPickFromCaptureWithCrop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="cropPic"
+        android:layout_margin="5dp"
+        android:text="从相机获取图片并裁剪" />
+
 
     <Button
-        android:id="@+id/btnCropFromTake"
+        android:id="@+id/btnPickFromDocuments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="cropPic"
         android:layout_margin="5dp"
-        android:text="从相机拍取照片进行裁剪" />
-
+        android:text="从文件选择图片" />
     <Button
-        android:id="@+id/btnTakeOriginal"
+        android:id="@+id/btnDocumentsCrop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="cropPic"
         android:layout_margin="5dp"
-        android:text="从相机拍取照片不裁剪" />
-    <Button
-        android:id="@+id/btnDocuments"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="cropPic"
-        android:layout_margin="5dp"
-        android:text="从文件选择照片不裁剪" />
+        android:text="从文件选择图片并裁剪" />
     <ImageView
         android:id="@+id/imgShow"
         android:background="@android:color/darker_gray"
