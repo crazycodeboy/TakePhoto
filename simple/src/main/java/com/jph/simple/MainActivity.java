@@ -1,10 +1,14 @@
 package com.jph.simple;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -30,11 +34,17 @@ public class MainActivity extends TakePhotoFragmentActivity {
         imgShow= (ImageView) findViewById(R.id.imgShow);
     }
     public void cropPic(View view) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请WRITE_EXTERNAL_STORAGE权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+        }
         File file=new File(Environment.getExternalStorageDirectory(), "/temp/"+System.currentTimeMillis() + ".jpg");
         if (!file.getParentFile().exists())file.getParentFile().mkdirs();
         Uri imageUri = Uri.fromFile(file);
         CompressConfig compressConfig=new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create();
-        CropOptions cropOptions=new CropOptions.Builder().setAspectX(1).setAspectY(1).create();
+        CropOptions cropOptions=new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create();
         switch (view.getId()) {
             case R.id.btnPickFromGallery://从相册选择照片不裁切
                 getTakePhoto().onEnableCompress(compressConfig,true).onPickFromGallery();
