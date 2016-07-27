@@ -15,6 +15,7 @@ import com.jph.takephoto.model.TExceptionType;
 import com.jph.takephoto.model.TIntentWap;
 import com.soundcloud.android.crop.Crop;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -57,6 +58,11 @@ public class TUtils {
         if (result.isEmpty()){
             cropWithOwnApp(activity,imageUri,outPutUri,options);
         }else {
+            try {
+                imageUri=Uri.fromFile(new File(TUriParse.getFilePathWithDocumentsUri(imageUri,activity)));
+            } catch (TException e) {
+                e.printStackTrace();
+            }
             activity.startActivityForResult(IntentUtils.getCropIntentWithOtherApp(imageUri, outPutUri,options), TConstant.RC_CROP);
         }
     }

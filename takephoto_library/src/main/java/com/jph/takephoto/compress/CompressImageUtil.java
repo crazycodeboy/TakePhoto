@@ -11,9 +11,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 /**
- * 压缩照片2.0
+ * 压缩照片
  * @author JPH
  * Date 2015-08-26 下午1:44:26
+ * Version:1.0.3
  */
 public class CompressImageUtil implements CompressImage{
 	private CompressConfig config;
@@ -96,7 +97,7 @@ public class CompressImageUtil implements CompressImage{
 		int height = newOpts.outHeight;
 		float maxSize =config.getMaxPixel();
 		int be = 1;
-		if (width > height && width > maxSize) {//缩放比,用高或者宽其中较大的一个数据进行计算
+		if (width >= height && width > maxSize) {//缩放比,用高或者宽其中较大的一个数据进行计算
 			be = (int) (newOpts.outWidth / maxSize);
 			be++;
 		} else if (width < height && height > maxSize) {

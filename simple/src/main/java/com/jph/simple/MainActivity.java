@@ -44,7 +44,7 @@ public class MainActivity extends TakePhotoFragmentActivity {
         if (!file.getParentFile().exists())file.getParentFile().mkdirs();
         Uri imageUri = Uri.fromFile(file);
         CompressConfig compressConfig=new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create();
-        CropOptions cropOptions=new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create();
+        CropOptions cropOptions=new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(false).create();
         switch (view.getId()) {
             case R.id.btnPickFromGallery://从相册选择照片不裁切
                 getTakePhoto().onEnableCompress(compressConfig,true).onPickFromGallery();
