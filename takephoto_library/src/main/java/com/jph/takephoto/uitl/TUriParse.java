@@ -26,7 +26,7 @@ public class TUriParse {
      * @param uri
      * @param activity
      * @return
-     * @Author JPH
+     * Author JPH
      * Date 2016/6/6 0006 20:01
      */
     public static String getFilePathWithUri(Uri uri, Activity activity)throws TException {
@@ -56,7 +56,7 @@ public class TUriParse {
      * @param uri
      * @param activity
      * @return
-     * @Author JPH
+     * Author JPH
      * Date 2016/6/6 0006 20:01
      */
     public static String getFilePathWithDocumentsUri(Uri uri,Activity activity) throws TException {
