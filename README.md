@@ -25,8 +25,8 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 ## 如何使用   
 ### 使用TakePhoto有以下两种方式：
 **方式一：通过继承的方式**  
-1. 继承TakePhotoActivity、TakePhotoFragmentActivity、TakePhotoFragment三者之一。  
-2. 通过`getTakePhoto()`获取TakePhoto实例进行相关操作。  
+1. 继承`TakePhotoActivity`、`TakePhotoFragmentActivity`、`TakePhotoFragment`三者之一。  
+2. 通过`getTakePhoto()`获取`TakePhoto`实例进行相关操作。  
 3. 重写以下方法获取结果        
 ```java
 void takeSuccess(String imagePath);  
@@ -59,9 +59,9 @@ void onPickFromGallery();
  */
 void onPickFromCapture(Uri outPutUri);
 ```
-以上三种方式均提供对应的裁剪API,详见：[关于裁剪图片](https://github.com/crazycodeboy/TakePhoto#裁剪图片)。    
+以上三种方式均提供对应的裁剪API，详见：[裁剪图片](https://github.com/crazycodeboy/TakePhoto#裁剪图片)。    
 **注：**  
-由于不同Android Rom厂商对系统有不同程度的定制，有可能导致某种选择图片的方式不支持，所以为了提高`TakePhoto`的兼容性，当以某种选的图片的方式不支持时，`TakePhoto`会自动切换成使用另一种选择图片的方式进行图片选择。      
+由于不同Android Rom厂商对系统有不同程度的定制，有可能导致某种选择图片的方式不支持，所以为了提高`TakePhoto`的兼容性，当某种选的图片的方式不支持时，`TakePhoto`会自动切换成使用另一种选择图片的方式进行图片选择。      
 
 ### 裁剪图片  
 #### API  
