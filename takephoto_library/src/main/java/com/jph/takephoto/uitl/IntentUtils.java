@@ -10,7 +10,7 @@ import com.jph.takephoto.model.CropOptions;
 
 /**
  * Intent工具类用于生成拍照、
- * 从相册选择照片，裁切照片所需的Intent
+ * 从相册选择照片，裁剪照片所需的Intent
  * Author: JPH
  * Date: 2016/6/7 0007 13:41
  */
@@ -18,10 +18,10 @@ public class IntentUtils {
     private static final String TAG = IntentUtils.class.getName();
 
     /**
-     * 获取裁切照片的Intent
-     * @param targetUri 要裁切的照片
-     * @param outPutUri 裁切完成的照片
-     * @param options 裁切配置
+     * 获取裁剪照片的Intent
+     * @param targetUri 要裁剪的照片
+     * @param outPutUri 裁剪完成的照片
+     * @param options 裁剪配置
      * @return
      */
     public static Intent getCropIntentWithOtherApp(Uri targetUri, Uri outPutUri, CropOptions options) {

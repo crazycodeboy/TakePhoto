@@ -8,7 +8,7 @@ android {
 //        applicationId "com.jph.takephoto"
         minSdkVersion 8
         targetSdkVersion 22
-        versionCode 4
+        versionCode 20
         versionName "2.0.0"
     }
     buildTypes {

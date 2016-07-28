@@ -7,15 +7,15 @@ package com.jph.takephoto.uitl;
  */
 public class TConstant {
     /**
-     * request Code 裁切照片
+     * request Code 裁剪照片
      **/
     public final static int RC_CROP = 1001;
     /**
-     * request Code 从相机获取照片并裁切
+     * request Code 从相机获取照片并裁剪
      **/
     public final static int RC_PICK_PICTURE_FROM_CAPTURE_CROP = 1002;
     /**
-     * request Code 从相机获取照片不裁切
+     * request Code 从相机获取照片不裁剪
      **/
     public final static int RC_PICK_PICTURE_FROM_CAPTURE = 1003;
     /**
@@ -23,7 +23,7 @@ public class TConstant {
      **/
     public final static int RC_PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL = 1004;
     /**
-     * request Code 从文件中选择照片并裁切
+     * request Code 从文件中选择照片并裁剪
      **/
     public final static int RC_PICK_PICTURE_FROM_DOCUMENTS_CROP = 1005;
     /**
@@ -31,7 +31,7 @@ public class TConstant {
      **/
     public final static int RC_PICK_PICTURE_FROM_GALLERY_ORIGINAL = 1006;
     /**
-     * request Code 从相册选择照片并裁切
+     * request Code 从相册选择照片并裁剪
      **/
     public final static int RC_PICK_PICTURE_FROM_GALLERY_CROP = 1007;
  }

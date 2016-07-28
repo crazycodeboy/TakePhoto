@@ -8,49 +8,60 @@ import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.TException;
 
+
 /**
- * 拍照及从图库选择图片框架
- * 从相册选择图片进行裁剪，从相机拍取图片进行裁剪<br>
- * 从相册选择图片（不裁切），并获取图片的路径<br>
- * 拍取图片（不裁切），并获取图片路径
+ - 支持通过相机拍照获取图片
+ - 支持从相册选择图片
+ - 支持从文件选择图片
+ - 支持对图片进行压缩
+ - 支持对图片进行裁剪
+ - 支持对裁剪及压缩参数自定义
+ - 提供自带裁剪工具(可选)
+ - 支持智能选取及裁剪异常处理
+ - 支持因拍照Activity被回收后的自动恢复
  * Author: JPH
- * Date 2016/7/27 13:56
- * Version:1.0.3
+ * Date: 2016/6/7 0007 15:10
+ * Version:2.0.0
  */
 public interface TakePhoto {
     /**
-     * 从文件中获取图片（不裁切）
+     * 从文件中获取图片（不裁剪）
      */
     void onPickFromDocuments();
     /**
-     * 从文件中获取图片并裁切
+     * 从文件中获取图片并裁剪
+     * @param outPutUri 图片裁剪之后保存的路径
+     * @param options 裁剪配置
      */
     void onPickFromDocumentsWithCrop(Uri outPutUri, CropOptions options);
     /**
-     * 从相册中获取图片（不裁切）
+     * 从相册中获取图片（不裁剪）
      */
     void onPickFromGallery();
     /**
-     * 从相册中获取图片并裁切
+     * 从相册中获取图片并裁剪
+     * @param outPutUri 图片裁剪之后保存的路径
+     * @param options 裁剪配置
      */
     void onPickFromGalleryWithCrop(Uri outPutUri, CropOptions options);
 
     /**
-     * 从相机获取图片(不裁切)
+     * 从相机获取图片(不裁剪)
      * @param outPutUri 图片保存的路径
      */
     void onPickFromCapture(Uri outPutUri);
     /**
-     * 从相机获取图片并裁切
-     * @param outPutUri 图片保存的路径
+     * 从相机获取图片并裁剪
+     * @param outPutUri 图片裁剪之后保存的路径
+     * @param options 裁剪配置             
      */
     void onPickFromCaptureWithCrop(Uri outPutUri, CropOptions options);
 
     /**
-     * 裁切图片
-     * @param imageUri 要裁切的图片
-     * @param outPutUri 裁切好输出的图片
-     * @param options 裁切配置
+     * 裁剪图片
+     * @param imageUri 要裁剪的图片
+     * @param outPutUri 图片裁剪之后保存的路径
+     * @param options 裁剪配置
      */
     void onCrop(Uri imageUri, Uri outPutUri, CropOptions options)throws TException;
     /**

@@ -25,12 +25,18 @@ import com.soundcloud.android.crop.Crop;
 import java.util.ArrayList;
 
 /**
- * 拍照及从图库选择照片框架
- * 从相册选择照片进行裁剪，从相机拍取照片进行裁剪<br>
- * 从相册选择照片（不裁切），并获取照片的路径<br>
- * 拍取照片（不裁切），并获取照片路径
+ - 支持通过相机拍照获取图片
+ - 支持从相册选择图片
+ - 支持从文件选择图片
+ - 支持对图片进行压缩
+ - 支持对图片进行裁剪
+ - 支持对裁剪及压缩参数自定义
+ - 提供自带裁剪工具(可选)
+ - 支持智能选取及裁剪异常处理
+ - 支持因拍照Activity被回收后的自动恢复
  * Author: JPH
  * Date: 2016/6/7 0007 15:10
+ * Version:2.0.0
  */
 public class TakePhotoImpl implements TakePhoto{
     private static final String TAG = IntentUtils.class.getName();
@@ -71,7 +77,7 @@ public class TakePhotoImpl implements TakePhoto{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case TConstant.RC_PICK_PICTURE_FROM_GALLERY_CROP:
-                if (resultCode == Activity.RESULT_OK && data != null) {//从相册选择照片并裁切
+                if (resultCode == Activity.RESULT_OK && data != null) {//从相册选择照片并裁剪
                     try {
                         onCrop(data.getData(),outPutUri,cropOptions);
                     } catch (TException e) {
@@ -82,7 +88,7 @@ public class TakePhotoImpl implements TakePhoto{
                     listener.takeCancel();
                 }
                 break;
-            case TConstant.RC_PICK_PICTURE_FROM_GALLERY_ORIGINAL://从相册选择照片不裁切
+            case TConstant.RC_PICK_PICTURE_FROM_GALLERY_ORIGINAL://从相册选择照片不裁剪
                 if (resultCode == Activity.RESULT_OK) {
                     try {
                         takeSuccess(TUriParse.getFilePathWithUri(data.getData(), activity));
@@ -94,7 +100,7 @@ public class TakePhotoImpl implements TakePhoto{
                     listener.takeCancel();
                 }
                 break;
-            case TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL://从文件选择照片不裁切
+            case TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL://从文件选择照片不裁剪
                 if (resultCode == Activity.RESULT_OK) {
                     try {
                         takeSuccess(TUriParse.getFilePathWithDocumentsUri(data.getData(), activity));
@@ -106,7 +112,7 @@ public class TakePhotoImpl implements TakePhoto{
                     listener.takeCancel();
                 }
                 break;
-            case TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_CROP://从文件选择照片，并裁切
+            case TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_CROP://从文件选择照片，并裁剪
                 if (resultCode == Activity.RESULT_OK) {
                     try {
                         onCrop(data.getData(),outPutUri,cropOptions);
@@ -118,7 +124,7 @@ public class TakePhotoImpl implements TakePhoto{
                     listener.takeCancel();
                 }
                 break;
-            case TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP://拍取照片,并裁切
+            case TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP://拍取照片,并裁剪
                 if (resultCode == Activity.RESULT_OK) {
                     try {
                         onCrop(outPutUri,outPutUri,cropOptions);
@@ -151,10 +157,10 @@ public class TakePhotoImpl implements TakePhoto{
                         takeFail(e.getDetailMessage());
                         e.printStackTrace();
                     }
-                } else if (resultCode == Activity.RESULT_CANCELED) {//裁切的照片没有保存
+                } else if (resultCode == Activity.RESULT_CANCELED) {//裁剪的照片没有保存
                     if (data != null) {
-                        Bitmap bitmap = data.getParcelableExtra("data");//获取裁切的结果数据
-                        TImageFiles.writeToFile(bitmap, outPutUri);//将裁切的结果写入到文件
+                        Bitmap bitmap = data.getParcelableExtra("data");//获取裁剪的结果数据
+                        TImageFiles.writeToFile(bitmap, outPutUri);//将裁剪的结果写入到文件
                         try {
                             takeSuccess(TUriParse.getFilePathWithUri(outPutUri, activity));
                         } catch (TException e) {

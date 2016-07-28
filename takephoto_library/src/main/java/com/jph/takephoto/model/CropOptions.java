@@ -3,6 +3,7 @@ package com.jph.takephoto.model;
 import java.io.Serializable;
 
 /**
+ * 裁剪配置类
  * Author: JPH
  * Date: 2016/7/27 13:19
  */
