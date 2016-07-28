@@ -162,7 +162,8 @@ public class TakePhotoImpl implements TakePhoto{
                             e.printStackTrace();
                         }
                     } else {
-                        takeFail("没有获取到裁剪结果");
+//                        takeFail("没有获取到裁剪结果");
+                        listener.takeCancel();
                     }
                 } else {
                     listener.takeCancel();
