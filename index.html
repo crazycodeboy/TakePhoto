@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Takephoto by crazycodeboy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Takephoto</h1>
+      <h2 class="project-tagline">一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库</h2>
+      <a href="https://github.com/crazycodeboy/TakePhoto" class="btn">View on GitHub</a>
+      <a href="https://github.com/crazycodeboy/TakePhoto/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/crazycodeboy/TakePhoto/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h2>
+<a id="takephoto-简介" class="anchor" href="#takephoto-%E7%AE%80%E4%BB%8B" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/crazycodeboy/TakePhoto">TakePhoto</a> 简介</h2>
+
+<p><code>TakePhoto</code>是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本<a href="https://github.com/crazycodeboy/TakePhoto/">2.0.0</a>。<br>
+2.0以下版本及API说明，详见<a href="https://github.com/crazycodeboy/TakePhoto/blob/master/README%20-V1.0+.md">TakePhoto1.0+</a>。  </p>
+
+<p><strong>V2.0</strong>    </p>
+
+<ul>
+<li>支持通过相机拍照获取图片 </li>
+<li>支持从相册选择图片</li>
+<li>支持从文件选择图片<br>
+</li>
+<li>支持对图片进行压缩</li>
+<li>支持对图片进行裁剪</li>
+<li>支持对裁剪及压缩参数个性化配置<br>
+</li>
+<li>提供自带裁剪工具(可选)<br>
+</li>
+<li>支持智能选取及裁剪异常处理 </li>
+<li>支持因拍照Activity被回收后的自动恢复<br>
+</li>
+</ul>
+
+<p>GitHub地址： <a href="https://github.com/crazycodeboy/TakePhoto">https://github.com/crazycodeboy/TakePhoto</a></p>
+
+<h2>
+<a id="预览图" class="anchor" href="#%E9%A2%84%E8%A7%88%E5%9B%BE" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>预览图</h2>
+
+<p>运行效果图：    </p>
+
+<p><img src="https://raw.githubusercontent.com/crazycodeboy/TakePhoto/master/Screenshots/%E9%A2%84%E8%A7%88%E5%9B%BE.jpg" alt="运行效果图"></p>
+
+<h2>
+<a id="如何使用" class="anchor" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>如何使用</h2>
+
+<h3>
+<a id="使用takephoto有以下两种方式" class="anchor" href="#%E4%BD%BF%E7%94%A8takephoto%E6%9C%89%E4%BB%A5%E4%B8%8B%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>使用TakePhoto有以下两种方式：</h3>
+
+<p><strong>方式一：通过继承的方式</strong><br>
+1. 继承<code>TakePhotoActivity</code>、<code>TakePhotoFragmentActivity</code>、<code>TakePhotoFragment</code>三者之一。<br>
+2. 通过<code>getTakePhoto()</code>获取<code>TakePhoto</code>实例进行相关操作。<br>
+3. 重写以下方法获取结果        </p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">void</span> takeSuccess(<span class="pl-smi">String</span> imagePath);  
+<span class="pl-k">void</span> takeFail(<span class="pl-smi">String</span> msg);
+<span class="pl-k">void</span> takeCancel();</pre></div>
+
+<p>此方式使用简单，满足的大部分的使用需求，具体使用详见simple。如果通过继承的方式无法满足实际项目的使用，可以通过下面介绍的方式。  </p>
+
+<p><strong>方式二：通过组装的方式</strong><br>
+1. 获取TakePhoto实例<code>TakePhoto takePhoto=new TakePhotoImpl(getActivity(),this);</code><br>
+2. 在 <code>onCreate</code>,<code>onActivityResult</code>,<code>onSaveInstanceState</code>方法中调用TakePhoto对用的方法。<br>
+3. 调用TakePhoto实例进行相关操作。<br>
+4. 在<code>TakeResultListener</code>相关方法中获取结果。      </p>
+
+<h3>
+<a id="获取图片" class="anchor" href="#%E8%8E%B7%E5%8F%96%E5%9B%BE%E7%89%87" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>获取图片</h3>
+
+<p>TakePhoto提供拍照，从相册选择，从文件中选择三种方式获取图片。    </p>
+
+<h4>
+<a id="api" class="anchor" href="#api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API:</h4>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">/**</span>
+<span class="pl-c"> * 从文件中获取图片（不裁剪）</span>
+<span class="pl-c"> */</span>
+<span class="pl-k">void</span> onPickFromDocuments();
+<span class="pl-c">/**</span>
+<span class="pl-c"> * 从相册中获取图片（不裁剪）</span>
+<span class="pl-c"> */</span>
+<span class="pl-k">void</span> onPickFromGallery();
+<span class="pl-c">/**</span>
+<span class="pl-c"> * 从相机获取图片(不裁剪)</span>
+<span class="pl-c"> * @param outPutUri 图片保存的路径</span>
+<span class="pl-c"> */</span>
+<span class="pl-k">void</span> onPickFromCapture(<span class="pl-smi">Uri</span> outPutUri);</pre></div>
+
+<p>以上三种方式均提供对应的裁剪API，详见：<a href="https://github.com/crazycodeboy/TakePhoto#%E8%A3%81%E5%89%AA%E5%9B%BE%E7%89%87">裁剪图片</a>。<br>
+<strong>注：</strong><br>
+由于不同Android Rom厂商对系统有不同程度的定制，有可能导致某种选择图片的方式不支持，所以为了提高<code>TakePhoto</code>的兼容性，当某种选的图片的方式不支持时，<code>TakePhoto</code>会自动切换成使用另一种选择图片的方式进行图片选择。      </p>
+
+<h3>
+<a id="裁剪图片" class="anchor" href="#%E8%A3%81%E5%89%AA%E5%9B%BE%E7%89%87" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>裁剪图片</h3>
+
+<h4>
+<a id="api-1" class="anchor" href="#api-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API</h4>
+
+<p><code>TakePhoto</code>支持对图片进行裁剪，无论是拍照的照片,还是从相册、文件中选择的图片。你只需要调用<code>TakePhoto</code>的相应方法即可：  </p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">/**</span>
+<span class="pl-c"> * 从相机获取图片并裁剪</span>
+<span class="pl-c"> * @param outPutUri 图片裁剪之后保存的路径</span>
+<span class="pl-c"> * @param options 裁剪配置             </span>
+<span class="pl-c"> */</span>
+<span class="pl-k">void</span> onPickFromCaptureWithCrop(<span class="pl-smi">Uri</span> outPutUri, <span class="pl-smi">CropOptions</span> options);
+<span class="pl-c">/**</span>
+<span class="pl-c"> * 从相册中获取图片并裁剪</span>
+<span class="pl-c"> * @param outPutUri 图片裁剪之后保存的路径</span>
+<span class="pl-c"> * @param options 裁剪配置</span>
+<span class="pl-c"> */</span>
+<span class="pl-k">void</span> onPickFromGalleryWithCrop(<span class="pl-smi">Uri</span> outPutUri, <span class="pl-smi">CropOptions</span> options);
+<span class="pl-c">/**</span>
+<span class="pl-c"> * 从文件中获取图片并裁剪</span>
+<span class="pl-c"> * @param outPutUri 图片裁剪之后保存的路径</span>
+<span class="pl-c"> * @param options 裁剪配置</span>
+<span class="pl-c"> */</span>
+<span class="pl-k">void</span> onPickFromDocumentsWithCrop(<span class="pl-smi">Uri</span> outPutUri, <span class="pl-smi">CropOptions</span> options);</pre></div>
+
+<h4>
+<a id="对指定图片进行裁剪" class="anchor" href="#%E5%AF%B9%E6%8C%87%E5%AE%9A%E5%9B%BE%E7%89%87%E8%BF%9B%E8%A1%8C%E8%A3%81%E5%89%AA" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>对指定图片进行裁剪</h4>
+
+<p>另外，TakePhoto也支持你对指定图片进行裁剪：     </p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">/**</span>
+<span class="pl-c"> * 裁剪图片</span>
+<span class="pl-c"> * @param imageUri 要裁剪的图片</span>
+<span class="pl-c"> * @param outPutUri 图片裁剪之后保存的路径</span>
+<span class="pl-c"> * @param options 裁剪配置</span>
+<span class="pl-c"> */</span>
+<span class="pl-k">void</span> onCrop(<span class="pl-smi">Uri</span> imageUri, <span class="pl-smi">Uri</span> outPutUri, <span class="pl-smi">CropOptions</span> options)throws <span class="pl-smi">TException</span>;</pre></div>
+
+<h4>
+<a id="cropoptions" class="anchor" href="#cropoptions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>CropOptions</h4>
+
+<p><code>CropOptions</code>是用于裁剪的配置类，通过它你可以对图片的裁剪比例，最大输出大小，以及是否使用<code>TakePhoto</code>自带的裁剪工具进行裁剪等，进行个性化配置。    </p>
+
+<p><strong>Usage:</strong>  </p>
+
+<div class="highlight highlight-source-java"><pre> <span class="pl-smi">CropOptions</span> cropOptions<span class="pl-k">=</span><span class="pl-k">new</span> <span class="pl-smi">CropOptions</span>.<span class="pl-smi">Builder</span>()<span class="pl-k">.</span>setAspectX(<span class="pl-c1">1</span>)<span class="pl-k">.</span>setAspectY(<span class="pl-c1">1</span>)<span class="pl-k">.</span>setWithOwnCrop(<span class="pl-c1">true</span>)<span class="pl-k">.</span>create();  
+ getTakePhoto()<span class="pl-k">.</span>onPickFromDocumentsWithCrop(imageUri,cropOptions);  
+ <span class="pl-c">//或  </span>
+ getTakePhoto()<span class="pl-k">.</span>onCrop(imageUri,outPutUri,cropOptions);  
+</pre></div>
+
+<p><strong>注：</strong><br>
+由于不同Android Rom厂商对系统有不同程度的定制，有可能系统中没有自带或第三方的裁剪工具，所以为了提高<code>TakePhoto</code>的兼容性，当系统中没有自带或第三方裁剪工具时，<code>TakePhoto</code>会自动切换到使用<code>TakePhoto</code>自带的裁剪工具进行裁剪。  </p>
+
+<h3>
+<a id="压缩图片" class="anchor" href="#%E5%8E%8B%E7%BC%A9%E5%9B%BE%E7%89%87" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>压缩图片</h3>
+
+<p>你可以选择是否对图片进行压缩处理，你只需要告诉它你是否要启用压缩功能以及<code>CompressConfig</code>即可。  </p>
+
+<h4>
+<a id="api-2" class="anchor" href="#api-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API</h4>
+
+<div class="highlight highlight-source-java"><pre> <span class="pl-c">/**</span>
+<span class="pl-c">  * 启用图片压缩</span>
+<span class="pl-c">  * @param config 压缩图片配置</span>
+<span class="pl-c">  * @param showCompressDialog 压缩时是否显示进度对话框</span>
+<span class="pl-c">  * @return </span>
+<span class="pl-c">  */</span>
+ <span class="pl-smi">TakePhoto</span> onEnableCompress(<span class="pl-smi">CompressConfig</span> config,<span class="pl-k">boolean</span> showCompressDialog);</pre></div>
+
+<p><strong>Usage:</strong>  </p>
+
+<div class="highlight highlight-source-java"><pre>getTakePhoto()<span class="pl-k">.</span>onEnableCompress(compressConfig,<span class="pl-c1">true</span>)<span class="pl-k">.</span>onPickFromGalleryWithCrop(imageUri,cropOptions);</pre></div>
+
+<p>如果你启用了图片压缩，<code>TakePhoto</code>会使用<code>CompressImage</code>对图片进行压缩处理，<code>CompressImage</code>目前支持对图片的尺寸以及图片的质量进行压缩。默认情况下，<code>CompressImage</code>开启了尺寸与质量双重压缩。  </p>
+
+<h4>
+<a id="对指定图片进行压缩" class="anchor" href="#%E5%AF%B9%E6%8C%87%E5%AE%9A%E5%9B%BE%E7%89%87%E8%BF%9B%E8%A1%8C%E5%8E%8B%E7%BC%A9" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>对指定图片进行压缩</h4>
+
+<p>另外，你也可以对指定图片进行压缩：<br>
+<strong>Usage:</strong>  </p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">new</span> <span class="pl-smi">CompressImageImpl</span>(compressConfig)<span class="pl-k">.</span>compress(picturePath, <span class="pl-k">new</span> <span class="pl-smi">CompressImage</span>.<span class="pl-smi">CompressListener</span>() {
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onCompressSuccess</span>(<span class="pl-smi">String</span> <span class="pl-v">imgPath</span>) {<span class="pl-c">//图片压缩成功</span>
+
+    }
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onCompressFailed</span>(<span class="pl-smi">String</span> <span class="pl-v">imagePath</span>,<span class="pl-smi">String</span> <span class="pl-v">msg</span>) {<span class="pl-c">//图片压缩失败</span>
+
+    }
+});</pre></div>
+
+<h4>
+<a id="compressconfig" class="anchor" href="#compressconfig" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>CompressConfig</h4>
+
+<p><code>CompressConfig</code>是用于图片压缩的配置类，你可以通过<code>CompressConfig.Builder</code>对图片压缩后的尺寸以及质量进行相关设置。如果你想改变压缩的方式可以通过<code>CompressConfig.Builder</code>进行相关设置。<br>
+<strong>Usage:</strong>   </p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">CompressConfig</span> compressConfig<span class="pl-k">=</span><span class="pl-k">new</span> <span class="pl-smi">CompressConfig</span>.<span class="pl-smi">Builder</span>()<span class="pl-k">.</span>setMaxSize(<span class="pl-c1">50</span><span class="pl-k">*</span><span class="pl-c1">1024</span>)<span class="pl-k">.</span>setMaxPixel(<span class="pl-c1">800</span>)<span class="pl-k">.</span>create();
+getTakePhoto()<span class="pl-k">.</span>onEnableCompress(compressConfig,<span class="pl-c1">true</span>)<span class="pl-k">.</span>onPickFromGallery();</pre></div>
+
+<h2>
+<a id="兼容性" class="anchor" href="#%E5%85%BC%E5%AE%B9%E6%80%A7" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>兼容性</h2>
+
+<h3>
+<a id="takephoto在深度兼容性方面的测试" class="anchor" href="#takephoto%E5%9C%A8%E6%B7%B1%E5%BA%A6%E5%85%BC%E5%AE%B9%E6%80%A7%E6%96%B9%E9%9D%A2%E7%9A%84%E6%B5%8B%E8%AF%95" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TakePhoto在深度兼容性方面的测试</h3>
+
+<p><img src="https://raw.githubusercontent.com/crazycodeboy/TakePhoto/master/Screenshots/%E5%85%BC%E5%AE%B9%E6%80%A7%E6%B5%8B%E8%AF%95.jpg" alt="兼容性测试报告"> </p>
+
+<h3>
+<a id="获取更高的兼容性" class="anchor" href="#%E8%8E%B7%E5%8F%96%E6%9B%B4%E9%AB%98%E7%9A%84%E5%85%BC%E5%AE%B9%E6%80%A7" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>获取更高的兼容性</h3>
+
+<p><code>TakePhot</code>o是基于Android官方标准API编写的，适配了目前市场上主流的Rom。如果你在使用过程中发现了适配问题，可以<a href="https://github.com/crazycodeboy/TakePhoto/issues">提交Issues</a>。<br>
+1. 为适配部分手机拍照时会回收<code>Activity</code>，<code>TakePhoto</code>在<code>onSaveInstanceState</code>与 <code>onCreate</code>做了相应的恢复处理。<br>
+2. 为适配部分手机拍照或从相册选择图片时屏幕方向会发生转变,从而导致拍照失败的问题，可以在AndroidManifest.xml中对使用了<code>TakePhoto</code>的<code>Activity</code>添加android:configChanges="orientation|keyboardHidden|screenSize"配置。<br>
+eg:  </p>
+
+<pre><code>&lt;activity
+    android:name=".MainActivity"
+    android:screenOrientation="portrait"
+    android:configChanges="orientation|keyboardHidden|screenSize"
+    android:label="@string/app_name" &gt;
+    &lt;intent-filter&gt;
+        &lt;action android:name="android.intent.action.MAIN" /&gt;
+        &lt;category android:name="android.intent.category.LAUNCHER" /&gt;
+    &lt;/intent-filter&gt;
+&lt;/activity&gt;
+</code></pre>
+
+<h2>
+<a id="在项目中使用" class="anchor" href="#%E5%9C%A8%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>在项目中使用</h2>
+
+<p>为方便大家使用，现已将TakePhoto V2.0.0发布到JCenter(如果你对如何将项目发布到JCenter感兴趣可以参考：《<a href="http://blog.csdn.net/fengyuzhengfan/article/details/51407009">教你轻松将Android library 发布到JCenter</a>)》<br>
+Gradle:  </p>
+
+<div class="highlight highlight-source-groovy"><pre>    compile <span class="pl-s"><span class="pl-pds">'</span>com.jph.takephoto:takephoto_library:2.0.0<span class="pl-pds">'</span></span></pre></div>
+
+<p>Maven:  </p>
+
+<div class="highlight highlight-source-groovy"><pre><span class="pl-k">&lt;</span>dependency<span class="pl-k">&gt;</span>
+  <span class="pl-k">&lt;</span>groupId<span class="pl-k">&gt;</span>com<span class="pl-k">.</span>jph<span class="pl-k">.</span>takephoto<span class="pl-k">&lt;</span><span class="pl-k">/</span>groupId<span class="pl-k">&gt;</span>
+  <span class="pl-k">&lt;</span>artifactId<span class="pl-k">&gt;</span>takephoto_library<span class="pl-k">&lt;</span><span class="pl-k">/</span>artifactId<span class="pl-k">&gt;</span>
+  <span class="pl-k">&lt;</span>version<span class="pl-k">&gt;</span><span class="pl-c1">2.0.0</span><span class="pl-k">&lt;</span><span class="pl-k">/</span>version<span class="pl-k">&gt;</span>
+  <span class="pl-k">&lt;</span>type<span class="pl-k">&gt;</span>pom<span class="pl-k">&lt;</span><span class="pl-k">/</span>type<span class="pl-k">&gt;</span>
+<span class="pl-k">&lt;</span><span class="pl-k">/</span>dependency<span class="pl-k">&gt;</span></pre></div>
+
+<h2>
+<a id="最后" class="anchor" href="#%E6%9C%80%E5%90%8E" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>最后</h2>
+
+<p>如果你对<a href="https://github.com/crazycodeboy/TakePhoto">TakePhoto</a>有更好的建议或想改造它，欢迎大家<a href="https://github.com/crazycodeboy/TakePhoto">Fork and Pull requests</a>。  </p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/crazycodeboy/TakePhoto">Takephoto</a> is maintained by <a href="https://github.com/crazycodeboy">crazycodeboy</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
