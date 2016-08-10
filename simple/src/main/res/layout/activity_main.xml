@@ -75,9 +75,9 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:minHeight="160dp"
+        android:minHeight="300dp"
         android:minWidth="260dp"
         android:layout_margin="5dp"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitXY" />
 
 </LinearLayout>

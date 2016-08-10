@@ -1,2 +1,2 @@
 include ':takephoto_library', ':simple'
-include ':android-crop/:lib_crop'
+//include ':android-crop/:lib_crop'

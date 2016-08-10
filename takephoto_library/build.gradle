@@ -8,8 +8,8 @@ android {
 //        applicationId "com.jph.takephoto"
         minSdkVersion 8
         targetSdkVersion 22
-        versionCode 20
-        versionName "2.0.0"
+        versionCode 21
+        versionName "2.0.1"
     }
     buildTypes {
         release {
@@ -22,6 +22,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-v4:23.3.0'
-    compile project(':android-crop/:lib_crop')
+    compile 'com.soundcloud.android.crop:lib_crop:1.0.0'
+//    compile project(':android-crop/:lib_crop')
 }
 //apply from: "bintrayUpload.gradle"
