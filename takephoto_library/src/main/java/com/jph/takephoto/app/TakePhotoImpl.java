@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.compress.CompressImage;
 import com.jph.takephoto.compress.CompressImageImpl;
 import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.TContextWrap;
 import com.jph.takephoto.model.TExceptionType;
 import com.jph.takephoto.model.TIntentWap;
 import com.jph.takephoto.uitl.IntentUtils;
@@ -40,7 +42,7 @@ import java.util.ArrayList;
  */
 public class TakePhotoImpl implements TakePhoto{
     private static final String TAG = IntentUtils.class.getName();
-    private Activity activity;
+    private TContextWrap contextWrap;
     private TakeResultListener listener;
     private Uri outPutUri;
     private CropOptions cropOptions;
@@ -51,10 +53,13 @@ public class TakePhotoImpl implements TakePhoto{
     private boolean showCompressDialog;
     private ProgressDialog wailLoadDialog;
     public TakePhotoImpl(Activity activity, TakeResultListener listener) {
-        this.activity = activity;
+        contextWrap=TContextWrap.of(activity);
         this.listener = listener;
     }
-
+    public TakePhotoImpl(Fragment fragment, TakeResultListener listener) {
+        contextWrap=TContextWrap.of(fragment);
+        this.listener = listener;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState!=null){
@@ -91,7 +96,7 @@ public class TakePhotoImpl implements TakePhoto{
             case TConstant.RC_PICK_PICTURE_FROM_GALLERY_ORIGINAL://从相册选择照片不裁剪
                 if (resultCode == Activity.RESULT_OK) {
                     try {
-                        takeSuccess(TUriParse.getFilePathWithUri(data.getData(), activity));
+                        takeSuccess(TUriParse.getFilePathWithUri(data.getData(), contextWrap.getActivity()));
                     } catch (TException e) {
                         takeFail(e.getDetailMessage());
                         e.printStackTrace();
@@ -103,7 +108,7 @@ public class TakePhotoImpl implements TakePhoto{
             case TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL://从文件选择照片不裁剪
                 if (resultCode == Activity.RESULT_OK) {
                     try {
-                        takeSuccess(TUriParse.getFilePathWithDocumentsUri(data.getData(), activity));
+                        takeSuccess(TUriParse.getFilePathWithDocumentsUri(data.getData(), contextWrap.getActivity()));
                     } catch (TException e) {
                         takeFail(e.getDetailMessage());
                         e.printStackTrace();
@@ -139,7 +144,7 @@ public class TakePhotoImpl implements TakePhoto{
             case TConstant.RC_PICK_PICTURE_FROM_CAPTURE://拍取照片
                 if (resultCode == Activity.RESULT_OK) {
                     try {
-                        takeSuccess(TUriParse.getFilePathWithUri(outPutUri, activity));
+                        takeSuccess(TUriParse.getFilePathWithUri(outPutUri, contextWrap.getActivity()));
                     } catch (TException e) {
                         takeFail(e.getDetailMessage());
                         e.printStackTrace();
@@ -152,7 +157,7 @@ public class TakePhotoImpl implements TakePhoto{
             case Crop.REQUEST_CROP://裁剪照片返回结果
                 if (resultCode == Activity.RESULT_OK) {
                     try {
-                        takeSuccess(TUriParse.getFilePathWithUri(outPutUri, activity));
+                        takeSuccess(TUriParse.getFilePathWithUri(outPutUri, contextWrap.getActivity()));
                     } catch (TException e) {
                         takeFail(e.getDetailMessage());
                         e.printStackTrace();
@@ -162,7 +167,7 @@ public class TakePhotoImpl implements TakePhoto{
                         Bitmap bitmap = data.getParcelableExtra("data");//获取裁剪的结果数据
                         TImageFiles.writeToFile(bitmap, outPutUri);//将裁剪的结果写入到文件
                         try {
-                            takeSuccess(TUriParse.getFilePathWithUri(outPutUri, activity));
+                            takeSuccess(TUriParse.getFilePathWithUri(outPutUri, contextWrap.getActivity()));
                         } catch (TException e) {
                             takeFail(e.getDetailMessage());
                             e.printStackTrace();
@@ -182,14 +187,14 @@ public class TakePhotoImpl implements TakePhoto{
 
     @Override
     public void onCrop(Uri imageUri, Uri outPutUri, CropOptions options)throws TException {
-        if (!TImageFiles.checkMimeType(activity,TImageFiles.getMimeType(activity,imageUri))){
-            Toast.makeText(activity,"选择的不是图片",Toast.LENGTH_SHORT).show();
+        if (!TImageFiles.checkMimeType(contextWrap.getActivity(),TImageFiles.getMimeType(contextWrap.getActivity(),imageUri))){
+            Toast.makeText(contextWrap.getActivity(),"选择的不是图片",Toast.LENGTH_SHORT).show();
             throw new TException(TExceptionType.TYPE_NOT_IMAGE);
         }
         if (options.isWithOwnCrop()){
-            TUtils.cropWithOwnApp(activity,imageUri,outPutUri,options);
+            TUtils.cropWithOwnApp(contextWrap,imageUri,outPutUri,options);
         }else {
-            TUtils.cropWithOtherAppBySafely(activity,imageUri,outPutUri,options);
+            TUtils.cropWithOtherAppBySafely(contextWrap,imageUri,outPutUri,options);
         }
     }
     @Override
@@ -205,7 +210,7 @@ public class TakePhotoImpl implements TakePhoto{
         intentWapList.add(new TIntentWap(IntentUtils.getPickIntentWithDocuments(),isCrop?TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_CROP:TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL));
         intentWapList.add(new TIntentWap(IntentUtils.getPickIntentWithGallery(),isCrop?TConstant.RC_PICK_PICTURE_FROM_GALLERY_CROP:TConstant.RC_PICK_PICTURE_FROM_GALLERY_ORIGINAL));
         try {
-            TUtils.sendIntentBySafely(activity,intentWapList,defaultIndex,isCrop);
+            TUtils.sendIntentBySafely(contextWrap,intentWapList,defaultIndex,isCrop);
         } catch (TException e) {
             takeFail(e.getDetailMessage());
             e.printStackTrace();
@@ -229,7 +234,7 @@ public class TakePhotoImpl implements TakePhoto{
     public void onPickFromCapture(Uri outPutUri) {
         this.outPutUri = outPutUri;
         try {
-            TUtils.captureBySafely(activity,new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE));
+            TUtils.captureBySafely(contextWrap,new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE));
         } catch (TException e) {
             takeFail(e.toString());
             e.printStackTrace();
@@ -241,7 +246,7 @@ public class TakePhotoImpl implements TakePhoto{
         this.cropOptions = options;
         this.outPutUri = outPutUri;
         try {
-            TUtils.captureBySafely(activity,new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP));
+            TUtils.captureBySafely(contextWrap,new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP));
         } catch (TException e) {
             takeFail(e.toString());
             e.printStackTrace();
@@ -257,17 +262,17 @@ public class TakePhotoImpl implements TakePhoto{
         if (null==compressConfig){
             listener.takeSuccess(picturePath);
         }else {
-            if (showCompressDialog)wailLoadDialog = TUtils.showProgressDialog(activity,"正在压缩照片...");
+            if (showCompressDialog)wailLoadDialog = TUtils.showProgressDialog(contextWrap.getActivity(),"正在压缩照片...");
             new CompressImageImpl(compressConfig).compress(picturePath, new CompressImage.CompressListener() {
                 @Override
                 public void onCompressSuccess(String imgPath) {
                     listener.takeSuccess(imgPath);
-                    if (wailLoadDialog!=null&&!activity.isFinishing())wailLoadDialog.dismiss();
+                    if (wailLoadDialog!=null&&!contextWrap.getActivity().isFinishing())wailLoadDialog.dismiss();
                 }
                 @Override
                 public void onCompressFailed(String imagePath,String msg) {
                     listener.takeFail(String.format("图片压缩失败:%s,picturePath:%s",msg,picturePath));
-                    if (wailLoadDialog!=null&&!activity.isFinishing())wailLoadDialog.dismiss();
+                    if (wailLoadDialog!=null&&!contextWrap.getActivity().isFinishing())wailLoadDialog.dismiss();
                 }
             });
         }

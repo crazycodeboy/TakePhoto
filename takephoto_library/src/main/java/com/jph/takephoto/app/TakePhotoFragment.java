@@ -35,7 +35,7 @@ public class TakePhotoFragment extends Fragment implements TakePhoto.TakeResultL
      */
     public TakePhoto getTakePhoto(){
         if (takePhoto==null){
-            takePhoto=new TakePhotoImpl(getActivity(),this);
+            takePhoto=new TakePhotoImpl(this,this);
         }
         return takePhoto;
     }
