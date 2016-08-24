@@ -99,11 +99,23 @@ public class TUtils {
      */
     public static void cropWithOwnApp(TContextWrap contextWrap, Uri imageUri, Uri outPutUri, CropOptions options){
         if (options.getAspectX()*options.getAspectY()>0){
-            Crop.of(imageUri, outPutUri).withAspect(options.getAspectX(),options.getAspectY()).start(contextWrap.getActivity(),contextWrap.getFragment());
+            if (contextWrap.getFragment()!=null){
+                Crop.of(imageUri, outPutUri).withAspect(options.getAspectX(),options.getAspectY()).start(contextWrap.getActivity(),contextWrap.getFragment());
+            }else {
+                Crop.of(imageUri, outPutUri).withAspect(options.getAspectX(),options.getAspectY()).start(contextWrap.getActivity());
+            }
         }else if (options.getOutputX()*options.getOutputY()>0){
-            Crop.of(imageUri, outPutUri).withMaxSize(options.getOutputX(),options.getOutputY()).start(contextWrap.getActivity(),contextWrap.getFragment());
+            if (contextWrap.getFragment()!=null){
+                Crop.of(imageUri, outPutUri).withMaxSize(options.getOutputX(),options.getOutputY()).start(contextWrap.getActivity(),contextWrap.getFragment());
+            }else {
+                Crop.of(imageUri, outPutUri).withMaxSize(options.getOutputX(),options.getOutputY()).start(contextWrap.getActivity());
+            }
         }else {
-            Crop.of(imageUri, outPutUri).asSquare().start(contextWrap.getActivity(),contextWrap.getFragment());;
+            if (contextWrap.getFragment()!=null){
+                Crop.of(imageUri, outPutUri).asSquare().start(contextWrap.getActivity(),contextWrap.getFragment());
+            }else {
+                Crop.of(imageUri, outPutUri).asSquare().start(contextWrap.getActivity());
+            }
         }
     }
     /**
