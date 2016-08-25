@@ -8,8 +8,8 @@ android {
 //        applicationId "com.jph.takephoto"
         minSdkVersion 8
         targetSdkVersion 22
-        versionCode 23
-        versionName "2.0.3"
+        versionCode 24
+        versionName "2.0.4"
     }
     buildTypes {
         release {
