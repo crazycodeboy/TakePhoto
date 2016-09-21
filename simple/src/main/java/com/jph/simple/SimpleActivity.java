@@ -15,9 +15,9 @@ import android.widget.ImageView;
 import android.widget.ToggleButton;
 
 import com.jph.takephoto.app.TakePhotoActivity;
-import com.jph.takephoto.app.TakePhotoFragmentActivity;
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.TResult;
 
 import java.io.File;
 
@@ -76,6 +76,9 @@ public class SimpleActivity extends TakePhotoActivity {
             case R.id.btnDocumentsCrop://从文件选择照片并裁剪
                 getTakePhoto().onEnableCompress(compressConfig,true).onPickFromDocumentsWithCrop(imageUri,cropOptions);
                 break;
+            case R.id.btnPickMultiple://图片多选
+                getTakePhoto().onEnableCompress(compressConfig,true).onPickMultipleWithCrop(5,cropOptions);
+                break;
             default:
                 break;
         }
@@ -85,13 +88,13 @@ public class SimpleActivity extends TakePhotoActivity {
         super.takeCancel();
     }
     @Override
-    public void takeFail(String msg) {
-        super.takeFail(msg);
+    public void takeFail(TResult result,String msg) {
+        super.takeFail(result,msg);
     }
     @Override
-    public void takeSuccess(String imagePath) {
-        super.takeSuccess(imagePath);
-        showImg(imagePath);
+    public void takeSuccess(TResult result) {
+        super.takeSuccess(result);
+        showImg(result.getImage().getPath());
     }
     private void showImg(String imagePath){
         BitmapFactory.Options option=new BitmapFactory.Options();

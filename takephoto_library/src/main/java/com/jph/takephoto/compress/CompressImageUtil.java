@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,13 +15,12 @@ import java.io.FileOutputStream;
  * Date 2015-08-26 下午1:44:26
  * Version:1.0.3
  */
-public class CompressImageUtil implements CompressImage{
+public class CompressImageUtil{
 	private CompressConfig config;
 	Handler mhHandler = new Handler();
 	public CompressImageUtil(CompressConfig config) {
 		this.config=config==null?CompressConfig.getDefaultConfig():config;
 	}
-	@Override
 	public void compress(String imagePath, CompressListener listener) {
 		if (config.isEnablePixelCompress()){
 			try {
@@ -42,7 +40,7 @@ public class CompressImageUtil implements CompressImage{
 	 * @param imgPath 图片的保存路径
 	 * @date 2014-12-5下午11:30:43
 	 */
-	private void compressImageByQuality(final Bitmap bitmap, final String imgPath, final CompressImage.CompressListener listener){
+	private void compressImageByQuality(final Bitmap bitmap, final String imgPath, final CompressListener listener){
 		if(bitmap==null){
 			sendMsg(false,imgPath,"像素压缩失败,bitmap is null",listener);
 			return;
@@ -122,7 +120,7 @@ public class CompressImageUtil implements CompressImage{
 	 * @param imagePath
 	 * @param message
 	 */
-	private void sendMsg(final boolean isSuccess, final String imagePath,final String message, final CompressImage.CompressListener listener){
+	private void sendMsg(final boolean isSuccess, final String imagePath,final String message, final CompressListener listener){
 		mhHandler.post(new Runnable() {
 			@Override
 			public void run() {
@@ -133,5 +131,23 @@ public class CompressImageUtil implements CompressImage{
 				}
 			}
 		});
+	}
+	/**
+	 * 压缩结果监听器
+	 */
+	public interface CompressListener {
+		/**
+		 * 压缩成功
+		 *
+		 * @param imgPath 压缩图片的路径
+		 */
+		void onCompressSuccess(String imgPath);
+
+		/**
+		 * 压缩失败
+		 * @param imgPath 压缩失败的图片
+		 * @param msg 失败的原因
+		 */
+		void onCompressFailed(String imgPath,String msg);
 	}
 }

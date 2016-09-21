@@ -9,15 +9,16 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
-
+import com.darsh.multipleimageselect.models.Image;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.TContextWrap;
 import com.jph.takephoto.model.TException;
 import com.jph.takephoto.model.TExceptionType;
+import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TIntentWap;
 import com.soundcloud.android.crop.Crop;
-
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +28,42 @@ import java.util.List;
  */
 public class TUtils {
     private static final String TAG = IntentUtils.class.getName();
-
+    /**
+     *
+     * @param images
+     * @return
+     */
+    public static ArrayList<Uri> convertImageToUri(ArrayList<Image>images) throws TException {
+        ArrayList<Uri>uris=new ArrayList();
+        for(Image image:images){
+            uris.add(Uri.fromFile(new File(image.path)));
+        }
+        return uris;
+    }
+    /**
+     *
+     * @param images
+     * @return
+     */
+    public static ArrayList<TImage> getTImagesWithImages(ArrayList<Image>images){
+        ArrayList<TImage>tImages=new ArrayList();
+        for(Image image:images){
+            tImages.add(TImage.of(image.path));
+        }
+        return tImages;
+    }
+    /**
+     *
+     * @param uris
+     * @return
+     */
+    public static ArrayList<TImage> getTImagesWithUris(ArrayList<Uri>uris){
+        ArrayList<TImage>tImages=new ArrayList();
+        for(Uri uri:uris){
+            tImages.add(TImage.of(uri));
+        }
+        return tImages;
+    }
     /**
      * @param contextWrap
      * @param intentWap

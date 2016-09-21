@@ -5,7 +5,6 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-//        applicationId "com.jph.takephoto"
         minSdkVersion 8
         targetSdkVersion 22
         versionCode 24
@@ -23,6 +22,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.soundcloud.android.crop:lib_crop:1.0.0'
-//    compile project(':android-crop/:lib_crop')
+    compile 'com.darsh.multipleimageselect:multipleimageselect:1.0.4'
 }
 //apply from: "bintrayUpload.gradle"

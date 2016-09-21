@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import com.jph.takephoto.model.TResult;
 
 /**
  * 继承这个类来让Activity获取拍照的能力<br>
@@ -39,11 +40,11 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
         return takePhoto;
     }
     @Override
-    public void takeSuccess(String imagePath) {
-        Log.i("info", "takeSuccess：" + imagePath);
+    public void takeSuccess(TResult result) {
+        Log.i("info", "takeSuccess：" + result.getImage().getPath());
     }
     @Override
-    public void takeFail(String msg) {
+    public void takeFail(TResult result,String msg) {
         Log.w("info", "takeFail:" + msg);
     }
     @Override

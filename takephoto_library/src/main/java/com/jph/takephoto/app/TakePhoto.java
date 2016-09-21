@@ -3,10 +3,11 @@ package com.jph.takephoto.app;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.MultipleCrop;
 import com.jph.takephoto.model.TException;
+import com.jph.takephoto.model.TResult;
 
 
 /**
@@ -24,6 +25,17 @@ import com.jph.takephoto.model.TException;
  * Version:2.0.0
  */
 public interface TakePhoto {
+    /**
+     * 图片多选
+     * @param limit 最多选择图片张数的限制
+     * */
+    void onPickMultiple(int limit);
+    /**
+     * 图片多选，并裁切
+     * @param limit 最多选择图片张数的限制
+     * @param options  裁剪配置
+     * */
+    void onPickMultipleWithCrop(int limit, CropOptions options);
     /**
      * 从文件中获取图片（不裁剪）
      */
@@ -65,6 +77,12 @@ public interface TakePhoto {
      */
     void onCrop(Uri imageUri, Uri outPutUri, CropOptions options)throws TException;
     /**
+     * 裁剪多张图片
+     * @param multipleCrop 要裁切的图片的路径以及输出路径
+     * @param options 裁剪配置
+     */
+    void onCrop(MultipleCrop multipleCrop, CropOptions options)throws TException;
+    /**
      * 启用图片压缩
      * @param config 压缩图片配置
      * @param showCompressDialog 压缩时是否显示进度对话框
@@ -84,9 +102,9 @@ public interface TakePhoto {
      * 拍照结果监听接口
      */
     interface TakeResultListener {
-        void takeSuccess(String imagePath);
+        void takeSuccess(TResult result);
 
-        void takeFail(String msg);
+        void takeFail(TResult result,String msg);
 
         void takeCancel();
     }

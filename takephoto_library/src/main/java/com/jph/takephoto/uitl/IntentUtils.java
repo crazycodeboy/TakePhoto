@@ -5,8 +5,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
-
+import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
+import com.darsh.multipleimageselect.helpers.Constants;
 import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.TContextWrap;
 
 /**
  * Intent工具类用于生成拍照、
@@ -16,6 +18,16 @@ import com.jph.takephoto.model.CropOptions;
  */
 public class IntentUtils {
     private static final String TAG = IntentUtils.class.getName();
+
+    /**
+     *  获取图片多选的Intent
+     * @param limit 最多选择图片张数的限制
+     * */
+    public static Intent getPickMultipleIntent(TContextWrap contextWrap, int limit){
+        Intent intent = new Intent(contextWrap.getActivity(), AlbumSelectActivity.class);
+        intent.putExtra(Constants.INTENT_EXTRA_LIMIT, limit>0? limit:1);
+        return intent;
+    }
 
     /**
      * 获取裁剪照片的Intent

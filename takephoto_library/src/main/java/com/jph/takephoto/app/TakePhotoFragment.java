@@ -3,8 +3,8 @@ package com.jph.takephoto.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import com.jph.takephoto.model.TResult;
 
 /**
  * 继承这个类来让Fragment获取拍照的能力<br>
@@ -40,11 +40,11 @@ public class TakePhotoFragment extends Fragment implements TakePhoto.TakeResultL
         return takePhoto;
     }
     @Override
-    public void takeSuccess(String imagePath) {
-        Log.i("info", "takeSuccess：" + imagePath);
+    public void takeSuccess(TResult result) {
+        Log.i("info", "takeSuccess：" + result.getImage().getPath());
     }
     @Override
-    public void takeFail(String msg) {
+    public void takeFail(TResult result,String msg) {
         Log.w("info", "takeFail:" + msg);
     }
     @Override

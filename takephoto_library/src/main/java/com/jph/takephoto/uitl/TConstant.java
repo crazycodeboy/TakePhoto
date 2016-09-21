@@ -34,4 +34,8 @@ public class TConstant {
      * request Code 从相册选择照片并裁剪
      **/
     public final static int RC_PICK_PICTURE_FROM_GALLERY_CROP = 1007;
+    /**
+     * request Code 选择多张照片
+     **/
+    public final static int RC_PICK_MULTIPLE = 1008;
  }

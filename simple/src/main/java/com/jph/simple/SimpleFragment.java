@@ -20,6 +20,7 @@ import android.widget.ToggleButton;
 import com.jph.takephoto.app.TakePhotoFragment;
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.TResult;
 
 import java.io.File;
 
@@ -95,13 +96,13 @@ public class SimpleFragment extends TakePhotoFragment {
         super.takeCancel();
     }
     @Override
-    public void takeFail(String msg) {
-        super.takeFail(msg);
+    public void takeFail(TResult result,String msg) {
+        super.takeFail(result,msg);
     }
     @Override
-    public void takeSuccess(String imagePath) {
-        super.takeSuccess(imagePath);
-        showImg(imagePath);
+    public void takeSuccess(TResult result) {
+        super.takeSuccess(result);
+        showImg(result.getImage().getPath());
     }
     private void showImg(String imagePath){
         BitmapFactory.Options option=new BitmapFactory.Options();
