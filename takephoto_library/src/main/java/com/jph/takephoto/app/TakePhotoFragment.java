@@ -8,8 +8,12 @@ import com.jph.takephoto.model.TResult;
 
 /**
  * 继承这个类来让Fragment获取拍照的能力<br>
- * @author JPH
- * Date:2015.08.05
+ * Author: crazycodeboy
+ * Date: 2016/9/21 0007 20:10
+ * Version:3.0.0
+ * 技术博文：http://www.cboy.me
+ * GitHub:https://github.com/crazycodeboy
+ * Eamil:crazycodeboy@gmail.com
  */
 public class TakePhotoFragment extends Fragment implements TakePhoto.TakeResultListener{
     private TakePhoto takePhoto;

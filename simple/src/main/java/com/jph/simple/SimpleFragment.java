@@ -15,24 +15,41 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
+import com.bumptech.glide.Glide;
 import com.jph.takephoto.app.TakePhotoFragment;
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TResult;
 
 import java.io.File;
+import java.util.ArrayList;
+
 
 /**
- * 从相册选择照片进行裁剪，从相机拍取照片进行裁剪<br>
- * 从相册选择照片（不裁切），并获取照片的路径<br>
- * 拍取照片（不裁切），并获取照片路径
- * Author JPH
- * Date 2016/6/7 0007 16:01
+ - 支持通过相机拍照获取图片
+ - 支持从相册选择图片
+ - 支持从文件选择图片
+ - 支持多图选择
+ - 支持批量图片裁切
+ - 支持批量图片压缩
+ - 支持对图片进行压缩
+ - 支持对图片进行裁剪
+ - 支持对裁剪及压缩参数自定义
+ - 提供自带裁剪工具(可选)
+ - 支持智能选取及裁剪异常处理
+ - 支持因拍照Activity被回收后的自动恢复
+ * Author: crazycodeboy
+ * Date: 2016/9/21 0007 20:10
+ * Version:3.0.0
+ * 技术博文：http://www.cboy.me
+ * GitHub:https://github.com/crazycodeboy
+ * Eamil:crazycodeboy@gmail.com
  */
 public class SimpleFragment extends TakePhotoFragment {
-    private ImageView imgShow;
     private ToggleButton toggleButton;
     private boolean withOwnCrop;
     @Override
@@ -45,7 +62,6 @@ public class SimpleFragment extends TakePhotoFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.simple_layout,null);
-        imgShow= (ImageView) view.findViewById(R.id.imgShow);
         toggleButton= (ToggleButton) view.findViewById(R.id.toggleButton);
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -102,12 +118,24 @@ public class SimpleFragment extends TakePhotoFragment {
     @Override
     public void takeSuccess(TResult result) {
         super.takeSuccess(result);
-        showImg(result.getImage().getPath());
+        showImg(result.getImages());
     }
-    private void showImg(String imagePath){
-        BitmapFactory.Options option=new BitmapFactory.Options();
-        option.inSampleSize=2;
-        Bitmap bitmap=BitmapFactory.decodeFile(imagePath,option);
-        imgShow.setImageBitmap(bitmap);
+    private void showImg(ArrayList<TImage> images){
+        LinearLayout linearLayout= (LinearLayout) getActivity().findViewById(R.id.llImages);
+        for(int i=0,j=images.size();i<j-1;i+=2){
+            View view= LayoutInflater.from(getActivity()).inflate(R.layout.image_show,null);
+            ImageView imageView1= (ImageView) view.findViewById(R.id.imgShow1);
+            ImageView imageView2= (ImageView) view.findViewById(R.id.imgShow2);
+            Glide.with(this).load(new File(images.get(i).getPath())).into(imageView1);
+            Glide.with(this).load(new File(images.get(i+1).getPath())).into(imageView2);
+            linearLayout.addView(view);
+        }
+        if(images.size()%2==1){
+            View view= LayoutInflater.from(getActivity()).inflate(R.layout.image_show,null);
+            ImageView imageView1= (ImageView) view.findViewById(R.id.imgShow1);
+            Glide.with(this).load(new File(images.get(images.size()-1).getPath())).into(imageView1);
+            linearLayout.addView(view);
+        }
+
     }
 }

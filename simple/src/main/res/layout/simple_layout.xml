@@ -18,14 +18,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="cropPic"
-            android:layout_margin="5dp"
             android:text="从相册获取图片" />
         <Button
             android:id="@+id/btnPickFromGalleryWithCrop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="cropPic"
-            android:layout_margin="5dp"
             android:text="从相册获取图片并裁剪" />
     </LinearLayout>
     <LinearLayout
@@ -38,14 +36,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="cropPic"
-            android:layout_margin="5dp"
             android:text="从相机获取图片" />
         <Button
             android:id="@+id/btnPickFromCaptureWithCrop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="cropPic"
-            android:layout_margin="5dp"
             android:text="从相机获取图片并裁剪" />
     </LinearLayout>
     <LinearLayout
@@ -58,14 +54,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="cropPic"
-            android:layout_margin="5dp"
             android:text="从文件选择图片" />
         <Button
             android:id="@+id/btnDocumentsCrop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="cropPic"
-            android:layout_margin="5dp"
             android:text="从文件选择图片并裁剪" />
     </LinearLayout>
     <LinearLayout
@@ -78,19 +72,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="cropPic"
-            android:layout_margin="5dp"
             android:text="图片多选" />
+        <Button
+            android:id="@+id/btnPickMultipleCrop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="cropPic"
+            android:text="图片多选并裁切" />
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imgShow"
-        android:background="@android:color/darker_gray"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:minHeight="300dp"
-        android:minWidth="260dp"
-        android:layout_margin="5dp"
-        android:scaleType="fitXY" />
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/btnPickMultipleCompress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="cropPic"
+            android:text="图片多选并压缩" />
+        <Button
+            android:id="@+id/btnPickMultipleCropCompress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="cropPic"
+            android:text="图片多选裁切并压缩" />
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/llImages"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </ScrollView>
 </LinearLayout>
