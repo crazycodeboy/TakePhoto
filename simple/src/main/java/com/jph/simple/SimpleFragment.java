@@ -103,6 +103,18 @@ public class SimpleFragment extends TakePhotoFragment {
             case R.id.btnDocumentsCrop://从文件选择照片并裁剪
                 getTakePhoto().onEnableCompress(compressConfig,true).onPickFromDocumentsWithCrop(imageUri,cropOptions);
                 break;
+            case R.id.btnPickMultiple://图片多选
+                getTakePhoto().onPickMultiple(5);
+                break;
+            case R.id.btnPickMultipleCompress://图片多选并压缩
+                getTakePhoto().onEnableCompress(compressConfig,true).onPickMultiple(5);
+                break;
+            case R.id.btnPickMultipleCrop://图片多选并裁切
+                getTakePhoto().onPickMultipleWithCrop(5,cropOptions);
+                break;
+            case R.id.btnPickMultipleCropCompress://图片多选裁切并压缩
+                getTakePhoto().onEnableCompress(compressConfig,true).onPickMultipleWithCrop(5,cropOptions);
+                break;
             default:
                 break;
         }
