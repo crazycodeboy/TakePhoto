@@ -21,6 +21,7 @@ import com.jph.takephoto.model.TExceptionType;
 import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TIntentWap;
 import com.jph.takephoto.model.TResult;
+import com.jph.takephoto.uitl.ImageRotateUtil;
 import com.jph.takephoto.uitl.IntentUtils;
 import com.jph.takephoto.uitl.TConstant;
 import com.jph.takephoto.model.TException;
@@ -145,6 +146,7 @@ public class TakePhotoImpl implements TakePhoto {
                 break;
             case TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP://拍取照片,并裁剪
                 if (resultCode == Activity.RESULT_OK) {
+                    ImageRotateUtil.of().correctTmage(outPutUri.getPath());
                     try {
                         onCrop(outPutUri, outPutUri, cropOptions);
                     } catch (TException e) {
@@ -157,6 +159,7 @@ public class TakePhotoImpl implements TakePhoto {
                 break;
             case TConstant.RC_PICK_PICTURE_FROM_CAPTURE://拍取照片
                 if (resultCode == Activity.RESULT_OK) {
+                    ImageRotateUtil.of().correctTmage(outPutUri.getPath());
                     try {
                         takeResult(TResult.of(TImage.of(TUriParse.getFilePathWithUri(outPutUri, contextWrap.getActivity()))));
                     } catch (TException e) {
