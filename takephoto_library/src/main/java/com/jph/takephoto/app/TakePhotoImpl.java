@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.widget.Toast;
 import com.darsh.multipleimageselect.helpers.Constants;
 import com.darsh.multipleimageselect.models.Image;
+import com.jph.takephoto.R;
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.compress.CompressImage;
 import com.jph.takephoto.compress.CompressImageImpl;
@@ -251,7 +252,7 @@ public class TakePhotoImpl implements TakePhoto {
     public void onCrop(Uri imageUri, Uri outPutUri, CropOptions options) throws TException {
         this.outPutUri = outPutUri;
         if (!TImageFiles.checkMimeType(contextWrap.getActivity(), TImageFiles.getMimeType(contextWrap.getActivity(), imageUri))) {
-            Toast.makeText(contextWrap.getActivity(), "选择的不是图片", Toast.LENGTH_SHORT).show();
+            Toast.makeText(contextWrap.getActivity(), contextWrap.getActivity().getResources().getText(R.string.tip_type_not_image), Toast.LENGTH_SHORT).show();
             throw new TException(TExceptionType.TYPE_NOT_IMAGE);
         }
         cropWithNonException(imageUri, outPutUri, options);
@@ -281,7 +282,7 @@ public class TakePhotoImpl implements TakePhoto {
             if (preSuccess) {
                 takeResult(TResult.of(multipleCrop.gettImages()));
             } else {
-                takeResult(TResult.of(multipleCrop.gettImages()), outPutUri.getPath() + " canceled crop");
+                takeResult(TResult.of(multipleCrop.gettImages()), outPutUri.getPath() +contextWrap.getActivity().getResources().getString(R.string.msg_crop_canceled));
             }
         } else {
             cropWithNonException(multipleCrop.getUris().get(index + 1), multipleCrop.getOutUris().get(index + 1), cropOptions);
@@ -359,7 +360,7 @@ public class TakePhotoImpl implements TakePhoto {
             handleTakeCallBack(result,message);
         } else {
             if (showCompressDialog)
-                wailLoadDialog = TUtils.showProgressDialog(contextWrap.getActivity(), "正在压缩照片...");
+                wailLoadDialog = TUtils.showProgressDialog(contextWrap.getActivity(),contextWrap.getActivity().getResources().getString(R.string.tip_compress));
             new CompressImageImpl(compressConfig,result.getImages(), new CompressImage.CompressListener() {
                 @Override
                 public void onCompressSuccess(ArrayList<TImage> images) {
@@ -370,7 +371,7 @@ public class TakePhotoImpl implements TakePhoto {
 
                 @Override
                 public void onCompressFailed(ArrayList<TImage> images, String msg) {
-                    handleTakeCallBack(TResult.of(images),String.format("%s 图片压缩失败:%s picturePath:%s",message.length>0? message[0]:"", msg, result.getImage().getPath()));
+                    handleTakeCallBack(TResult.of(images),String.format(contextWrap.getActivity().getResources().getString(R.string.tip_compress_failed),message.length>0? message[0]:"", msg, result.getImage().getPath()));
                     if (wailLoadDialog != null && !contextWrap.getActivity().isFinishing())
                         wailLoadDialog.dismiss();
                 }
@@ -383,13 +384,13 @@ public class TakePhotoImpl implements TakePhoto {
             return;
         }
         if(multipleCrop!=null&&multipleCrop.hasFailed){
-            listener.takeFail(result,"There are pictures of crop failures.");
+            listener.takeFail(result,contextWrap.getActivity().getResources().getString(R.string.msg_crop_failed));
             return;
         }
         if(compressConfig!=null){
             for(TImage image:result.getImages()){
                 if(image==null||!image.isCompressed()){
-                    listener.takeFail(result,"There are pictures of compress failures.");
+                    listener.takeFail(result,contextWrap.getActivity().getString(R.string.msg_compress_failed));
                     return;
                 }
             }

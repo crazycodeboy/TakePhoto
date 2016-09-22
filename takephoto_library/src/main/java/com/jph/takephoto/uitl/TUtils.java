@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 import com.darsh.multipleimageselect.models.Image;
+import com.jph.takephoto.R;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.TContextWrap;
 import com.jph.takephoto.model.TException;
@@ -99,7 +100,7 @@ public class TUtils {
     public static void captureBySafely(TContextWrap contextWrap,TIntentWap intentWap)throws TException{
         List result=contextWrap.getActivity().getPackageManager().queryIntentActivities(intentWap.getIntent(),PackageManager.MATCH_ALL);
         if (result.isEmpty()){
-            Toast.makeText(contextWrap.getActivity(),"没有找到相机",Toast.LENGTH_SHORT).show();
+            Toast.makeText(contextWrap.getActivity(),contextWrap.getActivity().getResources().getText(R.string.tip_no_camera),Toast.LENGTH_SHORT).show();
             throw new TException(TExceptionType.TYPE_NO_CAMERA);
         }else {
             startActivityForResult(contextWrap,intentWap);
@@ -185,7 +186,7 @@ public class TUtils {
     public static ProgressDialog showProgressDialog(final Activity activity,
                                                     String... progressTitle) {
         if(activity==null||activity.isFinishing())return null;
-        String title = "提示";
+        String title = activity.getResources().getString(R.string.tip_tips);
         if (progressTitle != null && progressTitle.length > 0)
             title = progressTitle[0];
         ProgressDialog progressDialog = new ProgressDialog(activity);

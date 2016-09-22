@@ -10,6 +10,7 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import com.jph.takephoto.R;
 import com.jph.takephoto.model.TException;
 import com.jph.takephoto.model.TExceptionType;
 
@@ -106,7 +107,7 @@ public class TImageFiles {
      */
     public static boolean checkMimeType(Context context,String minType) {
         boolean isPicture=TextUtils.isEmpty(minType)?false:".jpg|.gif|.png|.bmp|.jpeg|".contains(minType.toLowerCase())?true:false;
-        if (!isPicture)Toast.makeText(context,"选择的不是图片",Toast.LENGTH_SHORT).show();
+        if (!isPicture)Toast.makeText(context,context.getResources().getText(R.string.tip_type_not_image),Toast.LENGTH_SHORT).show();
         return isPicture;
     }
 

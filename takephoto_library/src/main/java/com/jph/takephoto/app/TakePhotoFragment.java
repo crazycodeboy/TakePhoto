@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+
+import com.jph.takephoto.R;
 import com.jph.takephoto.model.TResult;
 
 /**
@@ -16,6 +18,7 @@ import com.jph.takephoto.model.TResult;
  * Eamil:crazycodeboy@gmail.com
  */
 public class TakePhotoFragment extends Fragment implements TakePhoto.TakeResultListener{
+    private static final String TAG = TakePhotoFragment.class.getName();
     private TakePhoto takePhoto;
 
     @Override
@@ -45,14 +48,14 @@ public class TakePhotoFragment extends Fragment implements TakePhoto.TakeResultL
     }
     @Override
     public void takeSuccess(TResult result) {
-        Log.i("info", "takeSuccess：" + result.getImage().getPath());
+        Log.i(TAG,"takeSuccess：" + result.getImage().getPath());
     }
     @Override
     public void takeFail(TResult result,String msg) {
-        Log.w("info", "takeFail:" + msg);
+        Log.i(TAG, "takeFail:" + msg);
     }
     @Override
     public void takeCancel() {
-        Log.w("info", "用户取消");
+        Log.i(TAG, getResources().getString(R.string.msg_operation_canceled));
     }
 }
