@@ -30,7 +30,7 @@ import java.util.List;
 public class TUtils {
     private static final String TAG = IntentUtils.class.getName();
     /**
-     *
+     * 将Image集合转换成Uri集合
      * @param images
      * @return
      */
@@ -42,7 +42,7 @@ public class TUtils {
         return uris;
     }
     /**
-     *
+     * 将Image集合转换成TImage集合
      * @param images
      * @return
      */
@@ -54,7 +54,7 @@ public class TUtils {
         return tImages;
     }
     /**
-     *
+     * 将Uri集合转换成TImage集合
      * @param uris
      * @return
      */
