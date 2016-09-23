@@ -6,7 +6,12 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.jph.takephoto.R;
+import com.jph.takephoto.model.InvokeParam;
+import com.jph.takephoto.model.TContextWrap;
 import com.jph.takephoto.model.TResult;
+import com.jph.takephoto.permission.InvokeListener;
+import com.jph.takephoto.permission.PermissionManager;
+import com.jph.takephoto.permission.TakePhotoInvocationHandler;
 
 /**
  * 继承这个类来让Fragment获取拍照的能力<br>
@@ -17,8 +22,9 @@ import com.jph.takephoto.model.TResult;
  * GitHub:https://github.com/crazycodeboy
  * Eamil:crazycodeboy@gmail.com
  */
-public class TakePhotoFragment extends Fragment implements TakePhoto.TakeResultListener{
+public class TakePhotoFragment extends Fragment implements TakePhoto.TakeResultListener,InvokeListener {
     private static final String TAG = TakePhotoFragment.class.getName();
+    private InvokeParam invokeParam;
     private TakePhoto takePhoto;
 
     @Override
@@ -36,13 +42,19 @@ public class TakePhotoFragment extends Fragment implements TakePhoto.TakeResultL
         getTakePhoto().onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionManager.TPermissionType type=PermissionManager.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        PermissionManager.handlePermissionsResult(getActivity(),type,invokeParam,this);
+    }
     /**
      *  获取TakePhoto实例
      * @return
      */
     public TakePhoto getTakePhoto(){
         if (takePhoto==null){
-            takePhoto=new TakePhotoImpl(this,this);
+            takePhoto= (TakePhoto) TakePhotoInvocationHandler.of(this).bind(new TakePhotoImpl(this,this));
         }
         return takePhoto;
     }
@@ -57,5 +69,13 @@ public class TakePhotoFragment extends Fragment implements TakePhoto.TakeResultL
     @Override
     public void takeCancel() {
         Log.i(TAG, getResources().getString(R.string.msg_operation_canceled));
+    }
+    @Override
+    public PermissionManager.TPermissionType invoke(InvokeParam invokeParam) {
+        PermissionManager.TPermissionType type=PermissionManager.checkPermission(TContextWrap.of(this),invokeParam.getMethod());
+        if(PermissionManager.TPermissionType.WAIT.equals(type)){
+            this.invokeParam=invokeParam;
+        }
+        return type;
     }
 }

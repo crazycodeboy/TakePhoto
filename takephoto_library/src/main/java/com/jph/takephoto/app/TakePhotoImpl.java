@@ -21,6 +21,7 @@ import com.jph.takephoto.model.TExceptionType;
 import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TIntentWap;
 import com.jph.takephoto.model.TResult;
+import com.jph.takephoto.permission.PermissionManager;
 import com.jph.takephoto.uitl.ImageRotateUtil;
 import com.jph.takephoto.uitl.IntentUtils;
 import com.jph.takephoto.uitl.TConstant;
@@ -59,6 +60,7 @@ public class TakePhotoImpl implements TakePhoto {
     private CropOptions cropOptions;
     private CompressConfig compressConfig;
     private MultipleCrop multipleCrop;
+    private PermissionManager.TPermissionType permissionType;
     /**
      * 是否显示压缩对话框
      */
@@ -239,6 +241,7 @@ public class TakePhotoImpl implements TakePhoto {
 
     @Override
     public void onPickMultiple(int limit) {
+        if(PermissionManager.TPermissionType.WAIT.equals(permissionType))return;
         TUtils.startActivityForResult(contextWrap, new TIntentWap(IntentUtils.getPickMultipleIntent(contextWrap, limit), TConstant.RC_PICK_MULTIPLE));
     }
 
@@ -253,6 +256,7 @@ public class TakePhotoImpl implements TakePhoto {
      **/
     @Override
     public void onCrop(Uri imageUri, Uri outPutUri, CropOptions options) throws TException {
+        if(PermissionManager.TPermissionType.WAIT.equals(permissionType))return;
         this.outPutUri = outPutUri;
         if (!TImageFiles.checkMimeType(contextWrap.getActivity(), TImageFiles.getMimeType(contextWrap.getActivity(), imageUri))) {
             Toast.makeText(contextWrap.getActivity(), contextWrap.getActivity().getResources().getText(R.string.tip_type_not_image), Toast.LENGTH_SHORT).show();
@@ -303,6 +307,7 @@ public class TakePhotoImpl implements TakePhoto {
     }
 
     private void selectPicture(int defaultIndex, boolean isCrop) {
+        if(PermissionManager.TPermissionType.WAIT.equals(permissionType))return;
         ArrayList<TIntentWap> intentWapList = new ArrayList<>();
         intentWapList.add(new TIntentWap(IntentUtils.getPickIntentWithDocuments(), isCrop ? TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_CROP : TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL));
         intentWapList.add(new TIntentWap(IntentUtils.getPickIntentWithGallery(), isCrop ? TConstant.RC_PICK_PICTURE_FROM_GALLERY_CROP : TConstant.RC_PICK_PICTURE_FROM_GALLERY_ORIGINAL));
@@ -330,6 +335,7 @@ public class TakePhotoImpl implements TakePhoto {
 
     @Override
     public void onPickFromCapture(Uri outPutUri) {
+        if(PermissionManager.TPermissionType.WAIT.equals(permissionType))return;
         this.outPutUri = outPutUri;
         try {
             TUtils.captureBySafely(contextWrap, new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE));
@@ -341,6 +347,7 @@ public class TakePhotoImpl implements TakePhoto {
 
     @Override
     public void onPickFromCaptureWithCrop(Uri outPutUri, CropOptions options) {
+        if(PermissionManager.TPermissionType.WAIT.equals(permissionType))return;
         this.cropOptions = options;
         this.outPutUri = outPutUri;
         try {
@@ -352,13 +359,17 @@ public class TakePhotoImpl implements TakePhoto {
     }
 
     @Override
-    public TakePhoto onEnableCompress(CompressConfig config, boolean showCompressDialog) {
+    public void onEnableCompress(CompressConfig config, boolean showCompressDialog) {
         this.compressConfig = config;
         this.showCompressDialog = showCompressDialog;
-        return this;
     }
 
-    private void takeResult(final TResult result,final String...message) {
+    @Override
+    public void permissionNotify(PermissionManager.TPermissionType type) {
+        this.permissionType=type;
+    }
+
+    private void takeResult(final TResult result, final String...message) {
         if (null == compressConfig) {
             handleTakeCallBack(result,message);
         } else {

@@ -14,6 +14,9 @@
     <string name="msg_compress_failed">"有压缩失败的图片"</string>
     <string name="msg_crop_canceled">" 取消裁切"</string>
     <string name="msg_operation_canceled">"操作被取消"</string>
+    <string name="tip_permission_camera">没有使用相机的权限，请在权限管理中开启</string>
+    <string name="tip_permission_storage">没有使用SD卡的权限，请在权限管理中开启</string>
+    <string name="tip_permission_camera_storage">没有使用相机和SD卡的权限，请在权限管理中开启</string>
 
     <!--custom multipleimageselect -->
     <string name="album_view">选择图片</string>

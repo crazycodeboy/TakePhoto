@@ -14,6 +14,8 @@
     <string name="msg_compress_failed">"There are pictures of compress failures."</string>
     <string name="msg_crop_canceled">" canceled crop"</string>
     <string name="msg_operation_canceled">"Operation canceled."</string>
-
+    <string name="tip_permission_camera">No permission to use the camera, open the rights management</string>
+    <string name="tip_permission_storage">No permission to use the SD card, open the rights management</string>
+    <string name="tip_permission_camera_storage">No permission to use the camera and SD card, open the rights management</string>
 
 </resources>

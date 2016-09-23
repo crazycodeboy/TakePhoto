@@ -6,7 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.jph.takephoto.R;
+import com.jph.takephoto.model.InvokeParam;
+import com.jph.takephoto.model.TContextWrap;
 import com.jph.takephoto.model.TResult;
+import com.jph.takephoto.permission.InvokeListener;
+import com.jph.takephoto.permission.PermissionManager;
+import com.jph.takephoto.permission.PermissionManager.TPermissionType;
+import com.jph.takephoto.permission.TakePhotoInvocationHandler;
 
 /**
  * 继承这个类来让Activity获取拍照的能力<br>
@@ -17,9 +23,10 @@ import com.jph.takephoto.model.TResult;
  * GitHub:https://github.com/crazycodeboy
  * Eamil:crazycodeboy@gmail.com
  */
-public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultListener{
+public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultListener,InvokeListener{
     private static final String TAG = TakePhotoActivity.class.getName();
     private TakePhoto takePhoto;
+    private InvokeParam invokeParam;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getTakePhoto().onCreate(savedInstanceState);
@@ -35,13 +42,21 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
         getTakePhoto().onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        TPermissionType type=PermissionManager.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        PermissionManager.handlePermissionsResult(this,type,invokeParam,this);
+    }
+
     /**
      *  获取TakePhoto实例
      * @return
      */
     public TakePhoto getTakePhoto(){
         if (takePhoto==null){
-            takePhoto=new TakePhotoImpl(this,this);
+            takePhoto= (TakePhoto) TakePhotoInvocationHandler.of(this).bind(new TakePhotoImpl(this,this));
         }
         return takePhoto;
     }
@@ -56,5 +71,14 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
     @Override
     public void takeCancel() {
         Log.i(TAG, getResources().getString(R.string.msg_operation_canceled));
+    }
+
+    @Override
+    public TPermissionType invoke(InvokeParam invokeParam) {
+        TPermissionType type=PermissionManager.checkPermission(TContextWrap.of(this),invokeParam.getMethod());
+        if(TPermissionType.WAIT.equals(type)){
+            this.invokeParam=invokeParam;
+        }
+        return type;
     }
 }

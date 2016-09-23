@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 22
+        targetSdkVersion 24
         versionCode 24
         versionName "2.0.4"
     }
@@ -19,8 +19,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:support-v4:23.3.0'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:support-v4:24.0.0'
     compile 'com.soundcloud.android.crop:lib_crop:1.0.0'
     compile 'com.darsh.multipleimageselect:multipleimageselect:1.0.4'
 }

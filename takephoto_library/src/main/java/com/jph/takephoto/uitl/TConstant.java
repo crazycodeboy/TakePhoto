@@ -38,4 +38,10 @@ public class TConstant {
      * request Code 选择多张照片
      **/
     public final static int RC_PICK_MULTIPLE = 1008;
+
+
+    /**
+     * requestCode 请求权限
+     **/
+    public final static int PERMISSION_REQUEST_TAKE_PHOTO = 2000;
  }

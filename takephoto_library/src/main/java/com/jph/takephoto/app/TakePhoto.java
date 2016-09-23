@@ -8,6 +8,7 @@ import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.MultipleCrop;
 import com.jph.takephoto.model.TException;
 import com.jph.takephoto.model.TResult;
+import com.jph.takephoto.permission.PermissionManager;
 
 
 /**
@@ -88,13 +89,14 @@ public interface TakePhoto {
      * @param options 裁剪配置
      */
     void onCrop(MultipleCrop multipleCrop, CropOptions options)throws TException;
+    void permissionNotify(PermissionManager.TPermissionType type);
     /**
      * 启用图片压缩
      * @param config 压缩图片配置
      * @param showCompressDialog 压缩时是否显示进度对话框
      * @return
      */
-    TakePhoto onEnableCompress(CompressConfig config,boolean showCompressDialog);
+    void onEnableCompress(CompressConfig config,boolean showCompressDialog);
     void onCreate(Bundle savedInstanceState);
     void onSaveInstanceState(Bundle outState);
     /**

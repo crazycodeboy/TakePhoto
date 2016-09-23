@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "22.0.1"
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         applicationId "com.jph.simple"
         minSdkVersion 8
-        targetSdkVersion 22
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
