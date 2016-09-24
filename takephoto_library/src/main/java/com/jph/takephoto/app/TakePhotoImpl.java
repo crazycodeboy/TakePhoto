@@ -30,6 +30,8 @@ import com.jph.takephoto.uitl.TImageFiles;
 import com.jph.takephoto.uitl.TUriParse;
 import com.jph.takephoto.uitl.TUtils;
 import com.soundcloud.android.crop.Crop;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -57,6 +59,7 @@ public class TakePhotoImpl implements TakePhoto {
     private TContextWrap contextWrap;
     private TakeResultListener listener;
     private Uri outPutUri;
+    private Uri tempUri;
     private CropOptions cropOptions;
     private CompressConfig compressConfig;
     private MultipleCrop multipleCrop;
@@ -83,6 +86,7 @@ public class TakePhotoImpl implements TakePhoto {
             cropOptions = (CropOptions) savedInstanceState.getSerializable("cropOptions");
             showCompressDialog = savedInstanceState.getBoolean("showCompressDialog");
             outPutUri = savedInstanceState.getParcelable("outPutUri");
+            tempUri = savedInstanceState.getParcelable("tempUri");
             compressConfig = (CompressConfig) savedInstanceState.getSerializable("compressConfig");
         }
     }
@@ -92,6 +96,7 @@ public class TakePhotoImpl implements TakePhoto {
         outState.putSerializable("cropOptions", cropOptions);
         outState.putBoolean("showCompressDialog", showCompressDialog);
         outState.putParcelable("outPutUri", outPutUri);
+        outState.putParcelable("tempUri", tempUri);
         outState.putSerializable("compressConfig", compressConfig);
     }
 
@@ -148,9 +153,9 @@ public class TakePhotoImpl implements TakePhoto {
                 break;
             case TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP://拍取照片,并裁剪
                 if (resultCode == Activity.RESULT_OK) {
-                    ImageRotateUtil.of().correctTmage(outPutUri.getPath());
+                    ImageRotateUtil.of().correctImage(tempUri);
                     try {
-                        onCrop(outPutUri, outPutUri, cropOptions);
+                        onCrop(tempUri,Uri.fromFile(new File(TUriParse.parseOwnUri(outPutUri))), cropOptions);
                     } catch (TException e) {
                         takeResult(TResult.of(TImage.of(outPutUri)), e.getDetailMessage());
                         e.printStackTrace();
@@ -161,7 +166,7 @@ public class TakePhotoImpl implements TakePhoto {
                 break;
             case TConstant.RC_PICK_PICTURE_FROM_CAPTURE://拍取照片
                 if (resultCode == Activity.RESULT_OK) {
-                    ImageRotateUtil.of().correctTmage(outPutUri.getPath());
+                    ImageRotateUtil.of().correctImage(outPutUri);
                     try {
                         takeResult(TResult.of(TImage.of(TUriParse.getFilePathWithUri(outPutUri, contextWrap.getActivity()))));
                     } catch (TException e) {
@@ -221,7 +226,7 @@ public class TakePhotoImpl implements TakePhoto {
                     ArrayList<Image> images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
                     if (cropOptions != null) {
                         try {
-                            onCrop(MultipleCrop.of(TUtils.convertImageToUri(images), contextWrap.getActivity()), cropOptions);
+                            onCrop(MultipleCrop.of(TUtils.convertImageToUri(contextWrap.getActivity(),images), contextWrap.getActivity()), cropOptions);
                         } catch (TException e) {
                             cropContinue(false);
                             e.printStackTrace();
@@ -336,7 +341,7 @@ public class TakePhotoImpl implements TakePhoto {
     @Override
     public void onPickFromCapture(Uri outPutUri) {
         if(PermissionManager.TPermissionType.WAIT.equals(permissionType))return;
-        this.outPutUri = outPutUri;
+        this.outPutUri = TUriParse.convertFileUriToFileProviderUri(contextWrap.getActivity(),outPutUri);
         try {
             TUtils.captureBySafely(contextWrap, new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE));
         } catch (TException e) {
@@ -350,8 +355,9 @@ public class TakePhotoImpl implements TakePhoto {
         if(PermissionManager.TPermissionType.WAIT.equals(permissionType))return;
         this.cropOptions = options;
         this.outPutUri = outPutUri;
+        this.tempUri=TUriParse.getTempUri(contextWrap.getActivity());
         try {
-            TUtils.captureBySafely(contextWrap, new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP));
+            TUtils.captureBySafely(contextWrap, new TIntentWap(IntentUtils.getCaptureIntent(this.tempUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP));
         } catch (TException e) {
             takeResult(TResult.of(TImage.of("")),e.getDetailMessage());
             e.printStackTrace();

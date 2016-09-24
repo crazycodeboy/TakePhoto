@@ -2,12 +2,14 @@ package com.jph.takephoto.model;
 
 import android.net.Uri;
 
+import java.io.Serializable;
+
 /**
  * TakePhoto 操作成功返回的处理结果
  * Author: JPH
  * Date: 2016/8/11 17:01
  */
-public class TImage {
+public class TImage implements Serializable{
     private String path;
     private boolean cropped;
     private boolean compressed;

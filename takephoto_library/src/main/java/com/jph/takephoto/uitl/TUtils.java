@@ -2,13 +2,16 @@ package com.jph.takephoto.uitl;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.darsh.multipleimageselect.models.Image;
 import com.jph.takephoto.R;
 import com.jph.takephoto.model.CropOptions;
@@ -18,6 +21,7 @@ import com.jph.takephoto.model.TExceptionType;
 import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TIntentWap;
 import com.soundcloud.android.crop.Crop;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +33,17 @@ import java.util.List;
  */
 public class TUtils {
     private static final String TAG = IntentUtils.class.getName();
+
+
     /**
      * 将Image集合转换成Uri集合
      * @param images
      * @return
      */
-    public static ArrayList<Uri> convertImageToUri(ArrayList<Image>images) throws TException {
+    public static ArrayList<Uri> convertImageToUri(Context context,ArrayList<Image>images) throws TException {
         ArrayList<Uri>uris=new ArrayList();
         for(Image image:images){
-            uris.add(Uri.fromFile(new File(image.path)));
+            uris.add(FileProvider.getUriForFile(context,TConstant.FILE_PROVIDER, new File(image.path)));
         }
         return uris;
     }
@@ -119,11 +125,11 @@ public class TUtils {
         if (result.isEmpty()){
             cropWithOwnApp(contextWrap,imageUri,outPutUri,options);
         }else {
-            try {
-                imageUri=Uri.fromFile(new File(TUriParse.getFilePathWithDocumentsUri(imageUri,contextWrap.getActivity())));
-            } catch (TException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                imageUri=Uri.fromFile(new File(TUriParse.getFilePathWithDocumentsUri(imageUri,contextWrap.getActivity())));
+//            } catch (TException e) {
+//                e.printStackTrace();
+//            }
             startActivityForResult(contextWrap,new TIntentWap(IntentUtils.getCropIntentWithOtherApp(imageUri, outPutUri,options), TConstant.RC_CROP));
         }
     }

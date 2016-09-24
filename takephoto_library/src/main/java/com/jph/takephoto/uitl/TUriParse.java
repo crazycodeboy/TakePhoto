@@ -2,9 +2,12 @@ package com.jph.takephoto.uitl;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -13,6 +16,10 @@ import com.jph.takephoto.model.TExceptionType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 
 /**
  * Uri解析工具类
@@ -21,6 +28,57 @@ import java.io.FileNotFoundException;
  */
 public class TUriParse {
     private static final String TAG = IntentUtils.class.getName();
+
+    /**
+     * 将scheme为file的uri转成FileProvider 提供的content uri
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static Uri convertFileUriToFileProviderUri(Context context,Uri uri){
+        if(uri==null)return null;
+        if(ContentResolver.SCHEME_FILE.equals(uri.getScheme())){
+            return getUriForFile(context,new File(uri.getPath()));
+        }
+        return uri;
+
+    }
+    /**
+     * 创建一个用于拍照图片输出路径的Uri,
+     * @param context
+     * @return
+     */
+    public static Uri getUriForFile(Context context, File file) {
+        return FileProvider.getUriForFile(context,TConstant.FILE_PROVIDER, file);
+    }
+
+    /**
+     * 获取一个临时的Uri ,(FileProvider)
+     * @param context
+     * @return
+     */
+    public static Uri getTempUri(Context context){
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        File file=new File(Environment.getExternalStorageDirectory(), "/images/"+timeStamp + ".jpg");
+        if (!file.getParentFile().exists())file.getParentFile().mkdirs();
+        return getUriForFile(context,file);
+    }
+
+    /**
+     * 将TakePhoto 提供的Uri 解析出文件绝对路径
+     * @param uri
+     * @return
+     */
+    public static String parseOwnUri(Uri uri){
+        if(uri==null)return null;
+        String path;
+        if(TextUtils.equals(uri.getAuthority(),TConstant.FILE_PROVIDER)){
+            path=new File(Environment.getExternalStorageDirectory(),uri.getPath().replace("camera_photos/","")).getAbsolutePath();
+        }else {
+            path=uri.getPath();
+        }
+        return path;
+    }
     /**
      * 通过URI获取文件的路径
      * @param uri
@@ -42,7 +100,11 @@ public class TUriParse {
                     filePathColumn, null, null, null);//从系统表中查询指定Uri对应的照片
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            picturePath = cursor.getString(columnIndex);  //获取照片路径
+            if(columnIndex>=0){
+                picturePath = cursor.getString(columnIndex);  //获取照片路径
+            }else if(TextUtils.equals(uri.getAuthority(),TConstant.FILE_PROVIDER)){
+                picturePath=parseOwnUri(uri);
+            }
             cursor.close();
         }else if (ContentResolver.SCHEME_FILE.equals(scheme)){
             picturePath=uri.getPath();

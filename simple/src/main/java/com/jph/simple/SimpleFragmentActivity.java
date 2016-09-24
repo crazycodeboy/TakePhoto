@@ -34,10 +34,10 @@ public class SimpleFragmentActivity extends FragmentActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.simple_fragment_layout);
         FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.fragment1,fragment=new SimpleFragment(),"dd");
+        transaction.add(R.id.fragment1,fragment=new SimpleFragment(),"test");
         transaction.commit();
     }
-    public void cropPic(View v){
-        fragment.cropPic(v);
+    public void onClick(View v){
+        fragment.onClick(v);
     }
 }

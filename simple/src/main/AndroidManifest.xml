@@ -22,6 +22,7 @@
         <activity android:name=".SimpleFragmentActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"></activity>
+        <activity android:name=".ResultActivity"></activity>
     </application>
 
 </manifest>

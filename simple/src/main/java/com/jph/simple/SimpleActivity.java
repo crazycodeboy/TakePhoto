@@ -1,24 +1,14 @@
 package com.jph.simple;
 
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ToggleButton;
 
-import com.bumptech.glide.Glide;
-import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
-import com.jph.takephoto.compress.CompressConfig;
-import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TResult;
 
-import java.io.File;
 import java.util.ArrayList;
 
 
@@ -43,64 +33,17 @@ import java.util.ArrayList;
  * Eamil:crazycodeboy@gmail.com
  */
 public class SimpleActivity extends TakePhotoActivity {
-    private ToggleButton toggleButton;
-    private boolean withOwnCrop;
-
+    private CustomHelper customHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.simple_layout);
-        toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
-        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                withOwnCrop = isChecked;
-            }
-        });
+        View contentView=LayoutInflater.from(this).inflate(R.layout.common_layout,null);
+        setContentView(contentView);
+        customHelper=CustomHelper.of(contentView);
     }
 
-    public void cropPic(View view) {
-        File file = new File(Environment.getExternalStorageDirectory(), "/temp/" + System.currentTimeMillis() + ".jpg");
-        if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
-        Uri imageUri = Uri.fromFile(file);
-        CompressConfig compressConfig = new CompressConfig.Builder().setMaxSize(50 * 1024).setMaxPixel(800).create();
-        CropOptions cropOptions = new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(withOwnCrop).create();
-        TakePhoto takePhoto = getTakePhoto();
-        takePhoto.onEnableCompress(compressConfig, true);
-        switch (view.getId()) {
-            case R.id.btnPickFromGallery://从相册选择照片不裁切
-                takePhoto.onPickFromGallery();
-                break;
-            case R.id.btnPickFromGalleryWithCrop://从相册选择照片进行裁剪
-                takePhoto.onPickFromGalleryWithCrop(imageUri, cropOptions);
-                break;
-            case R.id.btnPickFromCapture://从相机拍取照片不裁剪
-                getTakePhoto().onPickFromCapture(imageUri);
-                break;
-            case R.id.btnPickFromCaptureWithCrop://从相机拍取照片进行裁剪
-                takePhoto.onPickFromCaptureWithCrop(imageUri, cropOptions);
-                break;
-            case R.id.btnPickFromDocuments://从文件选择照片不裁剪
-                takePhoto.onPickFromDocuments();
-                break;
-            case R.id.btnDocumentsCrop://从文件选择照片并裁剪
-                getTakePhoto().onPickFromDocumentsWithCrop(imageUri, cropOptions);
-                break;
-            case R.id.btnPickMultiple://图片多选
-                getTakePhoto().onPickMultiple(5);
-                break;
-            case R.id.btnPickMultipleCompress://图片多选并压缩
-                takePhoto.onPickMultiple(5);
-                break;
-            case R.id.btnPickMultipleCrop://图片多选并裁切
-                getTakePhoto().onPickMultipleWithCrop(5, cropOptions);
-                break;
-            case R.id.btnPickMultipleCropCompress://图片多选裁切并压缩
-                takePhoto.onPickMultipleWithCrop(5, cropOptions);
-                break;
-            default:
-                break;
-        }
+    public void onClick(View view) {
+        customHelper.onClick(view,getTakePhoto());
     }
 
     @Override
@@ -120,21 +63,8 @@ public class SimpleActivity extends TakePhotoActivity {
     }
 
     private void showImg(ArrayList<TImage> images) {
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.llImages);
-        for (int i = 0, j = images.size(); i < j - 1; i += 2) {
-            View view = LayoutInflater.from(this).inflate(R.layout.image_show, null);
-            ImageView imageView1 = (ImageView) view.findViewById(R.id.imgShow1);
-            ImageView imageView2 = (ImageView) view.findViewById(R.id.imgShow2);
-            Glide.with(this).load(new File(images.get(i).getPath())).into(imageView1);
-            Glide.with(this).load(new File(images.get(i + 1).getPath())).into(imageView2);
-            linearLayout.addView(view);
-        }
-        if (images.size() % 2 == 1) {
-            View view = LayoutInflater.from(this).inflate(R.layout.image_show, null);
-            ImageView imageView1 = (ImageView) view.findViewById(R.id.imgShow1);
-            Glide.with(this).load(new File(images.get(images.size() - 1).getPath())).into(imageView1);
-            linearLayout.addView(view);
-        }
-
+        Intent intent=new Intent(this,ResultActivity.class);
+        intent.putExtra("images",images);
+        startActivity(intent);
     }
 }

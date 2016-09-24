@@ -6,18 +6,20 @@
     >
     <ImageView
         android:id="@+id/imgShow1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_gravity="center_horizontal"
         android:layout_marginRight="5dp"
         android:background="@android:color/darker_gray"
-        android:scaleType="fitXY" />
+        android:scaleType="fitCenter" />
     <ImageView
         android:id="@+id/imgShow2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_gravity="center_horizontal"
         android:layout_marginRight="5dp"
         android:background="@android:color/darker_gray"
-        android:scaleType="fitXY" />
+        android:scaleType="fitCenter" />
 </LinearLayout>

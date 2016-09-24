@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.Uri;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,15 +28,22 @@ public class ImageRotateUtil {
 
     private ImageRotateUtil() {
     }
-    public void correctTmage(String path){
+
+    /**
+     * 纠正照片的旋转角度
+     * @param path
+     */
+    public void correctImage(Uri path){
+
+        String imagePath=TUriParse.parseOwnUri(path);
         int degree;
-        if((degree=getBitmapDegree(path))!=0){
-            Bitmap bitmap= BitmapFactory.decodeFile(path);
+        if((degree=getBitmapDegree(imagePath))!=0){
+            Bitmap bitmap= BitmapFactory.decodeFile(imagePath);
             if(bitmap==null)return;
             Bitmap resultBitmap=rotateBitmapByDegree(bitmap,degree);
             if(resultBitmap==null)return;
             try {
-                resultBitmap.compress(Bitmap.CompressFormat.JPEG,100,new FileOutputStream(new File(path)));
+                resultBitmap.compress(Bitmap.CompressFormat.JPEG,100,new FileOutputStream(new File(imagePath)));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

@@ -6,6 +6,8 @@ package com.jph.takephoto.uitl;
  * Date 2016/6/7 0007 9:39
  */
 public class TConstant {
+
+    public final static String FILE_PROVIDER="com.jph.takephoto.fileprovider";
     /**
      * request Code 裁剪照片
      **/

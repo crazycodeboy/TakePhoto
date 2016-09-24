@@ -40,6 +40,7 @@ public class IntentUtils {
         boolean isReturnData = TUtils.isReturnData();
         Log.w(TAG, "getCaptureIntentWithCrop:isReturnData:" + (isReturnData ? "true" : "false"));
         Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setDataAndType(targetUri, "image/*");
         intent.putExtra("crop", "true");
         if (options.getAspectX()*options.getAspectY()>0){
@@ -64,6 +65,7 @@ public class IntentUtils {
      */
     public static Intent getCaptureIntent(Uri outPutUri) {
         Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outPutUri);//将拍取的照片保存到指定URI
         return intent;
