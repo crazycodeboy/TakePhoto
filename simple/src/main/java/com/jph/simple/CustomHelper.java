@@ -105,7 +105,10 @@ public class CustomHelper{
         }
     }
     private void configCompress(TakePhoto takePhoto){
-        if(rgCompress.getCheckedRadioButtonId()!=R.id.rbCompressYes)return ;
+        if(rgCompress.getCheckedRadioButtonId()!=R.id.rbCompressYes){
+            takePhoto.onEnableCompress(null,false);
+            return ;
+        }
         int maxSize= Integer.parseInt(etSize.getText().toString());
         int maxPixel= Integer.parseInt(etPx.getText().toString());
         boolean showProgressBar=rgShowProgressBar.getCheckedRadioButtonId()==R.id.rbShowYes? true:false;

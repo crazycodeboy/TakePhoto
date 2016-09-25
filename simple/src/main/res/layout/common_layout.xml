@@ -123,11 +123,12 @@
 
             <EditText
                 android:id="@+id/etCropWidth"
-                android:inputType="number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="42dp"
                 android:layout_marginLeft="10dp"
-                android:text="100" />
+                android:inputType="number"
+                android:text="800" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -136,9 +137,10 @@
 
             <EditText
                 android:id="@+id/etCropHeight"
+                android:minWidth="42dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="100" />
+                android:text="800" />
         </LinearLayout>
 
     </LinearLayout>
@@ -162,78 +164,71 @@
             android:layout_height="1px"
             android:background="@android:color/darker_gray" />
 
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:text="是否压缩：" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="是否压缩：" />
-
-                <RadioGroup
-                    android:id="@+id/rgCompress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/rbCompressYes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:checked="true"
-                        android:text="是" />
-
-                    <RadioButton
-                        android:id="@+id/rbCompressNo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="否" />
-                </RadioGroup>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <RadioGroup
+                android:id="@+id/rgCompress"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <TextView
+                <RadioButton
+                    android:id="@+id/rbCompressYes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="显示压缩进度条：" />
+                    android:layout_gravity="center_horizontal"
+                    android:checked="true"
+                    android:text="是" />
 
-                <RadioGroup
-                    android:id="@+id/rgShowProgressBar"
+                <RadioButton
+                    android:id="@+id/rbCompressNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:text="否" />
+            </RadioGroup>
+        </LinearLayout>
 
-                    <RadioButton
-                        android:id="@+id/rbShowYes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:checked="true"
-                        android:text="是" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/rbShowNo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="否" />
-                </RadioGroup>
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="显示压缩进度条：" />
+
+            <RadioGroup
+                android:id="@+id/rgShowProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbShowYes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="true"
+                    android:text="是" />
+
+                <RadioButton
+                    android:id="@+id/rbShowNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="否" />
+            </RadioGroup>
         </LinearLayout>
 
         <LinearLayout
@@ -251,6 +246,7 @@
                 android:id="@+id/etSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="42dp"
                 android:inputType="number"
                 android:text="102400" />
 
@@ -267,9 +263,10 @@
 
             <EditText
                 android:id="@+id/etPx"
-                android:inputType="number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="42dp"
+                android:inputType="number"
                 android:text="800" />
 
             <TextView
@@ -316,10 +313,11 @@
 
                 <EditText
                     android:id="@+id/etLimit"
-                    android:inputType="number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1" />
+                    android:minWidth="30dp"
+                    android:inputType="number"
+                    android:text="5" />
 
                 <TextView
                     android:layout_width="wrap_content"
