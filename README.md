@@ -141,7 +141,7 @@ void onPickFromCapture(Uri outPutUri);
 /**
  * 图片多选
  * @param limit 最多选择图片张数的限制
- * */
+ **/
 void onPickMultiple(int limit);
 ```
 以上三种方式均提供对应的裁剪API，详见：[裁剪图片](https://github.com/crazycodeboy/TakePhoto#裁剪图片)。    
@@ -176,7 +176,7 @@ void onPickFromDocumentsWithCrop(Uri outPutUri, CropOptions options);
  * 图片多选，并裁切
  * @param limit 最多选择图片张数的限制
  * @param options  裁剪配置
- * /
+ * */
 void onPickMultipleWithCrop(int limit, CropOptions options);
 ```   
 #### 对指定图片进行裁剪     
@@ -267,7 +267,7 @@ CompressConfig compressConfig=new CompressConfig.Builder().setMaxSize(50*1024).s
 ## 兼容性
 
 ### Android6.0
-由于Android6.0新增了"运行时权限控制(Runtime Permissions)"，为了应对这一改变，TakePhoto加入和自动权限管理，当TakePhoto检测到需要权限时，TakePhoto会自动申请权限，所以小伙伴们不用担心，权限的使用问题。
+由于Android6.0新增了"运行时权限控制(Runtime Permissions)"，为了应对这一改变，TakePhoto加入和自动权限管理，当TakePhoto检测到需要权限时，TakePhoto会自动申请权限，所以小伙伴们不用担心权限的使用问题。
 
 ### Android7.0  
 
