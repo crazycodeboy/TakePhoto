@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
@@ -341,7 +342,12 @@ public class TakePhotoImpl implements TakePhoto {
     @Override
     public void onPickFromCapture(Uri outPutUri) {
         if(PermissionManager.TPermissionType.WAIT.equals(permissionType))return;
-        this.outPutUri = TUriParse.convertFileUriToFileProviderUri(contextWrap.getActivity(),outPutUri);
+        if(Build.VERSION.SDK_INT>=23){
+            this.outPutUri = TUriParse.convertFileUriToFileProviderUri(contextWrap.getActivity(),outPutUri);
+        }else {
+            this.outPutUri = outPutUri;
+        }
+
         try {
             TUtils.captureBySafely(contextWrap, new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE));
         } catch (TException e) {
@@ -355,7 +361,12 @@ public class TakePhotoImpl implements TakePhoto {
         if(PermissionManager.TPermissionType.WAIT.equals(permissionType))return;
         this.cropOptions = options;
         this.outPutUri = outPutUri;
-        this.tempUri=TUriParse.getTempUri(contextWrap.getActivity());
+        if(Build.VERSION.SDK_INT>=23){
+            this.tempUri=TUriParse.getTempUri(contextWrap.getActivity());
+        }else {
+            this.tempUri=outPutUri;
+        }
+
         try {
             TUtils.captureBySafely(contextWrap, new TIntentWap(IntentUtils.getCaptureIntent(this.tempUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP));
         } catch (TException e) {
@@ -401,20 +412,29 @@ public class TakePhotoImpl implements TakePhoto {
     private void handleTakeCallBack(final TResult result,String...message){
         if(message.length>0){
            listener.takeFail(result,message[0]);
-            return;
-        }
-        if(multipleCrop!=null&&multipleCrop.hasFailed){
+        }else if(multipleCrop!=null&&multipleCrop.hasFailed){
             listener.takeFail(result,contextWrap.getActivity().getResources().getString(R.string.msg_crop_failed));
-            return;
-        }
-        if(compressConfig!=null){
+        }else if(compressConfig!=null){
+            boolean hasFailed=false;
             for(TImage image:result.getImages()){
                 if(image==null||!image.isCompressed()){
-                    listener.takeFail(result,contextWrap.getActivity().getString(R.string.msg_compress_failed));
-                    return;
+                    hasFailed=true;
+                    break;
                 }
             }
+            if(hasFailed){
+                listener.takeFail(result,contextWrap.getActivity().getString(R.string.msg_compress_failed));
+            }else {
+                listener.takeSuccess(result);
+            }
+        }else {
+            listener.takeSuccess(result);
         }
-        listener.takeSuccess(result);
+        clearParams();
+    }
+    private void clearParams(){
+        compressConfig=null;
+        cropOptions=null;
+        multipleCrop=null;
     }
 }
