@@ -26,6 +26,7 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 - [演示](#演示)
 - [使用说明](#使用说明)
 - [API](#api)
+- [兼容性](#兼容性)
 - [贡献](#贡献)
 
 ## 安装说明  
