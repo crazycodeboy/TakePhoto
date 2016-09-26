@@ -94,7 +94,6 @@ public interface TakePhoto {
      * 启用图片压缩
      * @param config 压缩图片配置
      * @param showCompressDialog 压缩时是否显示进度对话框
-     * @return
      */
     void onEnableCompress(CompressConfig config,boolean showCompressDialog);
     void onCreate(Bundle savedInstanceState);
