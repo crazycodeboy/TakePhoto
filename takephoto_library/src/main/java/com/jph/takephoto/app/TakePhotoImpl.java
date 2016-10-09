@@ -154,9 +154,9 @@ public class TakePhotoImpl implements TakePhoto {
                 break;
             case TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP://拍取照片,并裁剪
                 if (resultCode == Activity.RESULT_OK) {
-                    ImageRotateUtil.of().correctImage(tempUri);
+                    ImageRotateUtil.of().correctImage(contextWrap.getActivity(),tempUri);
                     try {
-                        onCrop(tempUri,Uri.fromFile(new File(TUriParse.parseOwnUri(outPutUri))), cropOptions);
+                        onCrop(tempUri,Uri.fromFile(new File(TUriParse.parseOwnUri(contextWrap.getActivity(),outPutUri))), cropOptions);
                     } catch (TException e) {
                         takeResult(TResult.of(TImage.of(outPutUri)), e.getDetailMessage());
                         e.printStackTrace();
@@ -167,7 +167,7 @@ public class TakePhotoImpl implements TakePhoto {
                 break;
             case TConstant.RC_PICK_PICTURE_FROM_CAPTURE://拍取照片
                 if (resultCode == Activity.RESULT_OK) {
-                    ImageRotateUtil.of().correctImage(outPutUri);
+                    ImageRotateUtil.of().correctImage(contextWrap.getActivity(),outPutUri);
                     try {
                         takeResult(TResult.of(TImage.of(TUriParse.getFilePathWithUri(outPutUri, contextWrap.getActivity()))));
                     } catch (TException e) {

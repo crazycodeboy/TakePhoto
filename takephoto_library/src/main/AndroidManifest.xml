@@ -8,7 +8,7 @@
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.jph.takephoto.fileprovider"
+            android:authorities="${applicationId}.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data

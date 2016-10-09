@@ -49,7 +49,7 @@ public class TUriParse {
      * @return
      */
     public static Uri getUriForFile(Context context, File file) {
-        return FileProvider.getUriForFile(context,TConstant.FILE_PROVIDER, file);
+        return FileProvider.getUriForFile(context,TConstant.getFileProviderName(context), file);
     }
 
     /**
@@ -69,10 +69,10 @@ public class TUriParse {
      * @param uri
      * @return
      */
-    public static String parseOwnUri(Uri uri){
+    public static String parseOwnUri(Context context,Uri uri){
         if(uri==null)return null;
         String path;
-        if(TextUtils.equals(uri.getAuthority(),TConstant.FILE_PROVIDER)){
+        if(TextUtils.equals(uri.getAuthority(),TConstant.getFileProviderName(context))){
             path=new File(Environment.getExternalStorageDirectory(),uri.getPath().replace("camera_photos/","")).getAbsolutePath();
         }else {
             path=uri.getPath();
@@ -102,8 +102,8 @@ public class TUriParse {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             if(columnIndex>=0){
                 picturePath = cursor.getString(columnIndex);  //获取照片路径
-            }else if(TextUtils.equals(uri.getAuthority(),TConstant.FILE_PROVIDER)){
-                picturePath=parseOwnUri(uri);
+            }else if(TextUtils.equals(uri.getAuthority(),TConstant.getFileProviderName(activity))){
+                picturePath=parseOwnUri(activity,uri);
             }
             cursor.close();
         }else if (ContentResolver.SCHEME_FILE.equals(scheme)){

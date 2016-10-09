@@ -43,7 +43,7 @@ public class TUtils {
     public static ArrayList<Uri> convertImageToUri(Context context,ArrayList<Image>images) throws TException {
         ArrayList<Uri>uris=new ArrayList();
         for(Image image:images){
-            uris.add(FileProvider.getUriForFile(context,TConstant.FILE_PROVIDER, new File(image.path)));
+            uris.add(FileProvider.getUriForFile(context,TConstant.getFileProviderName(context), new File(image.path)));
         }
         return uris;
     }

@@ -25,9 +25,11 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 - [安装说明](#安装说明)
 - [演示](#演示)
 - [使用说明](#使用说明)
+- [自定义UI](#自定义ui)
 - [API](#api)
 - [兼容性](#兼容性)
 - [贡献](#贡献)
+- [最后](#混淆)
 
 ## 安装说明  
 **Gradle:**  
@@ -117,6 +119,94 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
         return takePhoto;
     }    
 ```
+
+## 自定义UI
+
+TakePhoto不仅支持对相关参数的自定义，也支持对UI的自定义，下面就像大家介绍如何自定义TakePhoto的相册与裁剪工具的UI。
+
+### 自定义相册
+如果TakePhoto自带相册的UI不符合你应用的主题的话，你可以对它进行自定义。方法如下：   
+
+#### 自定义Toolbar 
+
+在“res/layout”目录中创建一个名为“toolbar.xml”的布局文件，内容如下：   
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    app:theme="@style/CustomToolbarTheme"
+    android:background="#ffa352">
+</android.support.v7.widget.Toolbar>
+```
+
+在“toolbar.xml”文件中你可以指定TakePhoto自带相册的主题以及Toolbar的背景色。
+
+#### 自定义提示文字
+
+在“res/values”目录的“string.xml”文件冲添加如下代码：
+
+```xml
+<resources>    
+    <string name="album_view">选择图片</string>
+    <string name="image_view">单击选择</string>
+    <string name="add">确定</string>
+    <string name="selected">已选</string>
+    <string name="limit_exceeded">最多能选 %d 张</string>
+</resources>
+```
+
+重写上述代码，便可以自定义TakePhoto自带相册的提示文字。
+
+### 自定义裁切工具
+
+在“res/layout”目录中创建一个名为“crop__activity_crop.xml”与“crop__layout_done_cancel.xml”的布局文件，内容如下：  
+
+**crop__activity_crop.xml**  
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.soundcloud.android.crop.CropImageView
+        android:id="@+id/crop_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/crop__texture"
+        android:layout_above="@+id/done_cancel_bar" />
+    <include
+        android:id="@+id/done_cancel_bar"
+        android:layout_alignParentBottom="true"
+        layout="@layout/crop__layout_done_cancel"
+        android:layout_height="50dp"
+        android:layout_width="match_parent" />
+</RelativeLayout>
+```
+
+**crop__layout_done_cancel.xml**  
+
+```xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Crop.DoneCancelBar">
+    <FrameLayout
+        android:id="@+id/btn_cancel"
+        style="@style/Crop.ActionButton">
+        <TextView style="@style/Crop.ActionButtonText.Cancel" />
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/btn_done"
+        style="@style/Crop.ActionButton">
+        <TextView style="@style/Crop.ActionButtonText.Done" />
+    </FrameLayout>
+</LinearLayout>
+```
+
+重写上述代码，便可以自定义TakePhoto裁切工具的UI。
 
 ## API
 
@@ -296,6 +386,22 @@ eg:
 </activity>
 ```
 
-
 ## 贡献  
-如果你在使用TakePhoto中遇到任何问题可以提[Issues](https://github.com/crazycodeboy/TakePhoto/issues)出来。另外欢迎大家为TakePhoto贡献智慧，欢迎大家[Fork and Pull requests](https://github.com/crazycodeboy/TakePhoto)。  
+如果你在使用TakePhoto中遇到任何问题可以提[Issues](https://github.com/crazycodeboy/TakePhoto/issues)出来。另外欢迎大家为TakePhoto贡献智慧，欢迎大家[Fork and Pull requests](https://github.com/crazycodeboy/TakePhoto)。     
+
+## 最后
+
+### 关于代码混淆
+如果你的项目中启用了代码混淆，可在混淆规则文件(如：proguard-rules.pro)中添加如下代码：   
+
+```
+-keep class com.jph.takephoto.** { *; }
+-dontwarn com.jph.takephoto.**
+
+-keep class com.darsh.multipleimageselect.** { *; }
+-dontwarn com.darsh.multipleimageselect.**
+
+-keep class com.soundcloud.android.crop.** { *; }
+-dontwarn com.soundcloud.android.crop.**
+
+```

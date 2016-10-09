@@ -1,5 +1,7 @@
 package com.jph.takephoto.uitl;
 
+import android.content.Context;
+
 /**
  * 常量类
  * @author JPH
@@ -7,7 +9,7 @@ package com.jph.takephoto.uitl;
  */
 public class TConstant {
 
-    public final static String FILE_PROVIDER="com.jph.takephoto.fileprovider";
+
     /**
      * request Code 裁剪照片
      **/
@@ -46,4 +48,8 @@ public class TConstant {
      * requestCode 请求权限
      **/
     public final static int PERMISSION_REQUEST_TAKE_PHOTO = 2000;
+
+    public final static String getFileProviderName(Context context){
+        return context.getPackageName()+".fileprovider";
+    }
  }

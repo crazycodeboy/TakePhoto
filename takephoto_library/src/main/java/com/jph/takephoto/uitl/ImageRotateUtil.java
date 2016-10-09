@@ -1,5 +1,6 @@
 package com.jph.takephoto.uitl;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -33,9 +34,9 @@ public class ImageRotateUtil {
      * 纠正照片的旋转角度
      * @param path
      */
-    public void correctImage(Uri path){
+    public void correctImage(Context context,Uri path){
 
-        String imagePath=TUriParse.parseOwnUri(path);
+        String imagePath=TUriParse.parseOwnUri(context,path);
         int degree;
         if((degree=getBitmapDegree(imagePath))!=0){
             Bitmap bitmap= BitmapFactory.decodeFile(imagePath);
