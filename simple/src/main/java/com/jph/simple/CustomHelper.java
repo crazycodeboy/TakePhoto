@@ -112,7 +112,7 @@ public class CustomHelper{
         int maxSize= Integer.parseInt(etSize.getText().toString());
         int maxPixel= Integer.parseInt(etPx.getText().toString());
         boolean showProgressBar=rgShowProgressBar.getCheckedRadioButtonId()==R.id.rbShowYes? true:false;
-        CompressConfig config= new CompressConfig.Builder().setMaxPixel(maxSize).setMaxPixel(maxPixel).create();
+        CompressConfig config= new CompressConfig.Builder().setMaxSize(maxSize).setMaxPixel(maxPixel).create();
         takePhoto.onEnableCompress(config,showProgressBar);
     }
     private CropOptions getCropOptions(){

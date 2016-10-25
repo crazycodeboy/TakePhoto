@@ -92,6 +92,21 @@ public class TUriParse {
             Log.w(TAG,"uri is null,activity may have been recovered?");
             throw new TException(TExceptionType.TYPE_URI_NULL);
         }
+        File picture=getFileWithUri(uri,activity);
+        String picturePath=picture==null? null:picture.getPath();
+        if (TextUtils.isEmpty(picturePath))throw new TException(TExceptionType.TYPE_URI_PARSE_FAIL);
+        if (!TImageFiles.checkMimeType(activity,TImageFiles.getMimeType(activity,uri)))throw new TException(TExceptionType.TYPE_NOT_IMAGE);
+        return picturePath;
+    }
+    /**
+     * 通过URI获取文件
+     * @param uri
+     * @param activity
+     * @return
+     * Author JPH
+     * Date 2016/10/25
+     */
+    public static File getFileWithUri(Uri uri, Activity activity) {
         String picturePath = null;
         String scheme=uri.getScheme();
         if (ContentResolver.SCHEME_CONTENT.equals(scheme)){
@@ -109,9 +124,7 @@ public class TUriParse {
         }else if (ContentResolver.SCHEME_FILE.equals(scheme)){
             picturePath=uri.getPath();
         }
-        if (TextUtils.isEmpty(picturePath))throw new TException(TExceptionType.TYPE_URI_PARSE_FAIL);
-        if (!TImageFiles.checkMimeType(activity,TImageFiles.getMimeType(activity,uri)))throw new TException(TExceptionType.TYPE_NOT_IMAGE);
-        return picturePath;
+        return TextUtils.isEmpty(picturePath)? null:new File(picturePath);
     }
     /**
      * 通过从文件中得到的URI获取文件的路径

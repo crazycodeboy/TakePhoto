@@ -1,5 +1,6 @@
 package com.jph.takephoto.uitl;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -91,7 +92,7 @@ public class TImageFiles {
      * @param photoUri
      * @return
      */
-    public static File getTempFile(Context context, Uri photoUri)throws TException {
+    public static File getTempFile(Activity context, Uri photoUri)throws TException {
         String minType=getMimeType(context, photoUri);
         if (!checkMimeType(context,minType))throw new TException(TExceptionType.TYPE_NOT_IMAGE);
         File filesDir=context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -115,7 +116,7 @@ public class TImageFiles {
      * To find out the extension of required object in given uri
      * Solution by http://stackoverflow.com/a/36514823/1171484
      */
-    public static String getMimeType(Context context, Uri uri) {
+    public static String getMimeType(Activity context, Uri uri) {
         String extension;
         //Check uri format to avoid null
         if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
@@ -128,6 +129,12 @@ public class TImageFiles {
             extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(new File(uri.getPath())).toString());
             if (TextUtils.isEmpty(extension))extension=MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getContentResolver().getType(uri));
         }
+        if(TextUtils.isEmpty(extension)){
+            extension=getMimeTypeByFileName(TUriParse.getFileWithUri(uri,context).getName());
+        }
         return extension;
+    }
+    public static String getMimeTypeByFileName(String fileName){
+        return fileName.substring(fileName.lastIndexOf("."),fileName.length());
     }
  }
