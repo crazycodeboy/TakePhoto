@@ -73,7 +73,7 @@ public class TUriParse {
         if(uri==null)return null;
         String path;
         if(TextUtils.equals(uri.getAuthority(),TConstant.getFileProviderName(context))){
-            path=new File(Environment.getExternalStorageDirectory(),uri.getPath().replace("camera_photos/","")).getAbsolutePath();
+            path=new File(uri.getPath().replace("camera_photos/","")).getAbsolutePath();
         }else {
             path=uri.getPath();
         }
