@@ -152,6 +152,19 @@ TakePhoto不仅支持对相关参数的自定义，也支持对UI的自定义，
 
 在“toolbar.xml”文件中你可以指定TakePhoto自带相册的主题以及Toolbar的背景色。
 
+#### 自定义状态栏
+
+在“res/values”目录中创建一个名为“colors.xml”的资源文件，内容如下： 
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="multiple_image_select_primaryDark">#212121</color>
+</resources>
+```
+
+通过上述方式便可以自定义状态栏的颜色。
+
 #### 自定义提示文字
 
 在“res/values”目录的“string.xml”文件冲添加如下代码：
