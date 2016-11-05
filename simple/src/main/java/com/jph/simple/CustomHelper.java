@@ -9,6 +9,7 @@ import android.widget.RadioGroup;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.TakePhotoOptions;
 
 import java.io.File;
 
@@ -35,7 +36,7 @@ import java.io.File;
  */
 public class CustomHelper{
     private View rootView;
-    private RadioGroup rgCrop,rgCompress,rgFrom,rgCropSize,rgCropTool,rgShowProgressBar;
+    private RadioGroup rgCrop,rgCompress,rgFrom,rgCropSize,rgCropTool,rgShowProgressBar,rgPickTool;
     private EditText etCropHeight,etCropWidth,etLimit,etSize,etPx;
     public static CustomHelper of(View rootView){
         return new CustomHelper(rootView);
@@ -49,6 +50,7 @@ public class CustomHelper{
         rgCompress= (RadioGroup) rootView.findViewById(R.id.rgCompress);
         rgCropSize= (RadioGroup) rootView.findViewById(R.id.rgCropSize);
         rgFrom= (RadioGroup) rootView.findViewById(R.id.rgFrom);
+        rgPickTool= (RadioGroup) rootView.findViewById(R.id.rgPickTool);
         rgShowProgressBar= (RadioGroup) rootView.findViewById(R.id.rgShowProgressBar);
         rgCropTool= (RadioGroup) rootView.findViewById(R.id.rgCropTool);
         etCropHeight= (EditText) rootView.findViewById(R.id.etCropHeight);
@@ -67,6 +69,7 @@ public class CustomHelper{
         Uri imageUri = Uri.fromFile(file);
 
         configCompress(takePhoto);
+        configTakePhotoOpthion(takePhoto);
         switch (view.getId()){
             case R.id.btnPickBySelect:
                 int limit= Integer.parseInt(etLimit.getText().toString());
@@ -102,6 +105,11 @@ public class CustomHelper{
                 break;
             default:
                 break;
+        }
+    }
+    private void configTakePhotoOpthion(TakePhoto takePhoto){
+        if(rgPickTool.getCheckedRadioButtonId()==R.id.rbPickWithOwn){
+            takePhoto.setTakePhotoOptions(new TakePhotoOptions.Builder().setWithOwnGallery(true).create());
         }
     }
     private void configCompress(TakePhoto takePhoto){

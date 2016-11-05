@@ -8,6 +8,7 @@ import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.MultipleCrop;
 import com.jph.takephoto.model.TException;
 import com.jph.takephoto.model.TResult;
+import com.jph.takephoto.model.TakePhotoOptions;
 import com.jph.takephoto.permission.PermissionManager;
 
 
@@ -96,6 +97,12 @@ public interface TakePhoto {
      * @param showCompressDialog 压缩时是否显示进度对话框
      */
     void onEnableCompress(CompressConfig config,boolean showCompressDialog);
+
+    /**
+     * 设置TakePhoto相关配置
+     * @param options
+     */
+    void setTakePhotoOptions(TakePhotoOptions options);
     void onCreate(Bundle savedInstanceState);
     void onSaveInstanceState(Bundle outState);
     /**

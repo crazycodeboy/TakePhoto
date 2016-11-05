@@ -1,6 +1,4 @@
 <resources>
-    <string name="action_settings">Settings</string>
-
     <!--TakePhoto-->
     <string name="tip_type_not_image">选择的不是图片</string>
     <string name="tip_no_camera">没有相机</string>

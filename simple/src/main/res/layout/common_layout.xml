@@ -125,9 +125,9 @@
                 android:id="@+id/etCropWidth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="42dp"
                 android:layout_marginLeft="10dp"
                 android:inputType="number"
+                android:minWidth="42dp"
                 android:text="800" />
 
             <TextView
@@ -137,9 +137,9 @@
 
             <EditText
                 android:id="@+id/etCropHeight"
-                android:minWidth="42dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="42dp"
                 android:text="800" />
         </LinearLayout>
 
@@ -246,8 +246,8 @@
                 android:id="@+id/etSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="42dp"
                 android:inputType="number"
+                android:minWidth="42dp"
                 android:text="102400" />
 
             <TextView
@@ -265,8 +265,8 @@
                 android:id="@+id/etPx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="42dp"
                 android:inputType="number"
+                android:minWidth="42dp"
                 android:text="800" />
 
             <TextView
@@ -309,78 +309,123 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="最多选取：" />
-
-                <EditText
-                    android:id="@+id/etLimit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="30dp"
-                    android:inputType="number"
-                    android:text="5" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="张" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="从哪选择：" />
+                    android:text="使用TakePhoto自带相册：" />
 
                 <RadioGroup
-                    android:id="@+id/rgFrom"
+                    android:id="@+id/rgPickTool"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:id="@+id/rbGallery"
+                        android:id="@+id/rbPickWithOwn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:checked="true"
-                        android:text="从相册" />
+                        android:text="是" />
 
                     <RadioButton
-                        android:id="@+id/rbFile"
+                        android:id="@+id/rbPickWithOther"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="从文件" />
+                        android:text="否" />
                 </RadioGroup>
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="提示：选择多张图片时会自动切换到TakePhoto自带相册"
+                android:textColor="#FF0000"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="最多选择：" />
+
+                    <EditText
+                        android:id="@+id/etLimit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:minWidth="30dp"
+                        android:text="5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="张" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="从哪选择：" />
+
+                    <RadioGroup
+                        android:id="@+id/rgFrom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rbGallery"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:checked="true"
+                            android:text="从相册" />
+
+                        <RadioButton
+                            android:id="@+id/rbFile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="从文件" />
+                    </RadioGroup>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnPickByTake"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                android:text="拍照" />
+
+            <Button
+                android:id="@+id/btnPickBySelect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                android:text="选择照片" />
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnPickByTake"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onClick"
-            android:text="拍照" />
-
-        <Button
-            android:id="@+id/btnPickBySelect"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onClick"
-            android:text="选择照片" />
-    </LinearLayout>
-
 </LinearLayout>

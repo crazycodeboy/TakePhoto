@@ -1,6 +1,4 @@
 <resources>
-    <string name="action_settings">Settings</string>
-
     <!--TakePhoto-->
     <string name="tip_type_not_image">Choose not pictures</string>
     <string name="tip_no_camera">No camera</string>

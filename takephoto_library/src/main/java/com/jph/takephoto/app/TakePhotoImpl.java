@@ -22,6 +22,7 @@ import com.jph.takephoto.model.TExceptionType;
 import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TIntentWap;
 import com.jph.takephoto.model.TResult;
+import com.jph.takephoto.model.TakePhotoOptions;
 import com.jph.takephoto.permission.PermissionManager;
 import com.jph.takephoto.uitl.ImageRotateUtil;
 import com.jph.takephoto.uitl.IntentUtils;
@@ -62,6 +63,7 @@ public class TakePhotoImpl implements TakePhoto {
     private Uri outPutUri;
     private Uri tempUri;
     private CropOptions cropOptions;
+    private TakePhotoOptions takePhotoOptions;
     private CompressConfig compressConfig;
     private MultipleCrop multipleCrop;
     private PermissionManager.TPermissionType permissionType;
@@ -85,6 +87,7 @@ public class TakePhotoImpl implements TakePhoto {
     public void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             cropOptions = (CropOptions) savedInstanceState.getSerializable("cropOptions");
+            takePhotoOptions = (TakePhotoOptions) savedInstanceState.getSerializable("takePhotoOptions");
             showCompressDialog = savedInstanceState.getBoolean("showCompressDialog");
             outPutUri = savedInstanceState.getParcelable("outPutUri");
             tempUri = savedInstanceState.getParcelable("tempUri");
@@ -95,6 +98,7 @@ public class TakePhotoImpl implements TakePhoto {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable("cropOptions", cropOptions);
+        outState.putSerializable("takePhotoOptions", takePhotoOptions);
         outState.putBoolean("showCompressDialog", showCompressDialog);
         outState.putParcelable("outPutUri", outPutUri);
         outState.putParcelable("tempUri", tempUri);
@@ -313,6 +317,10 @@ public class TakePhotoImpl implements TakePhoto {
     }
 
     private void selectPicture(int defaultIndex, boolean isCrop) {
+        if (takePhotoOptions!=null&&takePhotoOptions.isWithOwnGallery()){
+            onPickMultiple(1);
+            return;
+        }
         if(PermissionManager.TPermissionType.WAIT.equals(permissionType))return;
         ArrayList<TIntentWap> intentWapList = new ArrayList<>();
         intentWapList.add(new TIntentWap(IntentUtils.getPickIntentWithDocuments(), isCrop ? TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_CROP : TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL));
@@ -382,6 +390,11 @@ public class TakePhotoImpl implements TakePhoto {
     }
 
     @Override
+    public void setTakePhotoOptions(TakePhotoOptions options) {
+        this.takePhotoOptions=options;
+    }
+
+    @Override
     public void permissionNotify(PermissionManager.TPermissionType type) {
         this.permissionType=type;
     }
@@ -434,6 +447,7 @@ public class TakePhotoImpl implements TakePhoto {
     }
     private void clearParams(){
         compressConfig=null;
+        takePhotoOptions=null;
         cropOptions=null;
         multipleCrop=null;
     }
