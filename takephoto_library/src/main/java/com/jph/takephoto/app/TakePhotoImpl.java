@@ -52,7 +52,7 @@ import java.util.Map;
  * - 支持智能选取及裁剪异常处理
  * - 支持因拍照Activity被回收后的自动恢复
  * Date: 2016/9/21 0007 20:10
- * Version:3.0.0
+ * Version:4.0.0
  * 技术博文：http://www.cboy.me
  * GitHub:https://github.com/crazycodeboy
  * Eamil:crazycodeboy@gmail.com

@@ -10,7 +10,7 @@
 `TakePhoto`是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本[3.0.4](https://github.com/crazycodeboy/TakePhoto/)。
 3.0以下版本及API说明，详见[TakePhoto2.0+](https://github.com/crazycodeboy/TakePhoto/blob/master/README.2+.md)。  
 
-**V3.0**    
+**V4.0**
 
 - 支持通过相机拍照获取图片
 - 支持从相册选择图片
@@ -25,7 +25,8 @@
 - 支持智能选取及裁剪异常处理
 - 支持因拍照Activity被回收后的自动恢复   
 - 支持Android7.0
-
+- +支持多种压缩工具
+- +支持多种图片选择工具
 
 GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/crazycodeboy/TakePhoto)
 ## 目录
@@ -326,6 +327,8 @@ void onCrop(MultipleCrop multipleCrop, CropOptions options)throws TException;
 **注：**  
 由于不同Android Rom厂商对系统有不同程度的定制，有可能系统中没有自带或第三方的裁剪工具，所以为了提高`TakePhoto`的兼容性，当系统中没有自带或第三方裁剪工具时，`TakePhoto`会自动切换到使用`TakePhoto`自带的裁剪工具进行裁剪。  
 
+>另外TakePhoto4.0+支持指定使用TakePhoto自带相册,如：`takePhoto.setTakePhotoOptions(new TakePhotoOptions.Builder().setWithOwnGallery(true).create());`
+详情可参考:[Demo](https://github.com/crazycodeboy/TakePhoto/blob/master/simple/src/main/java/com/jph/simple/CustomHelper.java)
 
 ### 压缩图片
 你可以选择是否对图片进行压缩处理，你只需要告诉它你是否要启用压缩功能以及`CompressConfig`即可。  
@@ -374,6 +377,31 @@ new CompressImageImpl(compressConfig,result.getImages(), new CompressImage.Compr
 ```java
 CompressConfig compressConfig=new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create();
 ```
+#### 指定压缩工具
+
+#### 使用TakePhoto压缩工具进行压缩： 
+
+```
+CompressConfig config=new CompressConfig.Builder()
+                    .setMaxSize(maxSize)
+                    .setMaxPixel(width>=height? width:height)
+                    .create();
+takePhoto.onEnableCompress(config,showProgressBar);
+```
+
+#### 使用Luban进行压缩： 
+```
+LubanOptions option=new LubanOptions.Builder()
+                    .setGear(Luban.CUSTOM_GEAR)
+                    .setMaxHeight(height)
+                    .setMaxWidth(width)
+                    .setMaxSize(maxSize)
+                    .create();
+CompressConfig config=CompressConfig.ofLuban(option);
+takePhoto.onEnableCompress(config,showProgressBar);
+```
+
+>详情可参考Demo:[CustomHelper.java](https://github.com/crazycodeboy/TakePhoto/blob/master/simple/src/main/java/com/jph/simple/CustomHelper.java)
 
 
 ## 兼容性
