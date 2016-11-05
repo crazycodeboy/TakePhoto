@@ -7,7 +7,7 @@
 
 
 
-`TakePhoto`是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本[3.0.4](https://github.com/crazycodeboy/TakePhoto/)。
+`TakePhoto`是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本[4.0.0](https://github.com/crazycodeboy/TakePhoto/)。
 3.0以下版本及API说明，详见[TakePhoto2.0+](https://github.com/crazycodeboy/TakePhoto/blob/master/README.2+.md)。  
 
 **V4.0**
@@ -44,7 +44,7 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 **Gradle:**  
 
 ```groovy
-    compile 'com.jph.takephoto:takephoto_library:3.0.4'
+    compile 'com.jph.takephoto:takephoto_library:4.0.0'
 ```
 
 **Maven:**  
@@ -53,7 +53,7 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 <dependency>
   <groupId>com.jph.takephoto</groupId>
   <artifactId>takephoto_library</artifactId>
-  <version>3.0.4</version>
+  <version>4.0.0</version>
   <type>pom</type>
 </dependency>
 ```  
