@@ -392,7 +392,7 @@ public class TakePhotoImpl implements TakePhoto {
         } else {
             if (showCompressDialog)
                 wailLoadDialog = TUtils.showProgressDialog(contextWrap.getActivity(),contextWrap.getActivity().getResources().getString(R.string.tip_compress));
-            new CompressImageImpl(compressConfig,result.getImages(), new CompressImage.CompressListener() {
+            new CompressImageImpl(contextWrap.getActivity(),compressConfig,result.getImages(), new CompressImage.CompressListener() {
                 @Override
                 public void onCompressSuccess(ArrayList<TImage> images) {
                     handleTakeCallBack(result);

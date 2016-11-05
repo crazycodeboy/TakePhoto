@@ -1,5 +1,6 @@
 package com.jph.takephoto.compress;
 
+import android.content.Context;
 import android.text.TextUtils;
 import com.jph.takephoto.model.TImage;
 import java.io.File;
@@ -18,9 +19,8 @@ public class CompressImageImpl implements CompressImage {
     private CompressImageUtil compressImageUtil;
     private ArrayList<TImage> images;
     private CompressImage.CompressListener listener;
-
-    public CompressImageImpl(CompressConfig config, ArrayList<TImage> images, CompressImage.CompressListener listener) {
-        compressImageUtil = new CompressImageUtil(config);
+    public CompressImageImpl(Context context,CompressConfig config, ArrayList<TImage> images, CompressImage.CompressListener listener) {
+        compressImageUtil = new CompressImageUtil(context,config);
         this.images = images;
         this.listener = listener;
     }
@@ -52,6 +52,7 @@ public class CompressImageImpl implements CompressImage {
         compressImageUtil.compress(image.getPath(), new CompressImageUtil.CompressListener() {
             @Override
             public void onCompressSuccess(String imgPath) {
+                image.setPath(imgPath);
                 continueCompress(image,true);
             }
 

@@ -1,9 +1,13 @@
 package com.jph.takephoto.compress;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+
+import com.jph.takephoto.uitl.TFileUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,8 +21,10 @@ import java.io.FileOutputStream;
  */
 public class CompressImageUtil{
 	private CompressConfig config;
+	private Context context;
 	Handler mhHandler = new Handler();
-	public CompressImageUtil(CompressConfig config) {
+	public CompressImageUtil(Context context,CompressConfig config) {
+		this.context=context;
 		this.config=config==null?CompressConfig.getDefaultConfig():config;
 	}
 	public void compress(String imagePath, CompressListener listener) {
@@ -63,11 +69,12 @@ public class CompressImageUtil{
 //					bitmap.recycle();//回收内存中的图片
 //				}
 				try {
-					FileOutputStream fos = new FileOutputStream(new File(imgPath));//将压缩后的图片保存的本地上指定路径中
+					File thumbnailFile=getThumbnailFile(new File(imgPath));
+					FileOutputStream fos = new FileOutputStream(thumbnailFile);//将压缩后的图片保存的本地上指定路径中
 					fos.write(baos.toByteArray());
 					fos.flush();
 					fos.close();
-					sendMsg(true, imgPath,null,listener);
+					sendMsg(true, thumbnailFile.getPath(),null,listener);
 				} catch (Exception e) {
 					sendMsg(false,imgPath,"质量压缩失败",listener);
 					e.printStackTrace();
@@ -110,8 +117,10 @@ public class CompressImageUtil{
 		if (config.isEnableQualityCompress()){
 			compressImageByQuality(bitmap,imgPath,listener);//压缩好比例大小后再进行质量压缩
 		}else {
-			bitmap.compress(Bitmap.CompressFormat.JPEG,100,new FileOutputStream(new File(imgPath)));
-			listener.onCompressSuccess(imgPath);
+			File thumbnailFile=getThumbnailFile(new File(imgPath));
+			bitmap.compress(Bitmap.CompressFormat.JPEG,100,new FileOutputStream(thumbnailFile));
+
+			listener.onCompressSuccess(thumbnailFile.getPath());
 		}
 	}
 	/**
@@ -131,6 +140,10 @@ public class CompressImageUtil{
 				}
 			}
 		});
+	}
+	private File getThumbnailFile(File file){
+		if (file==null||!file.exists())return file;
+		return TFileUtils.getPhotoCacheDir(context,file);
 	}
 	/**
 	 * 压缩结果监听器
