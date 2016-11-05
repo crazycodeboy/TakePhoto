@@ -23,5 +23,6 @@ dependencies {
     compile 'com.android.support:support-v4:25.0.0'
     compile 'com.soundcloud.android.crop:lib_crop:1.0.0'
     compile 'com.darsh.multipleimageselect:multipleimageselect:1.0.4'
+    compile 'me.shaohui.advancedluban:library:1.2.8'
 }
 //apply from: "bintrayUpload.gradle"

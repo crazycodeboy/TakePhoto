@@ -9,9 +9,12 @@ import android.widget.RadioGroup;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.LubanOptions;
 import com.jph.takephoto.model.TakePhotoOptions;
 
 import java.io.File;
+
+import me.shaohui.advancedluban.Luban;
 
 
 /**
@@ -36,8 +39,8 @@ import java.io.File;
  */
 public class CustomHelper{
     private View rootView;
-    private RadioGroup rgCrop,rgCompress,rgFrom,rgCropSize,rgCropTool,rgShowProgressBar,rgPickTool;
-    private EditText etCropHeight,etCropWidth,etLimit,etSize,etPx;
+    private RadioGroup rgCrop,rgCompress,rgFrom,rgCropSize,rgCropTool,rgShowProgressBar,rgPickTool,rgCompressTool;
+    private EditText etCropHeight,etCropWidth,etLimit,etSize,etHeightPx,etWidthPx;
     public static CustomHelper of(View rootView){
         return new CustomHelper(rootView);
     }
@@ -48,6 +51,7 @@ public class CustomHelper{
     private void init(){
         rgCrop= (RadioGroup) rootView.findViewById(R.id.rgCrop);
         rgCompress= (RadioGroup) rootView.findViewById(R.id.rgCompress);
+        rgCompressTool= (RadioGroup) rootView.findViewById(R.id.rgCompressTool);
         rgCropSize= (RadioGroup) rootView.findViewById(R.id.rgCropSize);
         rgFrom= (RadioGroup) rootView.findViewById(R.id.rgFrom);
         rgPickTool= (RadioGroup) rootView.findViewById(R.id.rgPickTool);
@@ -57,7 +61,8 @@ public class CustomHelper{
         etCropWidth= (EditText) rootView.findViewById(R.id.etCropWidth);
         etLimit= (EditText) rootView.findViewById(R.id.etLimit);
         etSize= (EditText) rootView.findViewById(R.id.etSize);
-        etPx= (EditText) rootView.findViewById(R.id.etPx);
+        etHeightPx= (EditText) rootView.findViewById(R.id.etHeightPx);
+        etWidthPx= (EditText) rootView.findViewById(R.id.etWidthPx);
 
 
 
@@ -118,10 +123,26 @@ public class CustomHelper{
             return ;
         }
         int maxSize= Integer.parseInt(etSize.getText().toString());
-        int maxPixel= Integer.parseInt(etPx.getText().toString());
+        int width= Integer.parseInt(etCropWidth.getText().toString());
+        int height= Integer.parseInt(etHeightPx.getText().toString());
         boolean showProgressBar=rgShowProgressBar.getCheckedRadioButtonId()==R.id.rbShowYes? true:false;
-        CompressConfig config= new CompressConfig.Builder().setMaxSize(maxSize).setMaxPixel(maxPixel).create();
+        CompressConfig config;
+        if(rgCompressTool.getCheckedRadioButtonId()==R.id.rbCompressWithOwn){
+            config=new CompressConfig.Builder()
+                    .setMaxSize(maxSize)
+                    .setMaxPixel(width>=height? width:height)
+                    .create();
+        }else {
+            LubanOptions option=new LubanOptions.Builder()
+                    .setGear(Luban.CUSTOM_GEAR)
+                    .setMaxHeight(height)
+                    .setMaxWidth(width)
+                    .setMaxSize(maxSize)
+                    .create();
+            config=CompressConfig.ofLuban(option);
+        }
         takePhoto.onEnableCompress(config,showProgressBar);
+
     }
     private CropOptions getCropOptions(){
         if(rgCrop.getCheckedRadioButtonId()!=R.id.rbCropYes)return null;

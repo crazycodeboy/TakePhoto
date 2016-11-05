@@ -25,7 +25,7 @@ public class CompressImageUtil{
 	Handler mhHandler = new Handler();
 	public CompressImageUtil(Context context,CompressConfig config) {
 		this.context=context;
-		this.config=config==null?CompressConfig.getDefaultConfig():config;
+		this.config=config==null?CompressConfig.ofDefaultConfig():config;
 	}
 	public void compress(String imagePath, CompressListener listener) {
 		if (config.isEnablePixelCompress()){
