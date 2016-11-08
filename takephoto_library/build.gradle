@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.0"
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 25
         versionCode 40
         versionName "4.0.0"
@@ -24,5 +24,6 @@ dependencies {
     compile 'com.soundcloud.android.crop:lib_crop:1.0.0'
     compile 'com.darsh.multipleimageselect:multipleimageselect:1.0.4'
     compile 'me.shaohui.advancedluban:library:1.2.8'
+    compile 'com.yalantis:ucrop:2.2.0'
 }
 //apply from: "bintrayUpload.gradle"
