@@ -10,6 +10,8 @@
 `TakePhoto`是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本[4.0.0](https://github.com/crazycodeboy/TakePhoto/)。
 3.0以下版本及API说明，详见[TakePhoto2.0+](https://github.com/crazycodeboy/TakePhoto/blob/master/README.2+.md)。  
 
+>TakePhoto交流平台：QQ群：556387607（群1，未满）
+
 **V4.0**
 
 - 支持通过相机拍照获取图片
