@@ -9,7 +9,7 @@ import android.widget.RadioGroup;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
-import com.jph.takephoto.model.LubanOptions;
+import com.jph.takephoto.model.LubanOptions_;
 import com.jph.takephoto.model.TakePhotoOptions;
 
 import java.io.File;
@@ -133,7 +133,7 @@ public class CustomHelper{
                     .setMaxPixel(width>=height? width:height)
                     .create();
         }else {
-            LubanOptions option=new LubanOptions.Builder()
+            LubanOptions_ option=new LubanOptions_.Builder()
                     .setGear(Luban.CUSTOM_GEAR)
                     .setMaxHeight(height)
                     .setMaxWidth(width)
