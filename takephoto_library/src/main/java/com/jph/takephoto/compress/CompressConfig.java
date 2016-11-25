@@ -1,7 +1,7 @@
 package com.jph.takephoto.compress;
 
 
-import com.jph.takephoto.model.LubanOptions_;
+import com.jph.takephoto.model.LubanOptions;
 
 import java.io.Serializable;
 
@@ -29,19 +29,19 @@ public class CompressConfig implements Serializable {
      * 是否启用质量压缩
      */
     private boolean enableQualityCompress=true;
-    private LubanOptions_ lubanOptions;
+    private LubanOptions lubanOptions;
     public static CompressConfig ofDefaultConfig(){
         return new CompressConfig();
     }
-    public static CompressConfig ofLuban(LubanOptions_ options){
+    public static CompressConfig ofLuban(LubanOptions options){
         return new CompressConfig(options);
     }
     private CompressConfig(){}
-    private CompressConfig(LubanOptions_ options){
+    private CompressConfig(LubanOptions options){
         this.lubanOptions=options;
     }
 
-    public LubanOptions_ getLubanOptions() {
+    public LubanOptions getLubanOptions() {
         return lubanOptions;
     }
 

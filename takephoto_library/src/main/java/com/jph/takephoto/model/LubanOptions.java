@@ -13,7 +13,7 @@ import me.shaohui.advancedluban.Luban;
  * GitHub:https://github.com/crazycodeboy
  * Eamil:crazycodeboy@gmail.com
  */
-public class LubanOptions_ implements Serializable{
+public class LubanOptions implements Serializable{
     /**
      * 压缩到的最大大小，单位B
      */
@@ -21,7 +21,7 @@ public class LubanOptions_ implements Serializable{
     private int maxHeight;
     private int maxWidth;
     private int gear= Luban.CUSTOM_GEAR;
-    private LubanOptions_(){}
+    private LubanOptions(){}
 
     public int getMaxSize() {
         return maxSize;
@@ -56,10 +56,10 @@ public class LubanOptions_ implements Serializable{
     }
 
     public static class Builder{
-        private LubanOptions_ options;
+        private LubanOptions options;
 
         public Builder() {
-            options=new LubanOptions_();
+            options=new LubanOptions();
         }
 
         public Builder setMaxSize(int maxSize) {
@@ -81,7 +81,7 @@ public class LubanOptions_ implements Serializable{
             options.setGear(gear);
             return this;
         }
-        public LubanOptions_ create(){
+        public LubanOptions create(){
             return options;
         }
     }
