@@ -46,7 +46,7 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 **Gradle:**  
 
 ```groovy
-    compile 'com.jph.takephoto:takephoto_library:4.0.0'
+    compile 'com.jph.takephoto:takephoto_library:4.0.1'
 ```
 
 **Maven:**  
@@ -55,7 +55,7 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 <dependency>
   <groupId>com.jph.takephoto</groupId>
   <artifactId>takephoto_library</artifactId>
-  <version>4.0.0</version>
+  <version>4.0.1</version>
   <type>pom</type>
 </dependency>
 ```  
