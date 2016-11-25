@@ -8,7 +8,7 @@ import me.shaohui.advancedluban.Luban;
  * Luban配置类
  * Author: crazycodeboy
  * Date: 2016/11/5 0007 20:10
- * Version:4.0.0
+ * Version:4.0.1
  * 技术博文：http://www.devio.org/
  * GitHub:https://github.com/crazycodeboy
  * Eamil:crazycodeboy@gmail.com
