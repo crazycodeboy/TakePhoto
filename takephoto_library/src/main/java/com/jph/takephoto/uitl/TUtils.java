@@ -52,10 +52,10 @@ public class TUtils {
      * @param images
      * @return
      */
-    public static ArrayList<TImage> getTImagesWithImages(ArrayList<Image>images){
+    public static ArrayList<TImage> getTImagesWithImages(ArrayList<Image>images, TImage.FromType fromType){
         ArrayList<TImage>tImages=new ArrayList();
         for(Image image:images){
-            tImages.add(TImage.of(image.path));
+            tImages.add(TImage.of(image.path, fromType));
         }
         return tImages;
     }
@@ -64,10 +64,10 @@ public class TUtils {
      * @param uris
      * @return
      */
-    public static ArrayList<TImage> getTImagesWithUris(ArrayList<Uri>uris){
+    public static ArrayList<TImage> getTImagesWithUris(ArrayList<Uri>uris, TImage.FromType fromType){
         ArrayList<TImage>tImages=new ArrayList();
         for(Uri uri:uris){
-            tImages.add(TImage.of(uri));
+            tImages.add(TImage.of(uri, fromType));
         }
         return tImages;
     }

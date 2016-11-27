@@ -39,7 +39,7 @@ import me.shaohui.advancedluban.Luban;
  */
 public class CustomHelper{
     private View rootView;
-    private RadioGroup rgCrop,rgCompress,rgFrom,rgCropSize,rgCropTool,rgShowProgressBar,rgPickTool,rgCompressTool;
+    private RadioGroup rgCrop,rgCompress,rgFrom,rgCropSize,rgCropTool,rgShowProgressBar,rgPickTool,rgCompressTool, rgRawFile;
     private EditText etCropHeight,etCropWidth,etLimit,etSize,etHeightPx,etWidthPx;
     public static CustomHelper of(View rootView){
         return new CustomHelper(rootView);
@@ -55,6 +55,7 @@ public class CustomHelper{
         rgCropSize= (RadioGroup) rootView.findViewById(R.id.rgCropSize);
         rgFrom= (RadioGroup) rootView.findViewById(R.id.rgFrom);
         rgPickTool= (RadioGroup) rootView.findViewById(R.id.rgPickTool);
+        rgRawFile = (RadioGroup) rootView.findViewById(R.id.rgRawFile);
         rgShowProgressBar= (RadioGroup) rootView.findViewById(R.id.rgShowProgressBar);
         rgCropTool= (RadioGroup) rootView.findViewById(R.id.rgCropTool);
         etCropHeight= (EditText) rootView.findViewById(R.id.etCropHeight);
@@ -126,11 +127,13 @@ public class CustomHelper{
         int width= Integer.parseInt(etCropWidth.getText().toString());
         int height= Integer.parseInt(etHeightPx.getText().toString());
         boolean showProgressBar=rgShowProgressBar.getCheckedRadioButtonId()==R.id.rbShowYes? true:false;
+        boolean enableRawFile = rgRawFile.getCheckedRadioButtonId() == R.id.rbRawYes ? true : false;
         CompressConfig config;
         if(rgCompressTool.getCheckedRadioButtonId()==R.id.rbCompressWithOwn){
             config=new CompressConfig.Builder()
                     .setMaxSize(maxSize)
                     .setMaxPixel(width>=height? width:height)
+                    .enableReserveRaw(enableRawFile)
                     .create();
         }else {
             LubanOptions option=new LubanOptions.Builder()
@@ -140,8 +143,10 @@ public class CustomHelper{
                     .setMaxSize(maxSize)
                     .create();
             config=CompressConfig.ofLuban(option);
+            config.enableReserveRaw(enableRawFile);
         }
         takePhoto.onEnableCompress(config,showProgressBar);
+
 
     }
     private CropOptions getCropOptions(){

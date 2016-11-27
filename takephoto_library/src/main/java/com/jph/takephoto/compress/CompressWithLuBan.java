@@ -71,6 +71,7 @@ public class CompressWithLuBan implements CompressImage {
                     public void onSuccess(File file) {
                         TImage image=images.get(0);
                         image.setPath(file.getPath());
+                        image.setCompressPath(file.getPath());
                         image.setCompressed(true);
                         listener.onCompressSuccess(images);
                     }

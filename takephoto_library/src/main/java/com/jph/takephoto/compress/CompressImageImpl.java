@@ -61,6 +61,7 @@ public class CompressImageImpl implements CompressImage {
             @Override
             public void onCompressSuccess(String imgPath) {
                 image.setPath(imgPath);
+                image.setCompressPath(imgPath);
                 continueCompress(image,true);
             }
 
