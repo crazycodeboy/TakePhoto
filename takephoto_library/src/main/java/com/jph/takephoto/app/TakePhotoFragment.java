@@ -60,7 +60,7 @@ public class TakePhotoFragment extends Fragment implements TakePhoto.TakeResultL
     }
     @Override
     public void takeSuccess(TResult result) {
-        Log.i(TAG,"takeSuccess：" + result.getImage().getPath());
+        Log.i(TAG,"takeSuccess：" + result.getImage().getCompressPath());
     }
     @Override
     public void takeFail(TResult result,String msg) {

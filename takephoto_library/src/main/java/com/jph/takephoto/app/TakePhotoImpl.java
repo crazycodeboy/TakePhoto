@@ -429,7 +429,7 @@ public class TakePhotoImpl implements TakePhoto {
                     if(!compressConfig.isEnableReserveRaw()) {
                         deleteRawFile(images);
                     }
-                    handleTakeCallBack(TResult.of(images), String.format(contextWrap.getActivity().getResources().getString(R.string.tip_compress_failed), message.length > 0 ? message[0] : "", msg, result.getImage().getPath()));
+                    handleTakeCallBack(TResult.of(images), String.format(contextWrap.getActivity().getResources().getString(R.string.tip_compress_failed), message.length > 0 ? message[0] : "", msg, result.getImage().getCompressPath()));
                     if (wailLoadDialog != null && !contextWrap.getActivity().isFinishing())
                         wailLoadDialog.dismiss();
                 }

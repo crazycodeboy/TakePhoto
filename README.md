@@ -40,6 +40,7 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 - [API](#api)
 - [兼容性](#兼容性)
 - [贡献](#贡献)
+- [更新说明](#更新说明)
 - [最后](#混淆)
 
 ## 安装说明  
@@ -439,6 +440,13 @@ eg:
 
 ## 贡献  
 如果你在使用TakePhoto中遇到任何问题可以提[Issues](https://github.com/crazycodeboy/TakePhoto/issues)出来。另外欢迎大家为TakePhoto贡献智慧，欢迎大家[Fork and Pull requests](https://github.com/crazycodeboy/TakePhoto)。     
+
+## 更新说明
+**2016/11/28**
+1、压缩成功后返回原图路径(originalPath), 以便用户可以自行处理原图。
+2、压缩成功后压缩路径path改为compressPath。
+2、压缩成功后返回图片来源类型，现在分CAMERA, OTHER两种。
+3、用户可以配置CompressConfig.enableReserveRaw(boolean)方法，ture保留原图，false删除原图，当且仅当类型为CAMERA此配置才有效
 
 ## 最后
 
