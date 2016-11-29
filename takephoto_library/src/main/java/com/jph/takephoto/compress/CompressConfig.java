@@ -29,6 +29,15 @@ public class CompressConfig implements Serializable {
      * 是否启用质量压缩
      */
     private boolean enableQualityCompress=true;
+
+    /**
+     * 是否保留原文件
+     */
+    private boolean enableReserveRaw = true;
+
+    /**
+     * Luban压缩配置
+     */
     private LubanOptions lubanOptions;
     public static CompressConfig ofDefaultConfig(){
         return new CompressConfig();
@@ -74,6 +83,13 @@ public class CompressConfig implements Serializable {
     public void enableQualityCompress(boolean enableQualityCompress) {
         this.enableQualityCompress = enableQualityCompress;
     }
+
+    public boolean isEnableReserveRaw() {
+        return enableReserveRaw;
+    }
+    public void enableReserveRaw(boolean enableReserveRaw) {
+        this.enableReserveRaw = enableReserveRaw;
+    }
     public static class Builder{
         private CompressConfig config;
         public Builder() {
@@ -93,6 +109,10 @@ public class CompressConfig implements Serializable {
         }
         public Builder enableQualityCompress(boolean enableQualityCompress) {
             config.enableQualityCompress(enableQualityCompress);
+            return this;
+        }
+        public Builder enableReserveRaw(boolean enableReserveRaw) {
+            config.enableReserveRaw(enableReserveRaw);
             return this;
         }
         public CompressConfig create(){

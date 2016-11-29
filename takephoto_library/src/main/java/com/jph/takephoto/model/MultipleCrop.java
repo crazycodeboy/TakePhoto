@@ -16,26 +16,29 @@ public class MultipleCrop {
     private ArrayList<Uri> uris;
     private ArrayList<Uri> outUris;
     private ArrayList<TImage>tImages;
+    private TImage.FromType fromType;
     public boolean hasFailed;//是否有裁切失败的标识
-    public static MultipleCrop of(ArrayList<Uri> uris,Activity activity) throws TException {
-        return new MultipleCrop(uris,activity);
+    public static MultipleCrop of(ArrayList<Uri> uris,Activity activity, TImage.FromType fromType) throws TException {
+        return new MultipleCrop(uris,activity, fromType);
     }
-    public static MultipleCrop of(ArrayList<Uri> uris,ArrayList<Uri>outUris){
-        return new MultipleCrop(uris,outUris);
+    public static MultipleCrop of(ArrayList<Uri> uris,ArrayList<Uri>outUris, TImage.FromType fromType){
+        return new MultipleCrop(uris,outUris, fromType);
     }
-    private MultipleCrop(ArrayList<Uri> uris,Activity activity) throws TException {
+    private MultipleCrop(ArrayList<Uri> uris,Activity activity, TImage.FromType fromType) throws TException {
         this.uris=uris;
         ArrayList<Uri>outUris=new ArrayList<>();
         for (Uri uri:uris){
             outUris.add(Uri.fromFile(TImageFiles.getTempFile(activity,uri)));//生成临时裁切输出路径
         }
         this.outUris=outUris;
-        this.tImages= TUtils.getTImagesWithUris(outUris);
+        this.tImages= TUtils.getTImagesWithUris(outUris, fromType);
+        this.fromType = fromType;
     }
-    private MultipleCrop(ArrayList<Uri> uris,ArrayList<Uri>outUris) {
+    private MultipleCrop(ArrayList<Uri> uris,ArrayList<Uri>outUris, TImage.FromType fromType) {
         this.uris=uris;
         this.outUris=outUris;
-        this.tImages= TUtils.getTImagesWithUris(outUris);
+        this.tImages= TUtils.getTImagesWithUris(outUris, fromType);
+        this.fromType = fromType;
     }
 
     public ArrayList<Uri> getUris() {

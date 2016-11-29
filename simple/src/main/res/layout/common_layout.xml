@@ -505,6 +505,40 @@
                             android:text="否" />
                     </RadioGroup>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="是否保存原图：" />
+
+                    <RadioGroup
+                        android:id="@+id/rgRawFile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rbRawYes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:checked="true"
+                            android:text="是" />
+
+                        <RadioButton
+                            android:id="@+id/rbRawNo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="否" />
+                    </RadioGroup>
+                </LinearLayout>
+
             </LinearLayout>
 
 

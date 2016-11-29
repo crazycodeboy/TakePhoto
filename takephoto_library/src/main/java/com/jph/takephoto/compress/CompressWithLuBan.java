@@ -46,7 +46,7 @@ public class CompressWithLuBan implements CompressImage {
                 listener.onCompressFailed(images, " There are pictures of compress  is null.");
                 return;
             }
-            files.add(new File(image.getPath()));
+            files.add(new File(image.getOriginalPath()));
         }
         if (images.size() == 1) {
             compressOne();
@@ -70,7 +70,7 @@ public class CompressWithLuBan implements CompressImage {
                     @Override
                     public void onSuccess(File file) {
                         TImage image=images.get(0);
-                        image.setPath(file.getPath());
+                        image.setCompressPath(file.getPath());
                         image.setCompressed(true);
                         listener.onCompressSuccess(images);
                     }
@@ -110,7 +110,7 @@ public class CompressWithLuBan implements CompressImage {
         for (int i = 0, j = images.size(); i < j; i++) {
             TImage image=images.get(i);
             image.setCompressed(true);
-            image.setPath(files.get(i).getPath());
+            image.setCompressPath(files.get(i).getPath());
         }
         listener.onCompressSuccess(images);
     }

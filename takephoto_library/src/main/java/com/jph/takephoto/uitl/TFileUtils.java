@@ -31,4 +31,18 @@ public class TFileUtils {
         }
         return file;
     }
+
+    public static void delete(String path) {
+        try {
+            if(path == null) {
+                return ;
+            }
+            File file = new File(path);
+            if(!file.delete()) {
+                file.deleteOnExit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

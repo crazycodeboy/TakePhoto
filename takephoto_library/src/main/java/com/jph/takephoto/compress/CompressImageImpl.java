@@ -46,21 +46,21 @@ public class CompressImageImpl implements CompressImage {
     }
 
     private void compress(final TImage image) {
-        if (TextUtils.isEmpty(image.getPath())){
+        if (TextUtils.isEmpty(image.getOriginalPath())){
             continueCompress(image,false);
             return;
         }
 
-        File file = new File(image.getPath());
+        File file = new File(image.getOriginalPath());
         if (file == null || !file.exists() || !file.isFile()){
             continueCompress(image,false);
             return;
         }
 
-        compressImageUtil.compress(image.getPath(), new CompressImageUtil.CompressListener() {
+        compressImageUtil.compress(image.getOriginalPath(), new CompressImageUtil.CompressListener() {
             @Override
             public void onCompressSuccess(String imgPath) {
-                image.setPath(imgPath);
+                image.setCompressPath(imgPath);
                 continueCompress(image,true);
             }
 
@@ -89,7 +89,7 @@ public class CompressImageImpl implements CompressImage {
 
         for(TImage image:images){
             if(!image.isCompressed()){
-                listener.onCompressFailed(images,image.getPath()+" is compress failures");
+                listener.onCompressFailed(images,image.getCompressPath()+" is compress failures");
                 return;
             }
         }
