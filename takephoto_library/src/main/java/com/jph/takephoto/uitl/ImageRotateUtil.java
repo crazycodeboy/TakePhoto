@@ -47,6 +47,8 @@ public class ImageRotateUtil {
                 resultBitmap.compress(Bitmap.CompressFormat.JPEG,100,new FileOutputStream(new File(imagePath)));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
+            }catch (OutOfMemoryError e){
+                e.printStackTrace();
             }
         }
     }

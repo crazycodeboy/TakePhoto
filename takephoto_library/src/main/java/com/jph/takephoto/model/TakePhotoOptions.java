@@ -15,6 +15,10 @@ public class TakePhotoOptions implements Serializable {
      * 是否使用TakePhoto自带的相册进行图片选择，默认不使用，但选择多张图片会使用
      */
     private boolean withOwnGallery;
+    /**
+     * 是对拍的照片进行旋转角度纠正
+     */
+    private boolean correctImage;
 
     private TakePhotoOptions() {
     }
@@ -27,6 +31,14 @@ public class TakePhotoOptions implements Serializable {
         this.withOwnGallery = withOwnGallery;
     }
 
+    public boolean isCorrectImage() {
+        return correctImage;
+    }
+
+    public void setCorrectImage(boolean correctImage) {
+        this.correctImage = correctImage;
+    }
+
     public static class Builder {
         private TakePhotoOptions options;
 
@@ -36,6 +48,10 @@ public class TakePhotoOptions implements Serializable {
 
         public Builder setWithOwnGallery(boolean withOwnGallery) {
             options.setWithOwnGallery(withOwnGallery);
+            return this;
+        }
+        public Builder setCorrectImage(boolean isCorrectImage) {
+            options.setCorrectImage(isCorrectImage);
             return this;
         }
         public TakePhotoOptions create(){

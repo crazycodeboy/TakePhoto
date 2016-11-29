@@ -39,7 +39,7 @@ import me.shaohui.advancedluban.Luban;
  */
 public class CustomHelper{
     private View rootView;
-    private RadioGroup rgCrop,rgCompress,rgFrom,rgCropSize,rgCropTool,rgShowProgressBar,rgPickTool,rgCompressTool, rgRawFile;
+    private RadioGroup rgCrop,rgCompress,rgFrom,rgCropSize,rgCropTool,rgShowProgressBar,rgPickTool,rgCompressTool,rgCorrectTool,rgRawFile;
     private EditText etCropHeight,etCropWidth,etLimit,etSize,etHeightPx,etWidthPx;
     public static CustomHelper of(View rootView){
         return new CustomHelper(rootView);
@@ -56,6 +56,7 @@ public class CustomHelper{
         rgFrom= (RadioGroup) rootView.findViewById(R.id.rgFrom);
         rgPickTool= (RadioGroup) rootView.findViewById(R.id.rgPickTool);
         rgRawFile = (RadioGroup) rootView.findViewById(R.id.rgRawFile);
+        rgCorrectTool= (RadioGroup) rootView.findViewById(R.id.rgCorrectTool);
         rgShowProgressBar= (RadioGroup) rootView.findViewById(R.id.rgShowProgressBar);
         rgCropTool= (RadioGroup) rootView.findViewById(R.id.rgCropTool);
         etCropHeight= (EditText) rootView.findViewById(R.id.etCropHeight);
@@ -75,7 +76,7 @@ public class CustomHelper{
         Uri imageUri = Uri.fromFile(file);
 
         configCompress(takePhoto);
-        configTakePhotoOpthion(takePhoto);
+        configTakePhotoOption(takePhoto);
         switch (view.getId()){
             case R.id.btnPickBySelect:
                 int limit= Integer.parseInt(etLimit.getText().toString());
@@ -113,10 +114,16 @@ public class CustomHelper{
                 break;
         }
     }
-    private void configTakePhotoOpthion(TakePhoto takePhoto){
+    private void configTakePhotoOption(TakePhoto takePhoto){
+        TakePhotoOptions.Builder builder=new TakePhotoOptions.Builder();
         if(rgPickTool.getCheckedRadioButtonId()==R.id.rbPickWithOwn){
-            takePhoto.setTakePhotoOptions(new TakePhotoOptions.Builder().setWithOwnGallery(true).create());
+            builder.setWithOwnGallery(true);
         }
+        if(rgCorrectTool.getCheckedRadioButtonId()==R.id.rbCorrectYes){
+            builder.setCorrectImage(true);
+        }
+        takePhoto.setTakePhotoOptions(builder.create());
+
     }
     private void configCompress(TakePhoto takePhoto){
         if(rgCompress.getCheckedRadioButtonId()!=R.id.rbCompressYes){
