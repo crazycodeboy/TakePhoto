@@ -515,7 +515,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="是否保存原图：" />
+                        android:text="拍照压缩后是否保存原图：" />
 
                     <RadioGroup
                         android:id="@+id/rgRawFile"

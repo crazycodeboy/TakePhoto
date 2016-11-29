@@ -7,7 +7,7 @@
 
 
 
-`TakePhoto`是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本[4.0.1](https://github.com/crazycodeboy/TakePhoto/)。
+`TakePhoto`是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本[4.0.2](https://github.com/crazycodeboy/TakePhoto/)。
 3.0以下版本及API说明，详见[TakePhoto2.0+](https://github.com/crazycodeboy/TakePhoto/blob/master/README.2+.md)。  
 
 >TakePhoto交流平台：QQ群：556387607（群1，未满）
@@ -47,7 +47,7 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 **Gradle:**  
 
 ```groovy
-    compile 'com.jph.takephoto:takephoto_library:4.0.1'
+    compile 'com.jph.takephoto:takephoto_library:4.0.2'
 ```
 
 **Maven:**  
@@ -56,7 +56,7 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 <dependency>
   <groupId>com.jph.takephoto</groupId>
   <artifactId>takephoto_library</artifactId>
-  <version>4.0.1</version>
+  <version>4.0.2</version>
   <type>pom</type>
 </dependency>
 ```  
@@ -443,10 +443,12 @@ eg:
 
 ## 更新说明
 **2016/11/28**
-1、压缩成功后返回原图路径(originalPath), 以便用户可以自行处理原图。
-2、压缩成功后压缩路径path改为compressPath。
-2、压缩成功后返回图片来源类型，现在分CAMERA, OTHER两种。
-3、用户可以配置CompressConfig.enableReserveRaw(boolean)方法，ture保留原图，false删除原图，当且仅当类型为CAMERA此配置才有效
+
+1. 压缩成功后返回原图路径(originalPath), 以便用户可以自行处理原图。
+2. 压缩成功后压缩路径path改为compressPath。
+3. 压缩成功后返回图片来源类型，现在分CAMERA, OTHER两种。
+4. 用户可以配置CompressConfig.enableReserveRaw(boolean)方法，ture保留原图，false删除原图，当且仅当类型为CAMERA此配置才有效
+5. 纠正拍照旋转角度功能改为可选
 
 ## 最后
 
