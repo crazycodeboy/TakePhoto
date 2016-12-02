@@ -43,17 +43,9 @@ public class TUriParse {
         return uri;
 
     }
-    /**
-     * 创建一个用于拍照图片输出路径的Uri,
-     * @param context
-     * @return
-     */
-    public static Uri getUriForFile(Context context, File file) {
-        return FileProvider.getUriForFile(context,TConstant.getFileProviderName(context), file);
-    }
 
     /**
-     * 获取一个临时的Uri ,(FileProvider)
+     * 获取一个临时的Uri, 文件名随机生成
      * @param context
      * @return
      */
@@ -62,6 +54,37 @@ public class TUriParse {
         File file=new File(Environment.getExternalStorageDirectory(), "/images/"+timeStamp + ".jpg");
         if (!file.getParentFile().exists())file.getParentFile().mkdirs();
         return getUriForFile(context,file);
+    }
+
+    /**
+     * 获取一个临时的Uri, 通过传入字符串路径
+     *
+     * @param context
+     * @param path
+     * @return
+     */
+    public static Uri getTempUri(Context context, String path) {
+        File file = new File(path);
+        return getTempUri(context, file);
+    }
+
+    /**
+     * 获取一个临时的Uri, 通过传入File对象
+     * @param context
+     * @return
+     */
+    public static Uri getTempUri(Context context, File file){
+        if (!file.getParentFile().exists())file.getParentFile().mkdirs();
+        return getUriForFile(context,file);
+    }
+
+    /**
+     * 创建一个用于拍照图片输出路径的Uri (FileProvider)
+     * @param context
+     * @return
+     */
+    public static Uri getUriForFile(Context context, File file) {
+        return FileProvider.getUriForFile(context,TConstant.getFileProviderName(context), file);
     }
 
     /**

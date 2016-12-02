@@ -254,7 +254,6 @@ public class TakePhotoImpl implements TakePhoto {
 
     @Override
     public void onPickMultiple(int limit) {
-        this.fromType = TImage.FromType.OTHER;
         if (PermissionManager.TPermissionType.WAIT.equals(permissionType)) return;
         TUtils.startActivityForResult(contextWrap, new TIntentWap(IntentUtils.getPickMultipleIntent(contextWrap, limit), TConstant.RC_PICK_MULTIPLE));
     }
@@ -322,6 +321,7 @@ public class TakePhotoImpl implements TakePhoto {
     }
 
     private void selectPicture(int defaultIndex, boolean isCrop) {
+        this.fromType = TImage.FromType.OTHER;
         if (takePhotoOptions != null && takePhotoOptions.isWithOwnGallery()) {
             onPickMultiple(1);
             return;
