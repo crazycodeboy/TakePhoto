@@ -7,11 +7,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.darsh.multipleimageselect.models.Image;
 import com.jph.takephoto.R;
 import com.jph.takephoto.model.CropOptions;
@@ -21,7 +21,8 @@ import com.jph.takephoto.model.TExceptionType;
 import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TIntentWap;
 import com.soundcloud.android.crop.Crop;
-
+import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.UCropActivity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,18 +121,29 @@ public class TUtils {
      * @param options
      */
     public static void cropWithOtherAppBySafely(TContextWrap contextWrap, Uri imageUri, Uri outPutUri, CropOptions options){
-        Intent nativeCropIntent=IntentUtils.getCropIntentWithOtherApp(imageUri, outPutUri,options);
-        List result=contextWrap.getActivity().getPackageManager().queryIntentActivities(nativeCropIntent,PackageManager.MATCH_ALL);
-        if (result.isEmpty()){
-            cropWithOwnApp(contextWrap,imageUri,outPutUri,options);
-        }else {
-//            try {
-//                imageUri=Uri.fromFile(new File(TUriParse.getFilePathWithDocumentsUri(imageUri,contextWrap.getActivity())));
-//            } catch (TException e) {
-//                e.printStackTrace();
-//            }
-            startActivityForResult(contextWrap,new TIntentWap(IntentUtils.getCropIntentWithOtherApp(imageUri, outPutUri,options), TConstant.RC_CROP));
-        }
+//        Intent nativeCropIntent=IntentUtils.getCropIntentWithOtherApp(imageUri, outPutUri,options);
+//        List result=contextWrap.getActivity().getPackageManager().queryIntentActivities(nativeCropIntent,PackageManager.MATCH_ALL);
+//        if (result.isEmpty()){
+//            cropWithOwnApp(contextWrap,imageUri,outPutUri,options);
+//        }else {
+////            try {
+////                imageUri=Uri.fromFile(new File(TUriParse.getFilePathWithDocumentsUri(imageUri,contextWrap.getActivity())));
+////            } catch (TException e) {
+////                e.printStackTrace();
+////            }
+//            startActivityForResult(contextWrap,new TIntentWap(IntentUtils.getCropIntentWithOtherApp(imageUri, outPutUri,options), TConstant.RC_CROP));
+//        }
+        Intent mCropIntent = new Intent();
+        Bundle mCropOptionsBundle = new Bundle();
+        mCropOptionsBundle.putParcelable(UCrop.EXTRA_INPUT_URI, imageUri);
+        mCropOptionsBundle.putParcelable(UCrop.EXTRA_OUTPUT_URI, outPutUri);
+        //mCropOptionsBundle.putFloat(UCrop.EXTRA_ASPECT_RATIO_X, 7);
+        //mCropOptionsBundle.putFloat(UCrop.EXTRA_ASPECT_RATIO_Y, 10);
+        //mCropOptionsBundle.putInt(UCrop.EXTRA_MAX_SIZE_X, 1000);
+        //mCropOptionsBundle.putInt(UCrop.EXTRA_MAX_SIZE_Y, 1000);
+        mCropIntent.setClass(contextWrap.getActivity(), UCropActivity.class);
+        mCropIntent.putExtras(mCropOptionsBundle);
+        startActivityForResult(contextWrap, new TIntentWap(mCropIntent, TConstant.RC_CROP));
     }
     /**
      * 通过TakePhoto自带的裁切工具裁切图片
