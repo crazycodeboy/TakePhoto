@@ -68,10 +68,6 @@ public class LubanOptions implements Serializable {
       return this;
     }
 
-    public Builder setGear(int gear) {
-      return this;
-    }
-
     public LubanOptions create() {
       return options;
     }
