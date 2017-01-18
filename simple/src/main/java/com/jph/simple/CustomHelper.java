@@ -5,16 +5,12 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.LubanOptions;
 import com.jph.takephoto.model.TakePhotoOptions;
-
 import java.io.File;
-
-import me.shaohui.advancedluban.Luban;
 
 
 /**
@@ -144,7 +140,6 @@ public class CustomHelper{
                     .create();
         }else {
             LubanOptions option=new LubanOptions.Builder()
-                    .setGear(Luban.CUSTOM_GEAR)
                     .setMaxHeight(height)
                     .setMaxWidth(width)
                     .setMaxSize(maxSize)
