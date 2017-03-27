@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.AppBarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:paddingLeft="-4dp"
+      android:paddingRight="-4dp"
+  >
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="-4dp"
+        android:layout_marginRight="2dp"
+        android:background="#6775D1"
+        android:minHeight="44dp"
+        android:padding="0dp"
+        app:layout_collapseMode="pin"
+        app:layout_scrollFlags="scroll|enterAlways|snap"
+    >
+      <TextView
+          android:id="@+id/txt_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:ellipsize="end"
+          android:lines="1"
+          android:textColor="@color/white"
+          android:textSize="18sp"
+          tools:text="title"
+      />
+
+      <TextView
+          android:id="@+id/txt_finish"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_gravity="right"
+          android:gravity="center"
+          android:paddingLeft="12dp"
+          android:paddingRight="12dp"
+          android:text="完成"
+          android:textColor="@color/white"
+          android:textSize="16dp"
+          android:visibility="invisible"
+      />
+
+    </android.support.v7.widget.Toolbar>
+  </RelativeLayout>
+</android.support.design.widget.AppBarLayout>

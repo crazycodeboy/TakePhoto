@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_album_select"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+  <include
+      android:id="@+id/app_bar"
+      layout="@layout/toolbar"/>
+
+  <ProgressBar
+      android:id="@+id/progress_bar_album_select"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"/>
+
+  <TextView
+      android:id="@+id/text_view_error"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:text="@string/error_null_cursor"/>
+
+  <GridView
+      android:id="@+id/grid_view_album_select"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@id/app_bar"
+      android:paddingBottom="1dp"
+      android:paddingLeft="1dp"
+      android:paddingRight="1dp"
+      android:paddingTop="1dp"
+      android:stretchMode="columnWidth"/>
+</RelativeLayout>

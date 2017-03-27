@@ -49,14 +49,14 @@ public class ResultActivity extends Activity {
             View view = LayoutInflater.from(this).inflate(R.layout.image_show, null);
             ImageView imageView1 = (ImageView) view.findViewById(R.id.imgShow1);
             ImageView imageView2 = (ImageView) view.findViewById(R.id.imgShow2);
-            Glide.with(this).load(new File(images.get(i).getCompressPath())).into(imageView1);
-            Glide.with(this).load(new File(images.get(i + 1).getCompressPath())).into(imageView2);
+            Glide.with(this).load(new File(images.get(i).getPath())).into(imageView1);
+            Glide.with(this).load(new File(images.get(i + 1).getPath())).into(imageView2);
             linearLayout.addView(view);
         }
         if (images.size() % 2 == 1) {
             View view = LayoutInflater.from(this).inflate(R.layout.image_show, null);
             ImageView imageView1 = (ImageView) view.findViewById(R.id.imgShow1);
-            Glide.with(this).load(new File(images.get(images.size() - 1).getCompressPath())).into(imageView1);
+            Glide.with(this).load(new File(images.get(images.size() - 1).getPath())).into(imageView1);
             linearLayout.addView(view);
         }
 

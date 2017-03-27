@@ -10,49 +10,33 @@ import java.io.Serializable;
  * Author: JPH
  * Date: 2016/8/11 17:01
  */
-public class TImage implements Serializable{
-    private String originalPath;
-    private String compressPath;
-    private FromType fromType;
+public class TImage implements Serializable {
+    private String path;
     private boolean cropped;
     private boolean compressed;
-    public static TImage of(String path, FromType fromType){
-        return new TImage(path, fromType);
-    }
-    public static TImage of(Uri uri, FromType fromType){
-        return new TImage(uri, fromType);
-    }
-    private TImage(String path, FromType fromType) {
-        this.originalPath = path;
-        this.fromType = fromType;
-    }
-    private TImage(Uri uri, FromType fromType) {
-        this.originalPath = uri.getPath();
-        this.fromType = fromType;
+
+    public static TImage of(String path) {
+        return new TImage(path);
     }
 
-    public String getOriginalPath() {
-        return originalPath;
+    public static TImage of(Uri uri) {
+        return new TImage(uri);
     }
 
-    public void setOriginalPath(String originalPath) {
-        this.originalPath = originalPath;
+    private TImage(String path) {
+        this.path = path;
     }
 
-    public String getCompressPath() {
-        return compressPath;
+    private TImage(Uri uri) {
+        this.path = uri.getPath();
     }
 
-    public void setCompressPath(String compressPath) {
-        this.compressPath = compressPath;
+    public String getPath() {
+        return path;
     }
 
-    public FromType getFromType() {
-        return fromType;
-    }
-
-    public void setFromType(FromType fromType) {
-        this.fromType = fromType;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public boolean isCropped() {
@@ -69,9 +53,5 @@ public class TImage implements Serializable{
 
     public void setCompressed(boolean compressed) {
         this.compressed = compressed;
-    }
-
-    public enum FromType {
-        CAMERA, OTHER
     }
 }

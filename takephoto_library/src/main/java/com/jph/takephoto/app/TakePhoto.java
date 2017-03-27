@@ -37,13 +37,13 @@ public interface TakePhoto {
      * 图片多选
      * @param limit 最多选择图片张数的限制
      * */
-    void onPickMultiple(int limit);
+    void onPickMultiple(boolean cameraEnable,int limit);
     /**
      * 图片多选，并裁切
      * @param limit 最多选择图片张数的限制
      * @param options  裁剪配置
      * */
-    void onPickMultipleWithCrop(int limit, CropOptions options);
+    void onPickMultipleWithCrop(boolean cameraEnable,int limit, CropOptions options);
     /**
      * 从文件中获取图片（不裁剪）
      */

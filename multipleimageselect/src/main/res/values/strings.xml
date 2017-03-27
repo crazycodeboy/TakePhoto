@@ -1,0 +1,18 @@
+<resources>
+  <string name="app_name">MultipleImageSelect</string>
+  <!--Request Permission-->
+  <string name="permission_ok">OK</string>
+  <string name="permission_settings">Settings</string>
+  <string name="permission_package">package</string>
+  <string name="permission_info">App requires permission to Storage to view images.</string>
+  <string name="permission_force">App requires permission to Storage to view images. Tap Settings
+    and go to Permissions to grant permission.
+  </string>
+  <string name="error_null_cursor">Oops, something went wrong!</string>
+  <string name="album_view">选择图片</string>
+  <string name="image_view">单击选择</string>
+
+  <string name="add">确定</string>
+  <string name="selected">还能选%1$s</string>
+  <string name="limit_exceeded">最多能选 %d 张</string>
+</resources>

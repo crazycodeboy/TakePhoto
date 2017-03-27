@@ -59,7 +59,7 @@ public class TakePhotoFragmentActivity extends FragmentActivity implements TakeP
     }
     @Override
     public void takeSuccess(TResult result) {
-        Log.i(TAG,"takeSuccess：" + result.getImage().getCompressPath());
+        //Log.i(TAG,"takeSuccess：" + result.getImage().getCompressPath());
     }
     @Override
     public void takeFail(TResult result,String msg) {

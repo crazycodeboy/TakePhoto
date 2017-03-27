@@ -15,5 +15,21 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <activity
+            android:name="multipleimageselect.activities.AlbumSelectActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="multipleimageselect.activities.ImageSelectActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

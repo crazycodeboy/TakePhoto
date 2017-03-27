@@ -452,6 +452,40 @@
                                 android:text="从文件" />
                         </RadioGroup>
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="在选择界面启用相机：" />
+
+                        <RadioGroup
+                            android:id="@+id/rgCameraSet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rbCameraEnable"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:checked="true"
+                                android:text="启用" />
+
+                            <RadioButton
+                                android:id="@+id/rbCameraDisEnable"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="不启用" />
+                        </RadioGroup>
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
 

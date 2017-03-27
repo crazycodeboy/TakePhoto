@@ -7,11 +7,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
-
-import com.darsh.multipleimageselect.helpers.Constants;
-import com.darsh.multipleimageselect.models.Image;
 import com.jph.takephoto.R;
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.compress.CompressImage;
@@ -19,6 +17,7 @@ import com.jph.takephoto.compress.CompressImageImpl;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.MultipleCrop;
 import com.jph.takephoto.model.TContextWrap;
+import com.jph.takephoto.model.TException;
 import com.jph.takephoto.model.TExceptionType;
 import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TIntentWap;
@@ -28,16 +27,14 @@ import com.jph.takephoto.permission.PermissionManager;
 import com.jph.takephoto.uitl.ImageRotateUtil;
 import com.jph.takephoto.uitl.IntentUtils;
 import com.jph.takephoto.uitl.TConstant;
-import com.jph.takephoto.model.TException;
-import com.jph.takephoto.uitl.TFileUtils;
 import com.jph.takephoto.uitl.TImageFiles;
 import com.jph.takephoto.uitl.TUriParse;
 import com.jph.takephoto.uitl.TUtils;
-import com.soundcloud.android.crop.Crop;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
+import multipleimageselect.helpers.Constants;
+import multipleimageselect.models.Image;
 
 /**
  * - 支持通过相机拍照获取图片
@@ -53,7 +50,7 @@ import java.util.Map;
  * - 支持智能选取及裁剪异常处理
  * - 支持因拍照Activity被回收后的自动恢复
  * Date: 2016/9/21 0007 20:10
- * Version:4.0.0
+ * Version:3.0.0
  * 技术博文：http://www.cboy.me
  * GitHub:https://github.com/crazycodeboy
  * Eamil:crazycodeboy@gmail.com
@@ -69,7 +66,6 @@ public class TakePhotoImpl implements TakePhoto {
     private CompressConfig compressConfig;
     private MultipleCrop multipleCrop;
     private PermissionManager.TPermissionType permissionType;
-    private TImage.FromType fromType; //CAMERA图片来源相机，OTHER图片来源其他
     /**
      * 是否显示压缩对话框
      */
@@ -86,8 +82,7 @@ public class TakePhotoImpl implements TakePhoto {
         this.listener = listener;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             cropOptions = (CropOptions) savedInstanceState.getSerializable("cropOptions");
             takePhotoOptions = (TakePhotoOptions) savedInstanceState.getSerializable("takePhotoOptions");
@@ -98,8 +93,7 @@ public class TakePhotoImpl implements TakePhoto {
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
+    @Override public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable("cropOptions", cropOptions);
         outState.putSerializable("takePhotoOptions", takePhotoOptions);
         outState.putBoolean("showCompressDialog", showCompressDialog);
@@ -108,15 +102,14 @@ public class TakePhotoImpl implements TakePhoto {
         outState.putSerializable("compressConfig", compressConfig);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case TConstant.RC_PICK_PICTURE_FROM_GALLERY_CROP:
                 if (resultCode == Activity.RESULT_OK && data != null) {//从相册选择照片并裁剪
                     try {
                         onCrop(data.getData(), outPutUri, cropOptions);
                     } catch (TException e) {
-                        takeResult(TResult.of(TImage.of(outPutUri, fromType)), e.getDetailMessage());
+                        takeResult(TResult.of(TImage.of(outPutUri)), e.getDetailMessage());
                         e.printStackTrace();
                     }
                 } else {
@@ -126,9 +119,10 @@ public class TakePhotoImpl implements TakePhoto {
             case TConstant.RC_PICK_PICTURE_FROM_GALLERY_ORIGINAL://从相册选择照片不裁剪
                 if (resultCode == Activity.RESULT_OK) {
                     try {
-                        takeResult(TResult.of(TImage.of(TUriParse.getFilePathWithUri(data.getData(), contextWrap.getActivity()), fromType)));
+                        takeResult(TResult.of(TImage.of(
+                            TUriParse.getFilePathWithUri(data.getData(), contextWrap.getActivity()))));
                     } catch (TException e) {
-                        takeResult(TResult.of(TImage.of(data.getData(), fromType)), e.getDetailMessage());
+                        takeResult(TResult.of(TImage.of(data.getData())), e.getDetailMessage());
                         e.printStackTrace();
                     }
                 } else {
@@ -138,9 +132,10 @@ public class TakePhotoImpl implements TakePhoto {
             case TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL://从文件选择照片不裁剪
                 if (resultCode == Activity.RESULT_OK) {
                     try {
-                        takeResult(TResult.of(TImage.of(TUriParse.getFilePathWithDocumentsUri(data.getData(), contextWrap.getActivity()), fromType)));
+                        takeResult(TResult.of(TImage.of(
+                            TUriParse.getFilePathWithDocumentsUri(data.getData(), contextWrap.getActivity()))));
                     } catch (TException e) {
-                        takeResult(TResult.of(TImage.of(outPutUri, fromType)), e.getDetailMessage());
+                        takeResult(TResult.of(TImage.of(outPutUri)), e.getDetailMessage());
                         e.printStackTrace();
                     }
                 } else {
@@ -152,7 +147,7 @@ public class TakePhotoImpl implements TakePhoto {
                     try {
                         onCrop(data.getData(), outPutUri, cropOptions);
                     } catch (TException e) {
-                        takeResult(TResult.of(TImage.of(outPutUri, fromType)), e.getDetailMessage());
+                        takeResult(TResult.of(TImage.of(outPutUri)), e.getDetailMessage());
                         e.printStackTrace();
                     }
                 } else {
@@ -161,24 +156,28 @@ public class TakePhotoImpl implements TakePhoto {
                 break;
             case TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP://拍取照片,并裁剪
                 if (resultCode == Activity.RESULT_OK) {
-                    if(takePhotoOptions!=null&&takePhotoOptions.isCorrectImage())ImageRotateUtil.of().correctImage(contextWrap.getActivity(), tempUri);
-                    try {
-                        onCrop(tempUri, Uri.fromFile(new File(TUriParse.parseOwnUri(contextWrap.getActivity(), outPutUri))), cropOptions);
-                    } catch (TException e) {
-                        takeResult(TResult.of(TImage.of(outPutUri, fromType)), e.getDetailMessage());
-                        e.printStackTrace();
-                    }
+                    ImageRotateUtil.of().correctImage(contextWrap.getActivity(), tempUri);
+                    takeResult(TResult.of(TImage.of(outPutUri)));
+                    //try {
+                    //  onCrop(tempUri,
+                    //      Uri.fromFile(new File(TUriParse.parseOwnUri(contextWrap.getActivity(), outPutUri))),
+                    //      cropOptions);
+                    //} catch (TException e) {
+                    //  takeResult(TResult.of(TImage.of(outPutUri)), e.getDetailMessage());
+                    //  e.printStackTrace();
+                    //}
                 } else {
                     listener.takeCancel();
                 }
                 break;
             case TConstant.RC_PICK_PICTURE_FROM_CAPTURE://拍取照片
                 if (resultCode == Activity.RESULT_OK) {
-                    if(takePhotoOptions!=null&&takePhotoOptions.isCorrectImage())ImageRotateUtil.of().correctImage(contextWrap.getActivity(), outPutUri);
+                    ImageRotateUtil.of().correctImage(contextWrap.getActivity(), outPutUri);
                     try {
-                        takeResult(TResult.of(TImage.of(TUriParse.getFilePathWithUri(outPutUri, contextWrap.getActivity()), fromType)));
+                        takeResult(TResult.of(
+                            TImage.of(TUriParse.getFilePathWithUri(outPutUri, contextWrap.getActivity()))));
                     } catch (TException e) {
-                        takeResult(TResult.of(TImage.of(outPutUri, fromType)), e.getDetailMessage());
+                        takeResult(TResult.of(TImage.of(outPutUri)), e.getDetailMessage());
                         e.printStackTrace();
                     }
                 } else {
@@ -186,17 +185,18 @@ public class TakePhotoImpl implements TakePhoto {
                 }
                 break;
             case TConstant.RC_CROP://裁剪照片返回结果
-            case Crop.REQUEST_CROP://裁剪照片返回结果
+                //case Crop.REQUEST_CROP://裁剪照片返回结果
                 if (resultCode == Activity.RESULT_OK) {
                     if (multipleCrop != null) {
                         cropContinue(true);
                     } else {
                         try {
-                            TImage image = TImage.of(TUriParse.getFilePathWithUri(outPutUri, contextWrap.getActivity()), fromType);
+                            TImage image =
+                                TImage.of(TUriParse.getFilePathWithUri(outPutUri, contextWrap.getActivity()));
                             image.setCropped(true);
                             takeResult(TResult.of(image));
                         } catch (TException e) {
-                            takeResult(TResult.of(TImage.of(outPutUri.getPath(), fromType)), e.getDetailMessage());
+                            takeResult(TResult.of(TImage.of(outPutUri.getPath())), e.getDetailMessage());
                             e.printStackTrace();
                         }
                     }
@@ -214,7 +214,7 @@ public class TakePhotoImpl implements TakePhoto {
                             Bitmap bitmap = data.getParcelableExtra("data");//获取裁剪的结果数据
                             TImageFiles.writeToFile(bitmap, outPutUri);//将裁剪的结果写入到文件
 
-                            TImage image = TImage.of(outPutUri.getPath(), fromType);
+                            TImage image = TImage.of(outPutUri.getPath());
                             image.setCropped(true);
                             takeResult(TResult.of(image));
                         } else {
@@ -231,18 +231,29 @@ public class TakePhotoImpl implements TakePhoto {
                 break;
             case TConstant.RC_PICK_MULTIPLE://多选图片返回结果
                 if (resultCode == Activity.RESULT_OK && data != null) {
-                    ArrayList<Image> images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
-                    if (cropOptions != null) {
-                        try {
-                            onCrop(MultipleCrop.of(TUtils.convertImageToUri(contextWrap.getActivity(), images), contextWrap.getActivity(), fromType), cropOptions);
-                        } catch (TException e) {
-                            cropContinue(false);
-                            e.printStackTrace();
-                        }
+                    boolean startCamera = data.getBooleanExtra(Constants.INTENT_EXTRA_START_CAMERA, false);
+                    if (startCamera) {
+                        File file = new File(Environment.getExternalStorageDirectory(),
+                            "/temp/" + System.currentTimeMillis() + ".jpg");
+                        if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+                        Uri imageUri = Uri.fromFile(file);
+                        onPickFromCaptureWithCrop(imageUri, null);
                     } else {
-                        takeResult(TResult.of(TUtils.getTImagesWithImages(images, fromType)));
+                        ArrayList<Image> images =
+                            data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
+                        if (cropOptions != null) {
+                            try {
+                                onCrop(MultipleCrop.of(
+                                    TUtils.convertImageToUri(contextWrap.getActivity(), images),
+                                    contextWrap.getActivity()), cropOptions);
+                            } catch (TException e) {
+                                cropContinue(false);
+                                e.printStackTrace();
+                            }
+                        } else {
+                            takeResult(TResult.of(TUtils.getTImagesWithImages(images)));
+                        }
                     }
-
                 } else {
                     listener.takeCancel();
                 }
@@ -252,35 +263,36 @@ public class TakePhotoImpl implements TakePhoto {
         }
     }
 
-    @Override
-    public void onPickMultiple(int limit) {
+    @Override public void onPickMultiple(boolean cameraEnable, int limit) {
         if (PermissionManager.TPermissionType.WAIT.equals(permissionType)) return;
-        TUtils.startActivityForResult(contextWrap, new TIntentWap(IntentUtils.getPickMultipleIntent(contextWrap, limit), TConstant.RC_PICK_MULTIPLE));
+        TUtils.startActivityForResult(contextWrap,
+            new TIntentWap(IntentUtils.getPickMultipleIntent(contextWrap, cameraEnable, limit),
+                TConstant.RC_PICK_MULTIPLE));
     }
 
     @Override
-    public void onPickMultipleWithCrop(int limit, CropOptions options) {
-        this.fromType = TImage.FromType.OTHER;
-        onPickMultiple(limit);
+    public void onPickMultipleWithCrop(boolean cameraEnable, int limit, CropOptions options) {
+        onPickMultiple(cameraEnable, limit);
         this.cropOptions = options;
     }
 
     /**
      * -----crop------
      **/
-    @Override
-    public void onCrop(Uri imageUri, Uri outPutUri, CropOptions options) throws TException {
+    @Override public void onCrop(Uri imageUri, Uri outPutUri, CropOptions options) throws TException {
         if (PermissionManager.TPermissionType.WAIT.equals(permissionType)) return;
         this.outPutUri = outPutUri;
-        if (!TImageFiles.checkMimeType(contextWrap.getActivity(), TImageFiles.getMimeType(contextWrap.getActivity(), imageUri))) {
-            Toast.makeText(contextWrap.getActivity(), contextWrap.getActivity().getResources().getText(R.string.tip_type_not_image), Toast.LENGTH_SHORT).show();
+        if (!TImageFiles.checkMimeType(contextWrap.getActivity(),
+            TImageFiles.getMimeType(contextWrap.getActivity(), imageUri))) {
+            Toast.makeText(contextWrap.getActivity(),
+                contextWrap.getActivity().getResources().getText(R.string.tip_type_not_image),
+                Toast.LENGTH_SHORT).show();
             throw new TException(TExceptionType.TYPE_NOT_IMAGE);
         }
         cropWithNonException(imageUri, outPutUri, options);
     }
 
-    @Override
-    public void onCrop(MultipleCrop multipleCrop, CropOptions options) throws TException {
+    @Override public void onCrop(MultipleCrop multipleCrop, CropOptions options) throws TException {
         this.multipleCrop = multipleCrop;
         onCrop(multipleCrop.getUris().get(0), multipleCrop.getOutUris().get(0), options);
     }
@@ -288,7 +300,7 @@ public class TakePhotoImpl implements TakePhoto {
     private void cropWithNonException(Uri imageUri, Uri outPutUri, CropOptions options) {
         this.outPutUri = outPutUri;
         if (options.isWithOwnCrop()) {
-            TUtils.cropWithOwnApp(contextWrap, imageUri, outPutUri, options);
+            //TUtils.cropWithOwnApp(contextWrap, imageUri, outPutUri, options);
         } else {
             TUtils.cropWithOtherAppBySafely(contextWrap, imageUri, outPutUri, options);
         }
@@ -303,76 +315,78 @@ public class TakePhotoImpl implements TakePhoto {
             if (preSuccess) {
                 takeResult(TResult.of(multipleCrop.gettImages()));
             } else {
-                takeResult(TResult.of(multipleCrop.gettImages()), outPutUri.getPath() + contextWrap.getActivity().getResources().getString(R.string.msg_crop_canceled));
+                takeResult(TResult.of(multipleCrop.gettImages()),
+                    outPutUri.getPath() + contextWrap.getActivity()
+                        .getResources()
+                        .getString(R.string.msg_crop_canceled));
             }
         } else {
-            cropWithNonException(multipleCrop.getUris().get(index + 1), multipleCrop.getOutUris().get(index + 1), cropOptions);
+            cropWithNonException(multipleCrop.getUris().get(index + 1),
+                multipleCrop.getOutUris().get(index + 1), cropOptions);
         }
     }
 
-    @Override
-    public void onPickFromDocuments() {
+    @Override public void onPickFromDocuments() {
         selectPicture(0, false);
     }
 
-    @Override
-    public void onPickFromGallery() {
+    @Override public void onPickFromGallery() {
         selectPicture(1, false);
     }
 
     private void selectPicture(int defaultIndex, boolean isCrop) {
-        this.fromType = TImage.FromType.OTHER;
         if (takePhotoOptions != null && takePhotoOptions.isWithOwnGallery()) {
-            onPickMultiple(1);
+            onPickMultiple(false, 1);
             return;
         }
         if (PermissionManager.TPermissionType.WAIT.equals(permissionType)) return;
         ArrayList<TIntentWap> intentWapList = new ArrayList<>();
-        intentWapList.add(new TIntentWap(IntentUtils.getPickIntentWithDocuments(), isCrop ? TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_CROP : TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL));
-        intentWapList.add(new TIntentWap(IntentUtils.getPickIntentWithGallery(), isCrop ? TConstant.RC_PICK_PICTURE_FROM_GALLERY_CROP : TConstant.RC_PICK_PICTURE_FROM_GALLERY_ORIGINAL));
+        intentWapList.add(new TIntentWap(IntentUtils.getPickIntentWithDocuments(),
+            isCrop ? TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_CROP
+                : TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL));
+        intentWapList.add(new TIntentWap(IntentUtils.getPickIntentWithGallery(),
+            isCrop ? TConstant.RC_PICK_PICTURE_FROM_GALLERY_CROP
+                : TConstant.RC_PICK_PICTURE_FROM_GALLERY_ORIGINAL));
         try {
             TUtils.sendIntentBySafely(contextWrap, intentWapList, defaultIndex, isCrop);
         } catch (TException e) {
-            takeResult(TResult.of(TImage.of("", fromType)), e.getDetailMessage());
+            takeResult(TResult.of(TImage.of("")), e.getDetailMessage());
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void onPickFromGalleryWithCrop(Uri outPutUri, CropOptions options) {
+    @Override public void onPickFromGalleryWithCrop(Uri outPutUri, CropOptions options) {
         this.cropOptions = options;
         this.outPutUri = outPutUri;
         selectPicture(1, true);
     }
 
-    @Override
-    public void onPickFromDocumentsWithCrop(Uri outPutUri, CropOptions options) {
+    @Override public void onPickFromDocumentsWithCrop(Uri outPutUri, CropOptions options) {
         this.cropOptions = options;
         this.outPutUri = outPutUri;
         selectPicture(0, true);
     }
 
-    @Override
-    public void onPickFromCapture(Uri outPutUri) {
-        this.fromType = TImage.FromType.CAMERA;
+    @Override public void onPickFromCapture(Uri outPutUri) {
         if (PermissionManager.TPermissionType.WAIT.equals(permissionType)) return;
         if (Build.VERSION.SDK_INT >= 23) {
-            this.outPutUri = TUriParse.convertFileUriToFileProviderUri(contextWrap.getActivity(), outPutUri);
+            this.outPutUri =
+                TUriParse.convertFileUriToFileProviderUri(contextWrap.getActivity(), outPutUri);
         } else {
             this.outPutUri = outPutUri;
         }
 
         try {
-            TUtils.captureBySafely(contextWrap, new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE));
+            TUtils.captureBySafely(contextWrap,
+                new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri),
+                    TConstant.RC_PICK_PICTURE_FROM_CAPTURE));
         } catch (TException e) {
-            takeResult(TResult.of(TImage.of("", fromType)), e.getDetailMessage());
+            takeResult(TResult.of(TImage.of("")), e.getDetailMessage());
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void onPickFromCaptureWithCrop(Uri outPutUri, CropOptions options) {
-        this.fromType = TImage.FromType.CAMERA;
+    @Override public void onPickFromCaptureWithCrop(Uri outPutUri, CropOptions options) {
         if (PermissionManager.TPermissionType.WAIT.equals(permissionType)) return;
         this.cropOptions = options;
         this.outPutUri = outPutUri;
@@ -383,26 +397,24 @@ public class TakePhotoImpl implements TakePhoto {
         }
 
         try {
-            TUtils.captureBySafely(contextWrap, new TIntentWap(IntentUtils.getCaptureIntent(this.tempUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP));
+            TUtils.captureBySafely(contextWrap, new TIntentWap(IntentUtils.getCaptureIntent(this.tempUri),
+                TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP));
         } catch (TException e) {
-            takeResult(TResult.of(TImage.of("", fromType)), e.getDetailMessage());
+            takeResult(TResult.of(TImage.of("")), e.getDetailMessage());
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void onEnableCompress(CompressConfig config, boolean showCompressDialog) {
+    @Override public void onEnableCompress(CompressConfig config, boolean showCompressDialog) {
         this.compressConfig = config;
         this.showCompressDialog = showCompressDialog;
     }
 
-    @Override
-    public void setTakePhotoOptions(TakePhotoOptions options) {
+    @Override public void setTakePhotoOptions(TakePhotoOptions options) {
         this.takePhotoOptions = options;
     }
 
-    @Override
-    public void permissionNotify(PermissionManager.TPermissionType type) {
+    @Override public void permissionNotify(PermissionManager.TPermissionType type) {
         this.permissionType = type;
     }
 
@@ -410,39 +422,29 @@ public class TakePhotoImpl implements TakePhoto {
         if (null == compressConfig) {
             handleTakeCallBack(result, message);
         } else {
-            if (showCompressDialog)
-                wailLoadDialog = TUtils.showProgressDialog(contextWrap.getActivity(), contextWrap.getActivity().getResources().getString(R.string.tip_compress));
-
-            CompressImageImpl.of(contextWrap.getActivity(), compressConfig, result.getImages(), new CompressImage.CompressListener() {
-                @Override
-                public void onCompressSuccess(ArrayList<TImage> images) {
-                    if(!compressConfig.isEnableReserveRaw()) {
-                        deleteRawFile(images);
-                    }
-                    handleTakeCallBack(result);
-                    if (wailLoadDialog != null && !contextWrap.getActivity().isFinishing())
-                        wailLoadDialog.dismiss();
-                }
-
-                @Override
-                public void onCompressFailed(ArrayList<TImage> images, String msg) {
-                    if(!compressConfig.isEnableReserveRaw()) {
-                        deleteRawFile(images);
-                    }
-                    handleTakeCallBack(TResult.of(images), String.format(contextWrap.getActivity().getResources().getString(R.string.tip_compress_failed), message.length > 0 ? message[0] : "", msg, result.getImage().getCompressPath()));
-                    if (wailLoadDialog != null && !contextWrap.getActivity().isFinishing())
-                        wailLoadDialog.dismiss();
-                }
-            }).compress();
-        }
-    }
-
-    private void deleteRawFile(ArrayList<TImage> images) {
-        for(TImage image : images) {
-            if(TImage.FromType.CAMERA == fromType) {
-                TFileUtils.delete(image.getOriginalPath());
-                image.setOriginalPath("");
+            if (showCompressDialog) {
+                wailLoadDialog = TUtils.showProgressDialog(contextWrap.getActivity(),
+                    contextWrap.getActivity().getResources().getString(R.string.tip_compress));
             }
+
+            CompressImageImpl.of(contextWrap.getActivity(), compressConfig, result.getImages(),
+                new CompressImage.CompressListener() {
+                    @Override public void onCompressSuccess(ArrayList<TImage> images) {
+                        handleTakeCallBack(result);
+                        if (wailLoadDialog != null && !contextWrap.getActivity().isFinishing()) {
+                            wailLoadDialog.dismiss();
+                        }
+                    }
+
+                    @Override public void onCompressFailed(ArrayList<TImage> images, String msg) {
+                        handleTakeCallBack(TResult.of(images), String.format(
+                            contextWrap.getActivity().getResources().getString(R.string.tip_compress_failed),
+                            message.length > 0 ? message[0] : "", msg, result.getImage().getPath()));
+                        if (wailLoadDialog != null && !contextWrap.getActivity().isFinishing()) {
+                            wailLoadDialog.dismiss();
+                        }
+                    }
+                }).compress();
         }
     }
 
@@ -450,7 +452,8 @@ public class TakePhotoImpl implements TakePhoto {
         if (message.length > 0) {
             listener.takeFail(result, message[0]);
         } else if (multipleCrop != null && multipleCrop.hasFailed) {
-            listener.takeFail(result, contextWrap.getActivity().getResources().getString(R.string.msg_crop_failed));
+            listener.takeFail(result,
+                contextWrap.getActivity().getResources().getString(R.string.msg_crop_failed));
         } else if (compressConfig != null) {
             boolean hasFailed = false;
             for (TImage image : result.getImages()) {
@@ -460,7 +463,8 @@ public class TakePhotoImpl implements TakePhoto {
                 }
             }
             if (hasFailed) {
-                listener.takeFail(result, contextWrap.getActivity().getString(R.string.msg_compress_failed));
+                listener.takeFail(result,
+                    contextWrap.getActivity().getString(R.string.msg_compress_failed));
             } else {
                 listener.takeSuccess(result);
             }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/frame_album_item"
+    android:paddingTop="1dp"
+    android:paddingRight="1dp"
+    android:paddingBottom="1dp"
+    android:paddingLeft="1dp">
+
+    <ImageView
+        android:id="@+id/image_view_album_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/text_view_album_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/multiple_image_select_albumTextBackground"
+        android:textColor="@color/multiple_image_select_primaryText"
+        android:textSize="20dp"
+        android:lines="1"
+        android:gravity="center"/>
+
+</FrameLayout>

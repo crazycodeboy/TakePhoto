@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="MultipleImageSelectTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">@color/multiple_image_select_primary</item>
+    <item name="colorPrimaryDark">@color/multiple_image_select_primaryDark</item>
+    <item name="colorAccent">@color/multiple_image_select_accent</item>
+
+    <item name="actionModeStyle">@style/CustomActionModeStyle</item>
+    <item name="windowActionModeOverlay">true</item>
+  </style>
+
+  <style name="CustomActionModeStyle" parent="Base.Widget.AppCompat.ActionMode">
+    <item name="background">@color/multiple_image_select_primary</item>
+  </style>
+
+</resources>
