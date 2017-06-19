@@ -11,8 +11,8 @@
 - 支持因拍照Activity被回收后的自动恢复   
 
 GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/crazycodeboy/TakePhoto)
-##如何使用   
-###使用TakePhoto有以下两种方式：
+## 如何使用   
+### 使用TakePhoto有以下两种方式：
 **方式一：通过继承的方式**  
 1. 继承TakePhotoActivity、TakePhotoFragmentActivity、TakePhotoFragment三者之一。  
 2. 通过`getTakePhoto()`获取TakePhoto实例进行相关操作。  
@@ -29,7 +29,7 @@ void takeCancel();
 2. 在 `onCreate`,`onActivityResult`,`onSaveInstanceState`方法中调用TakePhoto对用的方法。  
 3. 调用TakePhoto实例进行相关操作。  
 4. 在`TakeResultListener`相关方法中获取结果。      
-###关于压缩照片 
+### 关于压缩照片 
 你可以选择是否对照片进行压缩处理。  
 ```java
  /**
@@ -44,7 +44,7 @@ eg：
 `getTakePhoto().onEnableCompress(new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create(),true).onPicSelectCrop(imageUri);`  
 如果你启用了照片压缩，TakePhoto会使用`CompressImage`对照片进行压缩处理，CompressImage目前支持对照片的尺寸以及照片的质量进行压缩。默认情况下，CompressImage开启了尺寸与质量双重压缩，
 你可以通过CompressConfig.Builder对照片压缩后的尺寸以及质量进行相关设置。如果你想改变压缩的方式可以通过CompressConfig.Builder进行相关设置。  
-##关于兼容性问题  
+## 关于兼容性问题  
 TakePhoto是基于Android官方标准API编写的，适配了目前市场上主流的Rom。如果你在使用过程中发现了适配问题，可以提交Issues。   
 1. 为适配部分手机拍照时会回收Activity,TakePhoto在`onSaveInstanceState`与 `onCreate`做了相应的恢复处理。  
 2. 为适配部分手机拍照或从相册选择照片时屏幕方向会发生转变,从而导致拍照失败的问题，可以在AndroidManifest.xml中对使用了TakePhoto的Activity添加android:configChanges="orientation|keyboardHidden|screenSize"配置。  
@@ -62,7 +62,7 @@ eg:
 </activity>
 ```
 
-##在项目中使用    
+## 在项目中使用    
 为方便大家使用，现已将TakePhoto发布到JCenter(如果你对如何将项目发布到JCenter感兴趣可以参考：《[教你轻松将Android library 发布到JCenter](http://blog.csdn.net/fengyuzhengfan/article/details/51407009))》  
 Gradle:  
 ```groovy 
@@ -78,5 +78,5 @@ Maven:
   <type>pom</type>
 </dependency>
 ```  
-##最后  
+## 最后  
 如果你对[TakePhoto](https://github.com/crazycodeboy/TakePhoto)有更好的建议或想改造它，欢迎大家Fork and Pull requests。  
