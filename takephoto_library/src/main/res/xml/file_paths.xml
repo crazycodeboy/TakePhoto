@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <paths>
-        <root-path path="" name="camera_photos" />
+        <root-path
+            path=""
+            name="camera_photos" />
     </paths>
 </resources>
