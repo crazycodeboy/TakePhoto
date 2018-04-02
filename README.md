@@ -7,7 +7,7 @@
 
 
 
-`TakePhoto`是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本[4.0.3](https://github.com/crazycodeboy/TakePhoto/)。
+`TakePhoto`是一款用于在Android设备上获取照片（拍照或从相册、文件中选择）、裁剪图片、压缩图片的开源工具库，目前最新版本[4.1.0](https://github.com/crazycodeboy/TakePhoto/)。
 3.0以下版本及API说明，详见[TakePhoto2.0+](https://github.com/crazycodeboy/TakePhoto/blob/master/README.2+.md)。  
 
 >TakePhoto交流平台：QQ群：556387607（群1，未满）
@@ -47,7 +47,7 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 **Gradle:**  
 
 ```groovy
-    compile 'com.jph.takephoto:takephoto_library:4.0.3'
+    compile 'com.jph.takephoto:takephoto_library:4.1.0'
 ```
 
 **Maven:**  
@@ -56,7 +56,7 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 <dependency>
   <groupId>com.jph.takephoto</groupId>
   <artifactId>takephoto_library</artifactId>
-  <version>4.0.3</version>
+  <version>4.1.0</version>
   <type>pom</type>
 </dependency>
 ```  
@@ -442,6 +442,13 @@ eg:
 如果你在使用TakePhoto中遇到任何问题可以提[Issues](https://github.com/crazycodeboy/TakePhoto/issues)出来。另外欢迎大家为TakePhoto贡献智慧，欢迎大家[Fork and Pull requests](https://github.com/crazycodeboy/TakePhoto)。     
 
 ## 更新说明
+
+v4.1.0(2018/4/2)
+-----------------
+
+1. Upgrade glide to 4.6.1；
+2. Upgrade  buildToolsVersion & targetSdkVersion ；
+3. rename package name ;
 
 v4.0.3(2017/1/18)
 -----------------
