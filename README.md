@@ -47,7 +47,7 @@ GitHub地址： [https://github.com/crazycodeboy/TakePhoto](https://github.com/c
 **Gradle:**  
 
 ```groovy
-    compile 'com.jph.takephoto:takephoto_library:4.1.0'
+    compile 'org.devio.takephoto:takephoto_library:4.1.0'
 ```
 
 **Maven:**  
