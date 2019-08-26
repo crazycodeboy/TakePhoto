@@ -81,9 +81,11 @@ public class IntentUtils {
      * @return
      */
     public static Intent getPickIntentWithGallery() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_PICK);//Pick an item from the data
-        intent.setType("image/*");//从所有图片中进行选择
+//        Intent intent = new Intent();
+//        intent.setAction(Intent.ACTION_PICK);//Pick an item from the data
+//        intent.setType("image/*");//从所有图片中进行选择
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         return intent;
     }
 
